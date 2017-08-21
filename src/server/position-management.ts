@@ -35,23 +35,22 @@ export class TargetBasePositionManager {
   }
 
   constructor(
-    private _minTick: number,
-    private _dbInsert,
-    private _fvEngine,
-    private _ewma: Statistics.EWMATargetPositionCalculator,
-    private _qpRepo,
-    private _positionBroker,
-    private _uiSnap,
-    private _uiSend,
-    private _evOn,
-    private _evUp,
-    initRfv: Models.RegularFairValue[],
-    initTBP: Models.TargetBasePositionValue[]
-  ) {
-    if (initTBP.length && typeof initTBP[0].tbp != "undefined") {
-      this._latest = initTBP[0];
-      console.info(new Date().toISOString().slice(11, -1), 'tbp', 'Loaded from DB:', this._latest.tbp);
-    }
+      private _minTick: number,
+      private _dbInsert,
+      private _fvEngine,
+      private _ewma: Statistics.EWMATargetPositionCalculator,
+      private _qpRepo,
+      private _positionBroker,
+      private _uiSnap,
+      private _uiSend,
+      private _evOn,
+      private _evUp,
+      initTBP: Models.TargetBasePositionValue[]
+    ) {
+      if (initTBP.length && typeof initTBP[0].tbp != "undefined") {
+        this._latest = initTBP[0];
+        console.info(new Date().toISOString().slice(11, -1), 'tbp', 'Loaded from DB:', this._latest.tbp);
+      }
     _uiSnap(Models.Topics.TargetBasePosition, () => [this._latest]);
     _uiSnap(Models.Topics.EWMAChart, () => [this.fairValue?new Models.EWMAChart(
       this.newWidth,
