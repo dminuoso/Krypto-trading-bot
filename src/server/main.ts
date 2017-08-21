@@ -73,19 +73,19 @@ new QuoteSender.QuoteSender(
     new PositionManagement.TargetBasePositionManager(
       bindings.gwMinTick(),
       bindings.dbInsert,
-      bindings.mgFairV,
-      new Statistics.EWMATargetPositionCalculator(
-        bindings.qpRepo,
-        bindings.dbLoad(Models.Topics.EWMAChart)
-      ),
-      bindings.qpRepo,
-      bindings.pgRepo,
-      bindings.uiSnap,
-      bindings.uiSend,
-      bindings.evOn,
-      bindings.evUp,
-      bindings.dbLoad(Models.Topics.TargetBasePosition)
-    ),
+         bindings.mgFairV,
+         new Statistics.EWMATargetPositionCalculator(
+           bindings.qpRepo,
+           bindings.dbLoad(Models.Topics.EWMAChart)
+         ),
+         bindings.qpRepo,
+         bindings.pgRepo,
+         bindings.uiSnap,
+         bindings.uiSend,
+         bindings.evOn,
+         bindings.evUp,
+         bindings.dbLoad(Models.Topics.TargetBasePosition)
+       ),
     new Safety.SafetyCalculator(
       bindings.mgFairV,
       bindings.qpRepo,
