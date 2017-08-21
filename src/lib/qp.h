@@ -66,7 +66,7 @@ namespace K {
     {  "aspactive",                     false                                  },
     {  "aspvalue",                      decimal_cast<1>("0").getAsDouble()     },
     {  "safetynet",                     false                                  },
-    {  "safeZ",                         decimal_csat<1>("3").getAsDouble()     }
+    {  "safeZ",                         decimal_cast<1>("0").getAsDouble()     }
 
   };
   static vector<string> boolQP = {
