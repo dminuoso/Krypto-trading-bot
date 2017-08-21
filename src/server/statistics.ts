@@ -46,17 +46,17 @@ export class EWMATargetPositionCalculator {
     const SMA3TIME = this._SMA3TIME.reduce((a,b) => a+b) / this._SMA3TIME.length;
 
 /* enter safey modes */
-//  var SMAOLD = this._SMA3[3];
+//  var SMAOLD = this._SMA3[3];=
   if (((this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) - 100) > (100/params.safetyP))
   {
     params.mSafeMode = params.safemode.buy;
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value BUY' , (this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , (params.safetyP/100) );
   }
   if (((this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) - 100) <  -(params.safetyP/100) )
   {
     params.mSafeMode = params.safemode.sell;
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value SELL' , (this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , -(params.safetyP/100) );
   }
 
@@ -67,7 +67,8 @@ export class EWMATargetPositionCalculator {
       (SMA3 < this._SMA3[3])
 
       ) { }
-
+      params.moveit = Models.mMoveit.up;
+      console.info(new Date().toISOString().slice(11, -1), 'MoveMent: ',   Models.mMoveit[params.moveit] )
       */
 
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Current time' , this._SMA3TIME[this._SMA3TIME.length-1] );
