@@ -39,8 +39,9 @@ namespace K {
       static void insert(uiTXT k, json o, bool rm = true, string id = "NULL", long time = 0) {
         char* zErrMsg = 0;
         sqlite3_exec(db,
-        string((rm or id != "NULL" or time) ? string("DELETE FROM ").append(string(1, (char)k))  
-	.append(id != "NULL" ? string(" WHERE id = ").append(id).append(";") : (
+
+        string((rm or id != "NULL" or time) ? string("DELETE FROM ").append(string(1, (char)k))
+	       .append(id != "NULL" ? string(" WHERE id = ").append(id).append(";") : (
             time ? string(" WHERE time < ").append(to_string(time)).append(";") : ";"
           ) ) : "").append(o.is_null() ? "" : string("INSERT INTO ")
             .append(string(1, (char)k)).append(" (id,json) VALUES(").append(id).append(",'")
