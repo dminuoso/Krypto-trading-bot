@@ -24,6 +24,7 @@ export class EWMATargetPositionCalculator {
     }
   }
   private _SMA3: number[] = [];
+  private _SMA33: number[] = [];
   private _SMA3TIME: number[] = [];
 
 
@@ -34,34 +35,38 @@ export class EWMATargetPositionCalculator {
   computeTBP(value: number, newLong: number, newMedium: number, newShort: number): number {
     const params = this._qpRepo();
     this._SMA3.push(value);
+
     this._SMA3 = this._SMA3.slice(-3);
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA Length' , this._SMA3.length );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'SMA Length' , this._SMA33.length );
     //  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA1 Value' , this._SMA3[0] );
     //  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA P' , (params.safetyP/100) );
     const SMA3 = this._SMA3.reduce((a,b) => a+b) / this._SMA3.length;
 
+    this._SMA33.push(SMA3);
+
     var currenttime = new Date();
     this._SMA3TIME.push(currenttime.getTime());
-    this._SMA3TIME = this._SMA3TIME.slice(-3);
-    const SMA3TIME = this._SMA3TIME.reduce((a,b) => a+b) / this._SMA3TIME.length;
+
+
 
 /* enter safey modes */
 //  var SMAOLD = this._SMA3[3];=
-  if (((this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) - 100) > (params.safetyP/100))
+  if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) > (params.safetyP/100))
   {
     params.mSafeMode = Models.mSafeMode.buy;
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value BUY' , (this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) );
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , (params.safetyP/100) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value BUY' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
   }
-  if (((this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) - 100) <  -(params.safetyP/100) )
+  if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA3[0]) - 100) <  -(params.safetyP/100) )
   {
     params.mSafeMode = Models.mSafeMode.sell;
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value SELL' , (this._SMA3[this._SMA3.length-1] * 100 / this._SMA3[0]) );
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , -(params.safetyP/100) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value SELL' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) -100) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , -(params.safetyP/100) );
   }
 
-
-  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Mode' , Models.mSafeMode[params.mSafeMode] );
+  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'SMA3' , SMA3 );
+  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'latest SMA33' , this._SMA33[this._SMA33.length-1]  );
+  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Mode' , Models.mSafeMode[params.mSafeMode] );
 /* exit safey modes
     if(
       (SMA3 < this._SMA3[3])
@@ -70,7 +75,11 @@ export class EWMATargetPositionCalculator {
       params.moveit = Models.mMoveit.up;
       console.info(new Date().toISOString().slice(11, -1), 'MoveMent: ',   Models.mMoveit[params.moveit] )
       */
-
+// lets see if its time to get out of safety modes
+/* If SMA3(latest) < SMA3(-Z) && timer over
+   Quit Safety buy Mode
+   */
+//   if( this._SMA3[this._SMA3[this._SMA3.length-1]] )
 
 
     let newTargetPosition: number = 0;
