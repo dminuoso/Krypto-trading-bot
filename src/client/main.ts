@@ -162,6 +162,42 @@ class DisplayOrder {
                                 </tr>
                             </tbody>
                         </table>
+                        <table class="table table-responsive table-bordered" style="margin-bottom:0px;">
+                            <thead>
+                                <tr class="active">
+                                    <th>Activate Safety</th>
+                                    <th>Safety Percentage</th>
+                                    <th>Safety Minutes</th>
+                                    <th>Safetime timeover (in minutes)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                            <td style="width:25px;border-bottom: 3px solid #8BE296;">
+                                <input type="checkbox"
+                                   [(ngModel)]="pair.quotingParameters.display.safetynet">
+                            </td>
+                            <td style="width:100px;border-bottom: 3px solid #DDE28B;">
+                                <input class="form-control input-sm"
+                                   type="number" step="1" min="1"
+                                   onClick="this.select()"
+                                   [(ngModel)]="pair.quotingParameters.display.safetyP">
+                            </td>
+                            <td style="width:78px;border-bottom: 3px solid #DDE28B;">
+                                <input class="form-control input-sm"
+                                   type="number" step="1" min="1"
+                                   onClick="this.select()"
+                                   [(ngModel)]="pair.quotingParameters.display.safetytime">
+                            </td>
+                            <td style="width:78px;border-bottom: 3px solid #DDE28B;">
+                                <input class="form-control input-sm"
+                                   type="number" step="1" min="1"
+                                   onClick="this.select()"
+                                   [(ngModel)]="pair.quotingParameters.display.safetimeOver">
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
                                 <table class="table table-responsive table-bordered" style="margin-bottom:0px;">
                                     <thead>
                                         <tr class="active">
