@@ -44,7 +44,7 @@ export class EWMATargetPositionCalculator {
 
     if((SMA3 < this._SMA3[3])) { }
 
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Current time' , this._SMA3TIME[1] );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Current time' , currenttime.getTime() );
 
     let newTargetPosition: number = 0;
 
