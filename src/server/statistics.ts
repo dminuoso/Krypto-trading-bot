@@ -44,18 +44,19 @@ export class EWMATargetPositionCalculator {
 
 /* enter safey modes */
 //  var SMAOLD = this._SMA3[3];
-  if (((SMA3 * 100 / this._SMA3[3]) - 100) > params.safetyP)
+  if (((SMA3 * 100 / this._SMA3[3]) - 100) > (100/params.safetyP))
   {
     params.mSafeMode = params.safemode.buy;
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (SMA3 * 100 / this._SMA3[3]) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , params.safetyP );
   }
-  if (((SMA3 * 100 / this._SMA3[3]) - 100) <  -(params.safetyP) )
+  if (((SMA3 * 100 / this._SMA3[3]) - 100) <  -(100/params.safetyP) )
   {
     params.mSafeMode = params.safemode.sell;
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (SMA3 * 100 / this._SMA3[3]) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , params.safetyP );
   }
+  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (SMA3 * 100 / this._SMA3[3]) );
   console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Mode' , params.safemode[params.mSafeMode] );
 /* exit safey modes
     if(
