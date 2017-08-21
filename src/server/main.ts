@@ -19,7 +19,7 @@ import PositionManagement = require("./position-management");
 import Statistics = require("./statistics");
 import QuotingEngine = require("./quoting-engine");
 
-let happyEnding = () => { console.info(new Date().toISOString().slice(11, -1), 'main', 'Error', 'THE END IS NEVER '.repeat(21)+'THE END'); };
+let happyEnding = () => { console.info(new Date().toISOString().slice(11, -1), 'main', 'Error', 'THE END IS NEVER THE END'); };
 
 const processExit = () => {
   happyEnding();
