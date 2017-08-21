@@ -120,6 +120,7 @@ export enum OrderStatus { New, Working, Complete, Cancelled }
 export enum Liquidity { Make, Take }
 export enum  mMoveit { up, down, unknown }
 export enum  mMovemomentum {normal, mid, fast, unknown }
+export enum mSafeMode { buy, sell, unknown }
 
 export interface ProductState {
     advert: ProductAdvertisement;
