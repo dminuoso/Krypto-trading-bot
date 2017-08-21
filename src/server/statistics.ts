@@ -58,7 +58,8 @@ export class EWMATargetPositionCalculator {
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (this._SMA3[0] * 100 / this._SMA3[2]) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , -(100/params.safetyP) );
   }
-  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (this._SMA3[0] * 100 / this._SMA3[2]) );
+  
+  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , ((this._SMA3[0] * 100 / this._SMA3[2]) -100 ) );
   console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Mode' , params.safemode[params.mSafeMode] );
 /* exit safey modes
     if(
