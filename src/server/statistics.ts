@@ -24,6 +24,7 @@ export class EWMATargetPositionCalculator {
     }
   }
   private _SMA3: number[] = [];
+  private _SMA3TIME: number[] = [];
 
 
   public latestLong: number = null;
@@ -36,6 +37,14 @@ export class EWMATargetPositionCalculator {
     this._SMA3 = this._SMA3.slice(-3);
     const SMA3 = this._SMA3.reduce((a,b) => a+b) / this._SMA3.length;
 
+    var currenttime = new Date();
+    this._SMA3TIME.push(currenttime.getTime());
+    this._SMA3TIME = this._SMA3TIME.slice(-3);
+    const SMA3TIME = this._SMA3TIME.reduce((a,b) => a+b) / this._SMA3TIME.length;
+
+    if((SMA3 < this._SMA3[3])) { }
+
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Current time' , this._SMA3TIME[1] );
 
     let newTargetPosition: number = 0;
 
