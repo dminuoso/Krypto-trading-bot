@@ -36,6 +36,7 @@ export class EWMATargetPositionCalculator {
     this._SMA3.push(value);
     this._SMA3 = this._SMA3.slice(-3);
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA Length' , this._SMA3.length );
+      console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA1 Value' , this._SMA3[1] );
     const SMA3 = this._SMA3.reduce((a,b) => a+b) / this._SMA3.length;
 
     var currenttime = new Date();
