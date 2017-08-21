@@ -64,9 +64,10 @@ namespace K {
     {  "asp_low",                       decimal_cast<1>("-5").getAsDouble()    },
     {  "asp_high",                      decimal_cast<1>("5").getAsDouble()     },
     {  "aspactive",                     false                                  },
-    {  "aspvalue",                      decimal_cast<1>("0").getAsDouble()     }
+    {  "aspvalue",                      decimal_cast<1>("0").getAsDouble()     },
+    {  "safetynet",                     false                                  }
 
-  }; 
+  };
   static vector<string> boolQP = {
     "widthPercentage", "bestWidth", "sellSizeMax", "buySizeMax", "percentageValues",
     "quotingEwmaProtection", "quotingStdevBollingerBands", "cancelOrdersAuto", "audio"
