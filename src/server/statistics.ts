@@ -42,9 +42,26 @@ export class EWMATargetPositionCalculator {
     this._SMA3TIME = this._SMA3TIME.slice(-3);
     const SMA3TIME = this._SMA3TIME.reduce((a,b) => a+b) / this._SMA3TIME.length;
 
-    if((SMA3 < this._SMA3[3])) { }
+/* enter safey modes */
+//  var SMAOLD = this._SMA3[3];
+  if (((SMA3 * 100 / this._SMA3[3]) - 100) > params.safetyP)
+  {
+    params.mSafeMode = params.safemode.buy;
+  }
+  if (((SMA3 * 100 / this._SMA3[3]) - 100) <  -(params.safetyP) )
+  {
+    params.mSafeMode = params.safemode.sell;
+  }
+  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Mode' , params.safemode[params.mSafeMode] );
+/* exit safey modes
+    if(
+      (SMA3 < this._SMA3[3])
 
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Current time' , currenttime.getTime() );
+      ) { }
+
+      */
+
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Current time' , this._SMA3TIME[1] );
 
     let newTargetPosition: number = 0;
 
