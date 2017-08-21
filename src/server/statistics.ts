@@ -35,6 +35,7 @@ export class EWMATargetPositionCalculator {
     const params = this._qpRepo();
     this._SMA3.push(value);
     this._SMA3 = this._SMA3.slice(-3);
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA Length' , this._SMA3.length );
     const SMA3 = this._SMA3.reduce((a,b) => a+b) / this._SMA3.length;
 
     var currenttime = new Date();
@@ -44,16 +45,16 @@ export class EWMATargetPositionCalculator {
 
 /* enter safey modes */
 //  var SMAOLD = this._SMA3[3];
-  if (((SMA3 * 100 / this._SMA3[3]) - 100) > (100/params.safetyP))
+  if (((this._SMA3[1] * 100 / this._SMA3[3]) - 100) > (100/params.safetyP))
   {
     params.mSafeMode = params.safemode.buy;
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (SMA3 * 100 / this._SMA3[3]) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (this._SMA3[1] * 100 / this._SMA3[3]) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , params.safetyP );
   }
-  if (((SMA3 * 100 / this._SMA3[3]) - 100) <  -(100/params.safetyP) )
+  if (((this._SMA3[1] * 100 / this._SMA3[3]) - 100) <  -(100/params.safetyP) )
   {
     params.mSafeMode = params.safemode.sell;
-    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (SMA3 * 100 / this._SMA3[3]) );
+    console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (this._SMA3[1] * 100 / this._SMA3[3]) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Safety Percent' , params.safetyP );
   }
   console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'Value' , (this._SMA3[1] * 100 / this._SMA3[3]) );
