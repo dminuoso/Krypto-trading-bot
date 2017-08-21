@@ -67,8 +67,9 @@ namespace K {
     {  "aspvalue",                      decimal_cast<1>("0").getAsDouble()     },
     {  "safetynet",                     false                                  },
     {  "safeZ",                         decimal_cast<1>("0").getAsDouble()     },
-    {  "safetimeY",                      5                                      }, // safetime in minutes. 
-    {  "safetimeX",                      5                                      }, // safetime in minutes.
+    {  "safetimeY",                      5                                     }, // safetime in minutes. 
+    {  "safetimeX",                      5                                     }, // safetime in minutes.
+    {  "safetyP",                        decimal_cast<1>(".2").getAsDouble()   },
     {  "safemode",                      (int)mSafeMode::unknown                }
 
   };
