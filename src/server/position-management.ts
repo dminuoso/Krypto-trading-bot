@@ -62,7 +62,7 @@ export class TargetBasePositionManager {
     ):null]);
     this._evOn('PositionBroker', this.recomputeTargetPosition);
     this._evOn('QuotingParameters', () => setTimeout(() => this.recomputeTargetPosition(), moment.duration(121)));
-    setInterval(this.updateEwmaValues, moment.duration(1, 'minutes'));
+    setInterval(this.updateEwmaValues, moment.duration(5, 'seconds'));
   }
 
   private recomputeTargetPosition = () => {
