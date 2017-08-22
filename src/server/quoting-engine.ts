@@ -132,6 +132,8 @@ export class QuotingEngine {
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value params.aspvalue');
+        
           if ( (params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low) && params.aspactive ) {
             pDiv = 0;
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv Value Changed to: 0');
