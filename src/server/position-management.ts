@@ -103,6 +103,7 @@ export class TargetBasePositionManager {
         this._evUp('EWMACurrent');
         this._uiSend(Models.Topics.EWMACurrent, this._latestEWMACur , true);
         this._dbInsert(Models.Topics.EWMACurrent, this._latestEWMACur );
+        console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
         console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur.currentShort , this._latestEWMACur.currentLong );
       }
 
@@ -189,6 +190,7 @@ export class TargetBasePositionManager {
 
     //this._evUP('EWMACurrent');
     //this._uiSend(Models.Topics.EWMACurrent, this._latestEWMACur,true);
+    console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
     this._dbInsert(Models.Topics.EWMACurrent, new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium));
 
   //  this._evUp('TargetPosition');
