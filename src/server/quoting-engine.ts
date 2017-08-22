@@ -75,9 +75,9 @@ export class QuotingEngine {
       this._evOn('TargetPosition', this.recalcQuote);
       this._evOn('Safety', this.recalcQuote);
       if (initRfv !== null && initRfv.length) {
-        this.latestLong = initRfv[0].ewmaLong;
-        this.latestMedium = initRfv[0].ewmaMedium;
-        this.latestShort = initRfv[0].ewmaShort;
+        var latestLong = initRfv[0].ewmaLong;
+        var latestMedium = initRfv[0].ewmaMedium;
+        var latestShort = initRfv[0].ewmaShort;
       }
 
 
@@ -85,15 +85,17 @@ export class QuotingEngine {
     }
 
 
-      public latestLong: number = null;
-      private latestMedium: number = null;
-      public latestShort: number = null;
+    public aspvalue: number = null;
+
+
+
+
 
     private computeQuote(filteredMkt: Models.Market, fv: number) {
         const latestPosition = this._positionBroker();
         if (this._targetPosition.latestTargetPosition === null || latestPosition === null) return null;
         const targetBasePosition = this._targetPosition.latestTargetPosition.tbp;
-
+        const fvv = this._fvEngine;
         var params = this._qpRepo();
         const widthPing = (params.widthPercentage)
           ? params.widthPingPercentage * fv / 100
@@ -140,6 +142,7 @@ export class QuotingEngine {
               ? 3 : 1))
         ] : [1, 1];
 
+        let aspvalue = ((fvv.ewmaShort * 100/ fvv.ewmaShort  - 100) * (1 / params.ewmaSensiblityPercentage));
 
         var pDiv : number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
@@ -147,6 +150,7 @@ export class QuotingEngine {
 
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
 
+            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue); 
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
 /*
