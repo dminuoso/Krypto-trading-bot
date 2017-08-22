@@ -110,23 +110,27 @@ namespace K {
         if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
+
+        // lets do some SMA math to see if we can buy or sell safety time!
+        if (mGWSMA33[mGWSMA33.size()] * 100 / mGWSMA33[mGWSMA33.begin()] - 100) > (qpRepo["safetyP"]/100))
+        {
+    //  params.mSafeMode = Models.mSafeMode.buy;
+    //  params.safetimestart = currenttime.getTime();
+    //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value BUY' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) );
+    //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
+        }
+        if (mGWSMA33[mGWSMA33.size()] * 100 / mGWSMA33[mGWSMA33.begin()] - 100) < -(qpRepo["safetyP"]/100))
+        {
+    //  params.mSafeMode = Models.mSafeMode.buy;
+    //  params.safetimestart = currenttime.getTime();
+    //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value BUY' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) );
+    //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
+        }
+
+
       };
 
-      // lets do some SMA math to see if we can buy or sell safety time!
-      if (mGWSMA33[mGWSMA33.size()] * 100 / mGWSMA33[mGWSMA33.begin()] - 100) > (qpRepo["safetyP"]/100))
-      {
-  //  params.mSafeMode = Models.mSafeMode.buy;
-  //  params.safetimestart = currenttime.getTime();
-  //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value BUY' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) );
-  //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
-      }
-      if (mGWSMA33[mGWSMA33.size()] * 100 / mGWSMA33[mGWSMA33.begin()] - 100) < -(qpRepo["safetyP"]/100))
-      {
-  //  params.mSafeMode = Models.mSafeMode.buy;
-  //  params.safetimestart = currenttime.getTime();
-  //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value BUY' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) );
-  //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
-      }
+
 
 
       static void _mgFilter(const FunctionCallbackInfo<Value>& args) {
