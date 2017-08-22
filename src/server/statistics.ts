@@ -120,6 +120,7 @@ export class EWMATargetPositionCalculator {
           const newEwmacrossing = ((newShort * 100 / newMedium) - 100);
           newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / params.ewmaSensiblityPercentage);
             this.aspvalue = newTargetPosition;
+            params.aspvalue = newTargetPosition;
         } else if (params.autoPositionMode === Models.AutoPositionMode.EWMA_LS) {
           newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / params.ewmaSensiblityPercentage);
           params.aspvalue = newTargetPosition;
@@ -129,6 +130,7 @@ export class EWMATargetPositionCalculator {
         else if (newTargetPosition < -1) newTargetPosition = -1;
 
         console.warn(new Date().toISOString().slice(11, -1), 'ASP', 'ASP Value Set to' ,   this.aspvalue);
+        console.warn(new Date().toISOString().slice(11, -1), 'ASP', 'ASP Value Set to' ,   params.aspvalue);
 
         if(params.safetynet && Models.mSafeMode.buy == Models.mSafeMode.buy ) {
 
