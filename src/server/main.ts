@@ -86,7 +86,8 @@ new QuoteSender.QuoteSender(
       bindings.evOn,
       bindings.evUp,
       bindings.dbLoad(Models.Topics.TargetBasePosition),
-      bindings.dbLoad(Models.EWMACurrent)
+      bindings.dbLoad(Models.Topics.EWMACurrent)
+
     ),
     new Safety.SafetyCalculator(
       bindings.mgFairV,

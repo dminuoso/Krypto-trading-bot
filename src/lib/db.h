@@ -31,7 +31,7 @@ namespace K {
           string("SELECT json FROM ").append(k).append(" ORDER BY time DESC;"),
           cb, (void*)&j, &zErrMsg
         );
-
+          
         if (zErrMsg) printf("sqlite error1: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
         if (j[strlen(j.data()) - 1] == ',') j.pop_back();
