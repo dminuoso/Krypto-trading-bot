@@ -104,7 +104,7 @@ export class TargetBasePositionManager {
       console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'New Long Value:', (this.newLong) )
       console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'recalculated', params.aspvalue )
       console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Movement', movement )
-
+      console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Movement', params.aspactive  )
 
 
       if(this.newShort > this.newLong) {
