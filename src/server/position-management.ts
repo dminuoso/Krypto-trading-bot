@@ -97,7 +97,7 @@ export class TargetBasePositionManager {
 */
     let movement: number = ((this.newShort - this.newLong) / ((this.newShort + this.newLong) / 2)) * 100 ;
 
-      params.aspvalue = (this.newShort * 100 / this.newLong) - 100 ;
+      
     //  console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Find the bug:', mrdebug )
     //  console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Fair Value recalculated:', this._fvAgent.latestFairValue.price )
       console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'New Short Value:', (this.newShort ) )
