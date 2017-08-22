@@ -92,7 +92,7 @@ namespace K {
         if (mGWSMA33.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
         for (vector<double>::iterator it = mGWSMA33.begin(); it != mGWSMA33.end(); ++it)
         // log the time
-        mSMATIME.push_back(time());
+        mSMATIME.push_back(std::time(nullptr));
         if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
 
 

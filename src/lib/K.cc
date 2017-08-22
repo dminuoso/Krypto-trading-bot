@@ -37,7 +37,7 @@
 #include <uWS.h>
 
 //zaks librariess
-#include <time.h>
+#include <ctime>
 
 using namespace std;
 using namespace v8;
