@@ -125,6 +125,16 @@ export class EWMATargetPositionCalculator {
 
         console.warn(new Date().toISOString().slice(11, -1), 'ASP', 'ASP Value Set to' , params.aspvalue );
 
+        if(params.safetynet &&  params.mSafeMode == Models.mSafeMode.buy ) {
+
+          newTargetPosition = 1;
+          console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Activating New Target Position' , newTargetPosition );
+        }
+        if(params.safetynet &&  params.mSafeMode == Models.mSafeMode.sell ) {
+          newTargetPosition = -1;
+          console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Activating New Target Position' , newTargetPosition );
+        }
+
 
     return newTargetPosition;
   }
