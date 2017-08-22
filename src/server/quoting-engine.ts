@@ -58,7 +58,8 @@ export class QuotingEngine {
       private _targetPosition: PositionManagement.TargetBasePositionManager,
       private _safeties: Safety.SafetyCalculator,
       private _evOn,
-      private _evUp
+      private _evUp,
+      private _ewma2: Statistics.EWMATargetPositionCalculator
     ) {
       this._safeties.targetPosition = this._targetPosition;
       this._registry = new QuotingStyleRegistry.QuotingStyleRegistry();
@@ -91,6 +92,7 @@ export class QuotingEngine {
         if (this._targetPosition.latestTargetPosition === null || latestPosition === null) return null;
         const targetBasePosition = this._targetPosition.latestTargetPosition.tbp;
         const fvv = this._fvEngine;
+        const EWMA2 = this._ewma2;
         var params = this._qpRepo();
         const widthPing = (params.widthPercentage)
           ? params.widthPingPercentage * fv / 100
@@ -144,8 +146,8 @@ export class QuotingEngine {
           : params.positionDivergence;
 //
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
-          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  fvv.ewmaShort);
-          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  fvv.ewmaShort);
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  this._ewma2.latestShort);
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  this._ewma2.latestLong);
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue);
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
