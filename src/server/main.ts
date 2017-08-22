@@ -76,6 +76,7 @@ new QuoteSender.QuoteSender(
       bindings.mgFairV,
       new Statistics.EWMATargetPositionCalculator(
         bindings.qpRepo,
+        bindings.dbInsert,
         bindings.dbLoad(Models.Topics.EWMAChart)
       ),
       bindings.qpRepo,
