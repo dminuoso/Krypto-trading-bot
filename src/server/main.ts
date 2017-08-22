@@ -85,7 +85,8 @@ new QuoteSender.QuoteSender(
       bindings.uiSend,
       bindings.evOn,
       bindings.evUp,
-      bindings.dbLoad(Models.Topics.TargetBasePosition)
+      bindings.dbLoad(Models.Topics.TargetBasePosition),
+      bindings.dbLoad(Models.EWMACurrent)
     ),
     new Safety.SafetyCalculator(
       bindings.mgFairV,
@@ -102,8 +103,7 @@ new QuoteSender.QuoteSender(
     new Statistics.EWMATargetPositionCalculator(
       bindings.qpRepo,
       bindings.dbInsert,
-      bindings.dbLoad(Models.RegularFairValue),
-      bindings.dbLoad(Models.EWMACurrent)
+      bindings.dbLoad(Models.RegularFairValue)
     )
   ),
   bindings.allOrders,
