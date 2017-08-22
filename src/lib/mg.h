@@ -10,6 +10,8 @@ namespace K {
   static double mGWEwmaM = 0;
   static double mGWEwmaS = 0;
   static vector<double> mGWSMA3;
+  static vector<double> mGWSMA33; // Logging SMA3 values
+  static vector<double> mSMATIME; // logging SMA3 value timestamps
   class MG {
     public:
       static void main(Local<Object> exports) {
@@ -87,12 +89,12 @@ namespace K {
 
         // lets make a SMA logging average
         mGWSMA33.push_back(SMA3);
-        if (mGWSMA3.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
+        if (mGWSMA33.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
         for (vector<double>::iterator it = mGWSMA33.begin(); it != mGWSMA33.end(); ++it)
         // log the time
         mSMATIME.push_back(time());
         if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
-        
+
 
 
 
