@@ -178,7 +178,7 @@ export class TargetBasePositionManager {
     this._latestEWMACur = new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium);
 
     //this._evUP('EWMACurrent');
-    this._uiSend(Models.EWMACurrent, this._latestEWMACur,true);
+  //  this._uiSend(Models.EWMACurrent, this._latestEWMACur,true);
     this._dbInsert(Models.EWMACurrent, this._latestEWMACur);
 
   //  this._evUp('TargetPosition');
