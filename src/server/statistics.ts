@@ -75,6 +75,7 @@ export class EWMATargetPositionCalculator {
   console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'SMA3' , SMA3 );
   console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'latest SMA33' , this._SMA33[this._SMA33.length-1]  );
   console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Mode' , Models.mSafeMode[params.mSafeMode] );
+  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Active?' , params.aspactive );
 /* exit safey modes
     if(
       (SMA3 < this._SMA3[3])
