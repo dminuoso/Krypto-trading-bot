@@ -4,9 +4,12 @@
 namespace K {
 static json qpRepo;
 
-  void qpPassBack(const v8::FunctionCallbackInfo<v8::Value>& args) 
+  void passdata(const v8::Arguments& args)
   {
-    Isolate* isolate = args.GetIsolate();
+  //  std::list<std::string> values = cvv8::CastFromJS<std::list<std::string> >(args[0]);
+
+      //qpRepo["cancelOrdersAuto"].get<bool>()
+      //std::list<std::string> values = cvv8::CastFromJS<std::list<std::string> >(args[0]);
 
 
   }
