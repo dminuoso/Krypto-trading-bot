@@ -100,6 +100,7 @@ new QuoteSender.QuoteSender(
     bindings.evUp,
     new Statistics.EWMATargetPositionCalculator(
       bindings.qpRepo,
+      bindings.dbInsert,
       bindings.dbLoad(Models.RegularFairValue)
     )
   ),

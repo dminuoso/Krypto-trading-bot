@@ -9,9 +9,9 @@ export class TargetBasePositionManager {
 
   private newWidth: Models.IStdev = null;
   private newQuote: number = null;
-  private newShort: number = null;
-  private newMedium: number = null;
-  private newLong: number = null;
+  public newShort: number = null;
+  public newMedium: number = null;
+  public newLong: number = null;
   private fairValue: number = null;
   public latestLong: number = null;
   private latestMedium: number = null;
@@ -146,7 +146,7 @@ export class TargetBasePositionManager {
 
   };
 
-  private updateEwmaValues = () => {
+  public updateEwmaValues = () => {
     const fv = this._fvEngine();
     if (!fv) {
       console.info(new Date().toISOString().slice(11, -1), 'tbp', 'Unable to update ewma');
@@ -163,6 +163,7 @@ export class TargetBasePositionManager {
     this.newShort = this._ewma.addNewShortValue(this.fairValue);
     this.newMedium = this._ewma.addNewMediumValue(this.fairValue);
     this.newLong = this._ewma.addNewLongValue(this.fairValue);
+
     this._newTargetPosition = this._ewma.computeTBP(this.fairValue, this.newLong, this.newMedium, this.newShort);
     // console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');
     this.recomputeTargetPosition();

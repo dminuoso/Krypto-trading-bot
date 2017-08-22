@@ -15,6 +15,7 @@ function computeEwma(newValue: number, previous: number, periods: number): numbe
 export class EWMATargetPositionCalculator {
   constructor(
     private _qpRepo,
+    private _dbInsert,
     initRfv: Models.RegularFairValue[]
   ) {
     if (initRfv !== null && initRfv.length) {

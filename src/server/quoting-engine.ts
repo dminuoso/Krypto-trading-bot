@@ -146,8 +146,8 @@ export class QuotingEngine {
           : params.positionDivergence;
 //
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
-          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  this._ewma2.latestShort);
-          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  this._ewma2.latestLong);
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  this._targetPosition.newShort );
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  this._targetPosition.newLong);
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue);
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;

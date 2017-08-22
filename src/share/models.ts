@@ -353,6 +353,14 @@ export class ApplicationState {
     constructor(public memory: number, public hour: number, public freq: number, public dbsize: number) { }
 }
 
+export class EWMACurrent {
+  constructor(
+    public currenShort: number,
+    public currentLong: number,
+    public currentMedium: number
+  ) {}
+}
+
 export class RegularFairValue {
     constructor(
       public fairValue: number,
