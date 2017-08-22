@@ -98,6 +98,7 @@ new QuoteSender.QuoteSender(
     ),
     bindings.evOn,
     bindings.evUp,
+    bindings.mgFairv
   ),
   bindings.allOrders,
   bindings.allOrdersDelete,
