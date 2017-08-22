@@ -128,11 +128,13 @@ export class QuotingEngine {
               ? 3 : 1))
         ] : [1, 1];
 
-        var pDiv: number  = (params.percentageValues)
+        let pDiv: number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue) ;
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.asp_low) ;
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.as_high) ;
 
           if ( (params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low) && params.aspactive ) {
             pDiv = 0;
