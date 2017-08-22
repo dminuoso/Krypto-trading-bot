@@ -29,13 +29,17 @@ export class EWMATargetPositionCalculator {
 
 
   public latestLong: number = null;
-  private latestMedium: number = null;
-  public latestShort: number = null;
+  public latestMedium: number = null;
+  public latestShort: number = this.latestShort;
   public aspvalue: number = null;
 
   computeTBP(value: number, newLong: number, newMedium: number, newShort: number): number {
     var params = this._qpRepo();
     this._SMA3.push(value);
+
+    this.latestLong = newLong;
+    this.latestMedium = newMedium;
+    this.latestShort = newShort;
 
     this._SMA3 = this._SMA3.slice(-3);
     this._SMA33 = this._SMA33.slice(-100);
@@ -146,6 +150,8 @@ export class EWMATargetPositionCalculator {
     return newTargetPosition;
   }
 
+
+
   addNewShortValue(value: number): number {
     this.latestShort = computeEwma(value, this.latestShort, this._qpRepo().shortEwmaPeridos);
     return this.latestShort;
@@ -171,6 +177,7 @@ export class EWMAProtectionCalculator {
     setInterval(this.onTick, moment.duration(1, "minutes"));
   }
 
+
   private onTick = () => {
     var fv = this._fvEngine();
     if (!fv) {
@@ -180,6 +187,7 @@ export class EWMAProtectionCalculator {
 
     this.setLatest(computeEwma(fv, this._latest, this._qpRepo().quotingEwmaProtectionPeridos));
   };
+
 
   private _latest: number = null;
   public get latest() { return this._latest; }
