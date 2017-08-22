@@ -59,8 +59,10 @@ export class TargetBasePositionManager {
       }
       if (initEWMACur.length && typeof initEWMACur[0].currentShort != "undefined") {
         this._latestEWMACur = initEWMACur[0];
+        this.newShort = this._latestEWMACur.currentShort;
+        this.newLong = this._latestEWMACur.currentLong;
         console.info(new Date().toISOString().slice(11, -1), 'EWMA Short', 'Loaded from DB:', this._latestEWMACur.currentShort);
-      //  console.info(new Date().toISOString().slice(11, -1), 'EWMA Long', 'Loaded from DB:', this._latestEWMACur.currentLong);
+        console.info(new Date().toISOString().slice(11, -1), 'EWMA Long', 'Loaded from DB:', this._latestEWMACur.currentLong);
       }
     _uiSnap(Models.Topics.TargetBasePosition, () => [this._latest]);
     _uiSnap(Models.Topics.EWMACurrent, () => [this._latestEWMACur]);
