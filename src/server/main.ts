@@ -97,8 +97,7 @@ new QuoteSender.QuoteSender(
       bindings.evUp
     ),
     bindings.evOn,
-    bindings.evUp,
-    bindings.mgFairv
+    bindings.evUp
   ),
   bindings.allOrders,
   bindings.allOrdersDelete,
