@@ -146,10 +146,10 @@ export class QuotingEngine {
           : params.positionDivergence;
 
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
-        
+
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
-
+/*
           if ( (this._ew2.aspvalue >= params.asp_high || this._ew2.aspvalue <= params.asp_low) && params.aspactive ) {
             pDiv = 0;
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv Value Changed to: 0');
@@ -164,7 +164,7 @@ export class QuotingEngine {
             pDiv = 0;
             console.warn(new Date().toISOString().slice(11, -1), 'SMA33-pDiv', 'Changing pDiv to 0' );
           }
-
+*/
         if (superTradesMultipliers[1] > 1) {
           if (!params.buySizeMax) unrounded.bidSz = Math.min(superTradesMultipliers[1]*buySize, (latestPosition.quoteAmount / fv) / 2);
           if (!params.sellSizeMax) unrounded.askSz = Math.min(superTradesMultipliers[1]*sellSize, latestPosition.baseAmount / 2);
