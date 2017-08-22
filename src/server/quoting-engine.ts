@@ -139,7 +139,7 @@ export class QuotingEngine {
               ? 3 : 1))
         ] : [1, 1];
 
-        let aspvalue = ((fvv.ewmaShort * 100/ fvv.ewmaShort  - 100) * (1 / params.ewmaSensiblityPercentage));
+        let aspvalue = ((this._targetPosition.latestEMACurrent.currentShort * 100/ this._targetPosition.latestEMACurrent.currentLong - 100) * (1 / params.ewmaSensiblityPercentage));
 
         var pDiv : number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
