@@ -41,7 +41,7 @@ namespace K {
     MarketTrade = 'r', Trades = 's', ExternalValuation = 't', QuoteStatus = 'u',
     TargetBasePosition = 'v', TradeSafetyValue = 'w', CancelAllOrders = 'x',
     CleanAllClosedOrders = 'y', CleanAllOrders = 'z', CleanTrade = 'A', TradesChart = 'B',
-    WalletChart = 'C', EWMAChart = 'D',   EWMACurrent = 'FF'
+    WalletChart = 'C', EWMAChart = 'D',   EWMACurrent = 'Z'
   };
   class Gw {
     public:

@@ -49,7 +49,7 @@ export var Topics = {
   WalletChart: 'C',
   EWMAChart: 'D',
   ASPVALUE: 'E',
-  EWMACurrent: 'FF'
+  EWMACurrent: 'Z'
 }
 
 export class MarketSide {
