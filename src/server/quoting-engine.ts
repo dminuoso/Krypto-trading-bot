@@ -58,8 +58,7 @@ export class QuotingEngine {
       private _targetPosition: PositionManagement.TargetBasePositionManager,
       private _safeties: Safety.SafetyCalculator,
       private _evOn,
-      private _evUp,
-      initRfv: Models.RegularFairValue[]
+      private _evUp
     ) {
       this._safeties.targetPosition = this._targetPosition;
       this._registry = new QuotingStyleRegistry.QuotingStyleRegistry();
@@ -74,11 +73,7 @@ export class QuotingEngine {
       this._evOn('OrderTradeBroker', this.recalcQuote);
       this._evOn('TargetPosition', this.recalcQuote);
       this._evOn('Safety', this.recalcQuote);
-      if (initRfv !== null && initRfv.length) {
-        var latestLong = initRfv[0].ewmaLong;
-        var latestMedium = initRfv[0].ewmaMedium;
-        var latestShort = initRfv[0].ewmaShort;
-      }
+
 
 
       setInterval(this.recalcQuote, moment.duration(1, "seconds"));
@@ -150,7 +145,7 @@ export class QuotingEngine {
 
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
 
-            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue); 
+            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue);
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
 /*
