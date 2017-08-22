@@ -31,9 +31,10 @@ export class EWMATargetPositionCalculator {
   public latestLong: number = null;
   private latestMedium: number = null;
   public latestShort: number = null;
+  public aspvalue: number = null;
 
   computeTBP(value: number, newLong: number, newMedium: number, newShort: number): number {
-    const params = this._qpRepo();
+    var params = this._qpRepo();
     this._SMA3.push(value);
 
     this._SMA3 = this._SMA3.slice(-3);
@@ -122,11 +123,12 @@ export class EWMATargetPositionCalculator {
         } else if (params.autoPositionMode === Models.AutoPositionMode.EWMA_LS) {
           newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / params.ewmaSensiblityPercentage);
           params.aspvalue = newTargetPosition;
+          this.aspvalue = newTargetPosition;
         }
         if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
-      
-        console.warn(new Date().toISOString().slice(11, -1), 'ASP', 'ASP Value Set to' , params.aspvalue );
+
+        console.warn(new Date().toISOString().slice(11, -1), 'ASP', 'ASP Value Set to' ,   this.aspvalue);
 
         if(params.safetynet && Models.mSafeMode.buy == Models.mSafeMode.buy ) {
 
@@ -162,7 +164,7 @@ export class EWMAProtectionCalculator {
   constructor(
     private _fvEngine,
     private _qpRepo,
-    private _evUp
+    private _evUp,
   ) {
     setInterval(this.onTick, moment.duration(1, "minutes"));
   }

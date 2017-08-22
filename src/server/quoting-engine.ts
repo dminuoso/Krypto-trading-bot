@@ -58,7 +58,8 @@ export class QuotingEngine {
       private _targetPosition: PositionManagement.TargetBasePositionManager,
       private _safeties: Safety.SafetyCalculator,
       private _evOn,
-      private _evUp
+      private _evUp,
+      private _ew2: Statistics.EWMATargetPositionCalculator
     ) {
       this._safeties.targetPosition = this._targetPosition;
       this._registry = new QuotingStyleRegistry.QuotingStyleRegistry();
@@ -132,11 +133,12 @@ export class QuotingEngine {
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
-          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
+        //
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  this._ew2.aspvalue ) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
 
-          if ( (params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low) && params.aspactive ) {
+          if ( (this._ew2.aspvalue >= params.asp_high || this._ew2.aspvalue <= params.asp_low) && params.aspactive ) {
             pDiv = 0;
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv Value Changed to: 0');
 

@@ -60,7 +60,7 @@ new QuoteSender.QuoteSender(
     new Statistics.EWMAProtectionCalculator(
       bindings.mgFairV,
       bindings.qpRepo,
-      bindings.evUp
+      bindings.evUp,
     ),
     new Statistics.STDEVProtectionCalculator(
       bindings.mgFairV,
@@ -97,7 +97,11 @@ new QuoteSender.QuoteSender(
       bindings.evUp
     ),
     bindings.evOn,
-    bindings.evUp
+    bindings.evUp,
+  new Statistics.EWMATargetPositionCalculator (
+      bindings.qpRepo,
+      bindings.dbLoad(Models.RegularFairValue)
+  )
   ),
   bindings.allOrders,
   bindings.allOrdersDelete,
