@@ -116,7 +116,7 @@ namespace K {
         int  sma33Start = mGWSMA33.begin();
         int sma33End = mGWSMA33.end();
 
-        if ((mGWSMA33[sma33End] * 100 / mGWSMA33[sma33Start] - 100) > (qpRepo["safetyP"].get<double> / 100))
+        if ((mSMATIME.end()-1 * 100 / mSMATIME.begin() - 100) > (qpRepo["safetyP"].get<double> / 100))
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
     //  params.safetimestart = currenttime.getTime();
