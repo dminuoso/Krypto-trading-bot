@@ -104,7 +104,7 @@ new QuoteSender.QuoteSender(
     new Statistics.EWMATargetPositionCalculator(
       bindings.qpRepo,
       bindings.dbInsert,
-      bindings.dbLoad(Models.RegularFairValue)
+      bindings.dbLoad(Models.Topics.FairValue)
     )
   ),
   bindings.allOrders,
