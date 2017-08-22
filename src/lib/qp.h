@@ -69,8 +69,9 @@ namespace K {
     {  "safeZ",                         decimal_cast<1>("0").getAsDouble()     },
     {  "safetytime",                     5                                     }, // safetime in minutes.
     {  "safetimeOver",                   5                                     }, // safetime in minutes.
-    {  "safetyP",                        20   },
-    {  "safemode",                      (int)mSafeMode::unknown                }
+    {  "safetyP",                        20                                    },
+    {  "safemode",                      (int)mSafeMode::unknown                },
+    {  "safetimestart",                 0                                      }
 
   };
   static vector<string> boolQP = {

@@ -25,7 +25,7 @@ export class EWMATargetPositionCalculator {
   }
   private _SMA3: number[] = [];
   private _SMA33: number[] = [];
-  private _SMA3TIME: number[] = [];
+  private _SMA33TIME: number[] = [];
 
 
   public latestLong: number = null;
@@ -37,15 +37,21 @@ export class EWMATargetPositionCalculator {
     this._SMA3.push(value);
 
     this._SMA3 = this._SMA3.slice(-3);
+    this._SMA33 = this._SMA33.slice(-100);
+    this._SMA33TIME = this._SMA33TIME.slice(-100);
+
     console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'SMA Length' , this._SMA33.length );
     //  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA1 Value' , this._SMA3[0] );
     //  console.warn(new Date().toISOString().slice(11, -1), 'SMA3', 'SMA P' , (params.safetyP/100) );
     const SMA3 = this._SMA3.reduce((a,b) => a+b) / this._SMA3.length;
 
-    this._SMA33.push(SMA3);
+    //this._SMA33.push(SMA3);
 
     var currenttime = new Date();
-    this._SMA3TIME.push(currenttime.getTime());
+    var valuetopush = new Array();
+    this._SMA33.push(SMA3)
+    var currenttime = new Date();
+    this._SMA33TIME.push(currenttime.getTime());
 
 
 
@@ -54,12 +60,14 @@ export class EWMATargetPositionCalculator {
   if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) > (params.safetyP/100))
   {
     params.mSafeMode = Models.mSafeMode.buy;
+    params.safetimestart = currenttime.getTime();
     console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value BUY' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
   }
   if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA3[0]) - 100) <  -(params.safetyP/100) )
   {
     params.mSafeMode = Models.mSafeMode.sell;
+    params.safetimestart = currenttime.getTime();
     console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value SELL' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) -100) );
     console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , -(params.safetyP/100) );
   }
@@ -79,7 +87,26 @@ export class EWMATargetPositionCalculator {
 /* If SMA3(latest) < SMA3(-Z) && timer over
    Quit Safety buy Mode
    */
-//   if( this._SMA3[this._SMA3[this._SMA3.length-1]] )
+   var duration  = currenttime.getTime()  - params.safetimestart;
+   if ( (this._SMA33[this._SMA33.length-1] < this._SMA33[this._SMA33.length - params.safetytime] )
+   &&  (
+          duration >= (params.safetimeOver * 60000)
+
+       )
+      )
+  {
+    params.mSafeMode = Models.mSafeMode.unknown;
+
+
+  } else if ( (this._SMA33[this._SMA33.length-1] > this._SMA33[this._SMA33.length - params.safetytime] )
+   &&  (
+          duration >= (params.safetimeOver * 60000)
+
+       )
+      )
+   {
+        params.mSafeMode = Models.mSafeMode.unknown;
+   }
 
 
     let newTargetPosition: number = 0;
