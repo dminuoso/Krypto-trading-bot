@@ -49,7 +49,8 @@ export var Topics = {
   WalletChart: 'C',
   EWMAChart: 'D',
   ASPVALUE: 'E',
-  EWMACurrent: 'Z'
+  EWMACurrent: 'Z',
+  ASPDATA: 'Y'
 }
 
 export class MarketSide {
@@ -192,7 +193,11 @@ export interface IStdev {
     ask: number;
     askMean: number;
 }
-
+export class ASPDATA {
+  constructor(
+            public aspvalue: number
+  ){}
+}
 export class EWMAChart {
     constructor(public stdevWidth: IStdev,
                 public ewmaQuote: number,
