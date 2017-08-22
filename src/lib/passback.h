@@ -4,15 +4,21 @@
 namespace K {
 static json qpRepo;
 
-  void passdata(const v8::Arguments& args)
-  {
-  //  std::list<std::string> values = cvv8::CastFromJS<std::list<std::string> >(args[0]);
+void passback(const FunctionCallbackInfo<Value>& args) {
+  Isolate * isolate = args.GetIsolate();
 
-      //qpRepo["cancelOrdersAuto"].get<bool>()
-      //std::list<std::string> values = cvv8::CastFromJS<std::list<std::string> >(args[0]);
+  v8::String::Utf8Value s(args[0]);
+  std::string str(*s);
+  std::reverse(str.begin(), str.end());
 
+  Local<String> retval = String::NewFromUtf8(isolate, str.c_str());
+  args.GetReturnValue().Set(retval);
+}
 
-  }
+}
+
+void init(Local<Object> exports) {
+  NODE_SET_METHOD(exports, "passback", passback);
 }
 
 #endif
