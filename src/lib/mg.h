@@ -84,6 +84,19 @@ namespace K {
         for (vector<double>::iterator it = mGWSMA3.begin(); it != mGWSMA3.end(); ++it)
           SMA3 += *it;
         SMA3 /= mGWSMA3.size();
+
+        // lets make a SMA logging average
+        mGWSMA33.push_back(SMA3);
+        if (mGWSMA3.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
+        for (vector<double>::iterator it = mGWSMA33.begin(); it != mGWSMA33.end(); ++it)
+        // log the time
+        mSMATIME.push_back(time());
+        if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
+        
+
+
+
+
         double newTargetPosition = 0;
         if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
           double newTrend = ((SMA3 * 100 / newLong) - 100);
