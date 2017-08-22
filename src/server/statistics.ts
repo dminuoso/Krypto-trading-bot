@@ -95,8 +95,9 @@ export class EWMATargetPositionCalculator {
        )
       )
   {
-    params.mSafeMode = Models.mSafeMode.unknown;
 
+    params.mSafeMode = Models.mSafeMode.unknown;
+      console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Mode OVER ' , Models.mSafeMode[params.mSafeMode] );
 
   } else if ( (this._SMA33[this._SMA33.length-1] > this._SMA33[this._SMA33.length - params.safetytime] )
    &&  (
@@ -106,6 +107,7 @@ export class EWMATargetPositionCalculator {
       )
    {
         params.mSafeMode = Models.mSafeMode.unknown;
+        console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Mode OVER ' , Models.mSafeMode[params.mSafeMode] );
    }
 
 
