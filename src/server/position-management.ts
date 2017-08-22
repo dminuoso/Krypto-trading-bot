@@ -63,6 +63,7 @@ export class TargetBasePositionManager {
       //  console.info(new Date().toISOString().slice(11, -1), 'EWMA Long', 'Loaded from DB:', this._latestEWMACur.currentLong);
       }
     _uiSnap(Models.Topics.TargetBasePosition, () => [this._latest]);
+    _uiSnap(Models.Topics.EWMACurrent, () => [this._latestEWMACur]);
     _uiSnap(Models.Topics.EWMAChart, () => [this.fairValue?new Models.EWMAChart(
       this.newWidth,
       this.newQuote?Utils.roundNearest(this.newQuote, this._minTick):null,
@@ -72,6 +73,7 @@ export class TargetBasePositionManager {
       this.fairValue?Utils.roundNearest(this.fairValue, this._minTick):null
     ):null]);
     this._evOn('PositionBroker', this.recomputeTargetPosition);
+    this._evOn('EWMACurrent', this.updateEwmaValues);
     this._evOn('QuotingParameters', () => setTimeout(() => this.recomputeTargetPosition(), moment.duration(121)));
     setInterval(this.updateEwmaValues, moment.duration(1, 'minutes'));
   }
