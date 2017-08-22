@@ -112,8 +112,8 @@ namespace K {
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         // lets do some SMA math to see if we can buy or sell safety time!
-        vector<int>::iterator sma33Start = mGWSMA33.begin();
-        vector<int>::iterator sma33End = mGWSMA33.end();
+        vector<double>::iterator sma33Start = mGWSMA33.begin();
+        vector<double>::iterator sma33End = mGWSMA33.end();
 
         if ((mGWSMA33[sma33End] * 100 / mGWSMA33[sma33Start] - 100) > (qpRepo["safetyP"].get<double> / 100))
         {
