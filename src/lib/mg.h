@@ -113,10 +113,9 @@ namespace K {
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
-        int  sma33Start = mGWSMA33.begin();
-        int sma33End = mGWSMA33.end();
 
-        if ((mSMATIME.end()-1 * 100 / mSMATIME.begin() - 100) > (qpRepo["safetyP"].get<double>() / 100))
+
+        if (((mSMATIME.end()-1) * 100 / mSMATIME.begin() - 100) > (qpRepo["safetyP"].get<double>() / 100))
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
     //  params.safetimestart = currenttime.getTime();
