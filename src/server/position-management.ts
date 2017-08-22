@@ -57,6 +57,11 @@ export class TargetBasePositionManager {
         this._latest = initTBP[0];
         console.info(new Date().toISOString().slice(11, -1), 'tbp', 'Loaded from DB:', this._latest.tbp);
       }
+      if (initEWMACur.length && typeof initEWMACur[0].currentShort != "undefined") {
+        this._latestEWMACur = initEWMACur[0];
+        console.info(new Date().toISOString().slice(11, -1), 'EWMA Short', 'Loaded from DB:', this._latestEWMACur.currentShort);
+        console.info(new Date().toISOString().slice(11, -1), 'EWMA Long', 'Loaded from DB:', this._latestEWMACur.currentLong);
+      }
     _uiSnap(Models.Topics.TargetBasePosition, () => [this._latest]);
     _uiSnap(Models.Topics.EWMAChart, () => [this.fairValue?new Models.EWMAChart(
       this.newWidth,
@@ -176,9 +181,9 @@ export class TargetBasePositionManager {
     this._uiSend(Models.EWMACurrent, this._latestEWMACur,true);
     this._dbInsert(Models.EWMACurrent, this._latestEWMACur);
 
-    this._evUp('TargetPosition');
-    this._uiSend(Models.Topics.TargetBasePosition, this._latest, true);
-    this._dbInsert(Models.Topics.TargetBasePosition, this._latest);
+  //  this._evUp('TargetPosition');
+  //  this._uiSend(Models.Topics.TargetBasePosition, this._latest, true);
+  //  this._dbInsert(Models.Topics.TargetBasePosition, this._latest);
 
     this._newTargetPosition = this._ewma.computeTBP(this.fairValue, this.newLong, this.newMedium, this.newShort);
     // console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');

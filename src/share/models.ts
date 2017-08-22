@@ -355,7 +355,7 @@ export class ApplicationState {
 
 export class EWMACurrent {
   constructor(
-    public currenShort: number,
+    public currentShort: number,
     public currentLong: number,
     public currentMedium: number
   ) {}
