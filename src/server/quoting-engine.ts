@@ -59,7 +59,7 @@ export class QuotingEngine {
       private _safeties: Safety.SafetyCalculator,
       private _evOn,
       private _evUp,
-      private _ew2: Statistics.EWMATargetPositionCalculator
+      initRfv: Models.RegularFairValue[]
     ) {
       this._safeties.targetPosition = this._targetPosition;
       this._registry = new QuotingStyleRegistry.QuotingStyleRegistry();
@@ -74,9 +74,20 @@ export class QuotingEngine {
       this._evOn('OrderTradeBroker', this.recalcQuote);
       this._evOn('TargetPosition', this.recalcQuote);
       this._evOn('Safety', this.recalcQuote);
+      if (initRfv !== null && initRfv.length) {
+        this.latestLong = initRfv[0].ewmaLong;
+        this.latestMedium = initRfv[0].ewmaMedium;
+        this.latestShort = initRfv[0].ewmaShort;
+      }
+
 
       setInterval(this.recalcQuote, moment.duration(1, "seconds"));
     }
+
+
+      public latestLong: number = null;
+      private latestMedium: number = null;
+      public latestShort: number = null;
 
     private computeQuote(filteredMkt: Models.Market, fv: number) {
         const latestPosition = this._positionBroker();
@@ -129,12 +140,13 @@ export class QuotingEngine {
               ? 3 : 1))
         ] : [1, 1];
 
-        let pDiv: number  = (params.percentageValues)
+        let
+        : number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
-        //
-            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
+        //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
+         console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  eww.aspvalue ) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  eww.aspvalue ) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;

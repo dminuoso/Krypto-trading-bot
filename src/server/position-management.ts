@@ -100,11 +100,11 @@ export class TargetBasePositionManager {
 
     //  console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Find the bug:', mrdebug )
     //  console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Fair Value recalculated:', this._fvAgent.latestFairValue.price )
-      console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'New Short Value:', (this.newShort ) )
-      console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'New Long Value:', (this.newLong) )
-      console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'recalculated', params.aspvalue )
-      console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Movement', movement )
-      console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Movement', params.aspactive  )
+    console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'New Short Value:', (this.newShort ) )
+    console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'New Long Value:', (this.newLong) )
+    console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'recalculated', params.aspvalue )
+    console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Movement', movement )
+    console.info(new Date().toISOString().slice(11, -1), 'ASP2', 'Movement', params.aspactive  )
 
 
       if(this.newShort > this.newLong) {
