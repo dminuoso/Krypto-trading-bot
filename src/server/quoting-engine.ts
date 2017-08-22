@@ -132,10 +132,19 @@ export class QuotingEngine {
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
-          if ((params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low) && params.aspactive ) {
+          if ( (params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low) && params.aspactive ) {
             pDiv = 0;
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv Value Changed to: 0');
 
+          }
+          if(params.safetynet &&  params.mSafeMode == Models.mSafeMode.buy ) {
+
+            pDiv = 0;
+            console.warn(new Date().toISOString().slice(11, -1), 'SMA33-pDiv', 'Anti Slip changing pDiv to Zero' );
+          }
+          if(params.safetynet &&  params.mSafeMode == Models.mSafeMode.sell ) {
+            pDiv = 0;
+            console.warn(new Date().toISOString().slice(11, -1), 'SMA33-pDiv', 'Changing pDiv to 0' );
           }
 
         if (superTradesMultipliers[1] > 1) {
