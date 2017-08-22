@@ -26,12 +26,13 @@ namespace K {
           "time  TIMESTAMP DEFAULT (CAST((julianday('now') - 2440587.5)*86400000 AS INTEGER))  NOT NULL);"),
           NULL, NULL, &zErrMsg
         );
+        if (zErrMsg) printf("sqlite error3: %s\n", zErrMsg);
         string j = "[";
         sqlite3_exec(db,
           string("SELECT json FROM ").append(k).append(" ORDER BY time DESC;"),
           cb, (void*)&j, &zErrMsg
         );
-          
+
         if (zErrMsg) printf("sqlite error1: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
         if (j[strlen(j.data()) - 1] == ',') j.pop_back();
