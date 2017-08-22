@@ -144,7 +144,8 @@ export class QuotingEngine {
           : params.positionDivergence;
 
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
-
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  fvv.ewmaShort);
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  fvv.ewmaShort);
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue);
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
