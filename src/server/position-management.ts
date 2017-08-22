@@ -38,18 +38,20 @@ export class TargetBasePositionManager {
   public get latestEMACurrent(): Models.EWMACurrent{
     return this._latestEWMACur;
   }
-
-  constructor(
-      private _minTick: number,
-      private _dbInsert,
-      private _fvEngine,
-      private _ewma: Statistics.EWMATargetPositionCalculator,
-      private _qpRepo,
-      private _positionBroker,
-      private _uiSnap,
-      private _uiSend,
-      private _evOn,
-      private _evUp,
+   constructor(
+    private _minTick: number,
+    private _dbInsert,
+    private _fvEngine,
+    private _mgEwmaShort,
+    private _mgEwmaMedium,
+    private _mgEwmaLong,
+    private _mgTBP,
+    private _qpRepo,
+    private _positionBroker,
+    private _uiSnap,
+    private _uiSend,
+    private _evOn,
+    private _evUp,
       initTBP: Models.TargetBasePositionValue[],
       initEWMACur: Models.EWMACurrent[]
     ) {
@@ -184,24 +186,19 @@ export class TargetBasePositionManager {
     this.fairValue = fv;
 
 
-    this.newShort = this._ewma.addNewShortValue(this.fairValue);
-    this.newMedium = this._ewma.addNewMediumValue(this.fairValue);
-    this.newLong = this._ewma.addNewLongValue(this.fairValue);
 
-    //this._latestEWMACur = new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium);
 
-    //this._evUP('EWMACurrent');
-    //this._uiSend(Models.Topics.EWMACurrent, this._latestEWMACur,true);
-    console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
-    this._dbInsert(Models.Topics.EWMACurrent, new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium));
 
-  //  this._evUp('TargetPosition');
-  //  this._uiSend(Models.Topics.TargetBasePosition, this._latest, true);
-  //  this._dbInsert(Models.Topics.TargetBasePosition, this._latest);
 
-    this._newTargetPosition = this._ewma.computeTBP(this.fairValue, this.newLong, this.newMedium, this.newShort);
+    this.newShort = this._mgEwmaShort(this.fairValue);
+    this.newMedium = this._mgEwmaMedium(this.fairValue);
+    this.newLong = this._mgEwmaLong(this.fairValue);
+    this._newTargetPosition = this._mgTBP(this.fairValue, this.newLong, this.newMedium, this.newShort);
     // console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');
     this.recomputeTargetPosition();
+
+    console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
+    this._dbInsert(Models.Topics.EWMACurrent, new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium));
 
 
     this._uiSend(Models.Topics.EWMAChart, new Models.EWMAChart(
