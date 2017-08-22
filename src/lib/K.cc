@@ -38,7 +38,7 @@
 
 using namespace std;
 using namespace v8;
-using namespace nan;
+
 
 #include "png.h"
 #include "json.h"
