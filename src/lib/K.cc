@@ -28,7 +28,6 @@
 #include "quickfix/fix42/OrderCancelReject.h"
 
 #include <node.h>
-#include <nan.h>
 #include <node_buffer.h>
 #include <node_object_wrap.h>
 
