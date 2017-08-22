@@ -9,13 +9,13 @@ export class TargetBasePositionManager {
 
   private newWidth: Models.IStdev = null;
   private newQuote: number = null;
-  public newShort: number = null;
-  public newMedium: number = null;
-  public newLong: number = null;
+  public newShort: number = 0;
+  public newMedium: number = 0;
+  public newLong: number = 0;
   private fairValue: number = null;
-  public latestLong: number = null;
-  private latestMedium: number = null;
-  public latestShort: number = null;
+  public latestLong: number = 0;
+  private latestMedium: number = 0;
+  public latestShort: number = 0;
 
 
 
@@ -98,8 +98,16 @@ export class TargetBasePositionManager {
       this._dbInsert(Models.Topics.TargetBasePosition, this._latest);
       console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated', this._latest.tbp);
 
-    //  let fairFV: number = this._fvAgent.latestFairValue.price;
+      if(this._latestEWMACur === null) {
+        this._latestEWMACur = new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium);
+        this._evUp('EWMACurrent');
+        this._uiSend(Models.Topics.EWMACurrent, this._latestEWMACur , true);
+        this._dbInsert(Models.Topics.EWMACurrent, this._latestEWMACur );
+        console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur.currentShort , this._latestEWMACur.currentLong );
+      }
 
+    //  let fairFV: number = this._fvAgent.latestFairValue.price;
+    //this._dbInsert(Models.Topics.EWMACurrent, new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium));
     //  this._uiSend(Models.Topics.FairValue,   fairValue , true);
     //  this._dbInsert(Models.Topics.FairValue,   fairValue );
 /*
