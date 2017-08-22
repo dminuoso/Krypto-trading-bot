@@ -142,7 +142,7 @@ export class QuotingEngine {
         var pDiv : number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
-
+//
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  fvv.ewmaShort);
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  fvv.ewmaShort);

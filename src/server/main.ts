@@ -48,7 +48,7 @@ process.on("SIGINT", () => {
 process.on("exit", (code) => {
   console.info(new Date().toISOString().slice(11, -1), 'main', 'Exit code', code);
 });
-
+//
 new QuoteSender.QuoteSender(
   new QuotingEngine.QuotingEngine(
     bindings.mgFairV,

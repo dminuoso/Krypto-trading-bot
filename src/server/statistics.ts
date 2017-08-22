@@ -215,7 +215,7 @@ export class STDEVProtectionCalculator {
       }
       setInterval(this.onTick, moment.duration(1, "seconds"));
     }
-
+//
     private initialize(rfv: number[], mktBids: number[], mktAsks: number[]) {
       const params = this._qpRepo();
       for (let i = 0; i<mktBids.length||i<mktAsks.length;i++)
