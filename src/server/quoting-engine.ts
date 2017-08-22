@@ -58,8 +58,7 @@ export class QuotingEngine {
       private _targetPosition: PositionManagement.TargetBasePositionManager,
       private _safeties: Safety.SafetyCalculator,
       private _evOn,
-      private _evUp,
-      private _ewma2: Statistics.EWMATargetPositionCalculator
+      private _evUp
     ) {
       this._safeties.targetPosition = this._targetPosition;
       this._registry = new QuotingStyleRegistry.QuotingStyleRegistry();
@@ -92,7 +91,6 @@ export class QuotingEngine {
         if (this._targetPosition.latestTargetPosition === null || latestPosition === null) return null;
         const targetBasePosition = this._targetPosition.latestTargetPosition.tbp;
         const fvv = this._fvEngine;
-        const EWMA2 = this._ewma2;
         var params = this._qpRepo();
         const widthPing = (params.widthPercentage)
           ? params.widthPingPercentage * fv / 100
