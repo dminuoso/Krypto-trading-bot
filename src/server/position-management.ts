@@ -177,11 +177,11 @@ export class TargetBasePositionManager {
     this.newMedium = this._ewma.addNewMediumValue(this.fairValue);
     this.newLong = this._ewma.addNewLongValue(this.fairValue);
 
-    this._latestEWMACur = new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium);
+    //this._latestEWMACur = new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium);
 
     //this._evUP('EWMACurrent');
-  //  this._uiSend(Models.EWMACurrent, this._latestEWMACur,true);
-    this._dbInsert(Models.Topics.EWMACurrent, this._latestEWMACur);
+    //this._uiSend(Models.Topics.EWMACurrent, this._latestEWMACur,true);
+    this._dbInsert(Models.Topics.EWMACurrent, new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium));
 
   //  this._evUp('TargetPosition');
   //  this._uiSend(Models.Topics.TargetBasePosition, this._latest, true);
