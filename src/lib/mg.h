@@ -112,13 +112,17 @@ namespace K {
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         // lets do some SMA math to see if we can buy or sell safety time!
-        if ((mGWSMA33.end() * 100 / mGWSMA33.begin() - 100) > (qpRepo["safetyP"].get<double> / 100))
+        vector<double>::iterator sma33Start = mGWSMA33.begin();
+        vector<double>::iterator sma33End = mGWSMA33.end();
+
+        if ((mGWSMA33[sma33End] * 100 / mGWSMA33[sma33Start] - 100) > (qpRepo["safetyP"].get<double> / 100))
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
     //  params.safetimestart = currenttime.getTime();
     //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Value BUY' , ((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) );
     //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
         }
+        /*
         if ((mGWSMA33.end() * 100 / mGWSMA33.begin() - 100) < -(qpRepo["safetyP"].get<double> / 100))
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
@@ -127,7 +131,7 @@ namespace K {
     //  console.warn(new Date().toISOString().slice(11, -1), 'SMA33', 'Safety Percent' , (params.safetyP/100) );
         }
 
-
+*/
       };
 
 
