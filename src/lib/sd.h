@@ -42,22 +42,6 @@ namespace K {
         o->Set(FN::v8S("askMean"), Number::New(isolate, mean));
         args.GetReturnValue().Set(o);
       };
-      static double roundNearest(double value, double minTick) {
-        return round(value / minTick) * minTick;
-      };
-      static double roundUp(double value, double minTick) {
-        return ceil(value / minTick) * minTick;
-      };
-      static double roundDown(double value, double minTick) {
-        return floor(value / minTick) * minTick;
-      };
-      static double roundSide(double oP, double minTick, mSide oS) {
-
-        if (oS == mSide::Bid) return roundDown(oP, minTick);
-        else if (oS == mSide::Ask) return roundUp(oP, minTick);
-        else return roundNearest(oP, minTick);
-      };
-    private:
       static double ComputeStdev(double a[], int n, double f, double *mean) {
         if (n == 0) return 0.0;
         double sum = 0;
