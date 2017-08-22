@@ -119,7 +119,7 @@ export class EWMATargetPositionCalculator {
           const newTrend = ((SMA3 * 100 / newLong) - 100);
           const newEwmacrossing = ((newShort * 100 / newMedium) - 100);
           newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / params.ewmaSensiblityPercentage);
-          params.aspvalue = newTargetPosition;
+            this.aspvalue = newTargetPosition;
         } else if (params.autoPositionMode === Models.AutoPositionMode.EWMA_LS) {
           newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / params.ewmaSensiblityPercentage);
           params.aspvalue = newTargetPosition;

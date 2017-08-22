@@ -82,7 +82,7 @@ export class QuotingEngine {
         const latestPosition = this._positionBroker();
         if (this._targetPosition.latestTargetPosition === null || latestPosition === null) return null;
         const targetBasePosition = this._targetPosition.latestTargetPosition.tbp;
-
+        const eww = this._ew2;
         const params = this._qpRepo();
         const widthPing = (params.widthPercentage)
           ? params.widthPingPercentage * fv / 100
@@ -134,7 +134,7 @@ export class QuotingEngine {
           : params.positionDivergence;
 
         //
-          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  this._ew2.aspvalue ) ;
+          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  eww.aspvalue ) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
 
