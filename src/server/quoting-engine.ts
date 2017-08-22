@@ -93,7 +93,7 @@ export class QuotingEngine {
         const latestPosition = this._positionBroker();
         if (this._targetPosition.latestTargetPosition === null || latestPosition === null) return null;
         const targetBasePosition = this._targetPosition.latestTargetPosition.tbp;
-        const eww = this._ew2;
+
         var params = this._qpRepo();
         const widthPing = (params.widthPercentage)
           ? params.widthPingPercentage * fv / 100
@@ -140,14 +140,13 @@ export class QuotingEngine {
               ? 3 : 1))
         ] : [1, 1];
 
-        let
-        : number  = (params.percentageValues)
+
+        var pDiv : number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
         //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
-         console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  eww.aspvalue ) ;
-          console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  eww.aspvalue ) ;
+        
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
 

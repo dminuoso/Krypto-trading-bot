@@ -98,10 +98,6 @@ new QuoteSender.QuoteSender(
     ),
     bindings.evOn,
     bindings.evUp,
-  new Statistics.EWMATargetPositionCalculator (
-      bindings.qpRepo,
-      bindings.dbLoad(Models.RegularFairValue)
-  )
   ),
   bindings.allOrders,
   bindings.allOrdersDelete,
