@@ -113,7 +113,7 @@ namespace K {
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
-        printf("SMA33: %s\n", mGWSMA33.end()-1);
+        printf("SMA33: %f\n", mGWSMA33.end()-1);
 
       };
 
