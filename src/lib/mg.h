@@ -156,21 +156,27 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
         }
 
-
+        printf("Duration: %f  Start time: %s Time Starated: %s\n" duration, std::time(nullptr), qpRepo["safetimestart"].get<int>() );
         if(mGWSMA33.size() > 3  ) {
+          printf("Debug1\n");
                 if(mGWSMA33.size() > qpRepo["safetytime"].get<int>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
+                  printf("debug2\n");
                         if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                         {
+                          printf("debug3\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = 0;
                                 printf("SMA33 Safety Mode is over \n");
+                                printf("debug4\n");
                         }
                         if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                         {
+                          printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = 0;
                                 printf("SMA33 Safety Mode is over \n");
+                                printf("debug6\n");
                         }
                 }
         }
