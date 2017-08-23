@@ -202,7 +202,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                       //  printf("debugzz\n");
                         //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>())  ) or or (qpRepo["safetyduration"].get<unsigned long int>() >= std::time(nullptr) ) )
+                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>())  ) or  (qpRepo["safetyduration"].get<unsigned long int>() >= std::time(nullptr) ) )
                         {
                                 printf("Current Short: %f   old Short: %f\n", mGWSMA33.back(),  mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()));
                               //  printf("debug5\n");
