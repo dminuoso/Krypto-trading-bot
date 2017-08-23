@@ -128,7 +128,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 {
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
-                        qpRepo["safetyactive"].get<bool>() = true;
+                        <bool>qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = (int)SMA33STARTTIME;
                         printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
                         printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
@@ -137,7 +137,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 {
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
                         qpRepo["safetimestart"] = (int)SMA33STARTTIME;
-                        qpRepo["safetyactive"].get<bool>() = true;
+                          <bool>qpRepo["safetyactive"] = true;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
                         printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
                 }
@@ -149,13 +149,13 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                 {
                         qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
-                        qpRepo["safetyactive"].get<bool>() = false;
+                          <bool>qpRepo["safetyactive"] = false;
                         printf("SMA33 Safety Mode is over \n");
                 }
                 if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                 {
                         qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
-                        qpRepo["safetyactive"].get<bool>() = false;
+                          <bool>qpRepo["safetyactive"] = false;
                         printf("SMA33 Safety Mode is over \n");
                 }
         }
