@@ -153,8 +153,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
                         printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
                 }
+                int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
         }
-        int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
+
 
         if(mGWSMA33.size() > 3  ) {
                 if(mGWSMA33.size() > qpRepo["safetytime"].get<int>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
