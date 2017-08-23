@@ -109,7 +109,12 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
                 qpRepo["aspvalue"] = newTargetPosition;
                 printf("ASP: value: %f\n", newTargetPosition);
-        } if (newTargetPosition > 1) newTargetPosition = 1;
+        }
+        newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+        qpRepo["aspvalue"] = newTargetPosition;
+        
+
+        if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
 
         if ( (qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>() || qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()) && qpRepo["aspactive"].get<bool>() == true ) {
