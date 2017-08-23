@@ -28,57 +28,59 @@ static double mgStdevTop;
 static double mgStdevTopMean;
 int mgT = 0;
 class MG {
-public:
-static void main(Local<Object> exports) {
-        load();
-        thread([&]() {
-                                if (uv_timer_init(uv_default_loop(), &mgStats_)) { cout << FN::uiT() << "Errrror: GW mgStats_ init timer failed." << endl; exit(1); }
-                                mgStats_.data = NULL;
-                                if (uv_timer_start(&mgStats_, [](uv_timer_t *handle) {
-                                        if (mgfairV) {
-                                                if (++mgT == 60) {
-                                                        mgT = 0;
-                                                        // updateEwmaValues();
-                                                        ewmaPUp();
-                                                }
-                                                stdevPUp();
-                                        } else cout << FN::uiT() << "Market Stats notice: missing fair value." << endl;
-                                }, 0, 1000)) { cout << FN::uiT() << "Errrror: GW mgStats_ start timer failed." << endl; exit(1); }
-                        }).detach();
-        EV::evOn("MarketTradeGateway", [](json k) {
-                                mGWmt t(
-                                        gw->exchange,
-                                        gw->base,
-                                        gw->quote,
-                                        k["price"].get<double>(),
-                                        k["size"].get<double>(),
-                                        FN::T(),
-                                        (mSide)k["make_side"].get<int>()
-                                        );
-                                mGWmt_.push_back(t);
-                                if (mGWmt_.size()>69) mGWmt_.erase(mGWmt_.begin());
-                                EV::evUp("MarketTrade");
-                                UI::uiSend(uiTXT::MarketTrade, tradeUp(t));
-                        });
-        EV::evOn("MarketDataGateway", [](json o) {
-                                mktUp(o);
-                        });
-        EV::evOn("GatewayMarketConnect", [](json k) {
-                                if ((mConnectivityStatus)k["/0"_json_pointer].get<int>() == mConnectivityStatus::Disconnected)
-                                        mktUp({});
-                        });
-        EV::evOn("QuotingParameters", [](json k) {
-                                fairV();
-                        });
-        UI::uiSnap(uiTXT::MarketTrade, &onSnapTrade);
-        UI::uiSnap(uiTXT::FairValue, &onSnapFair);
-        NODE_SET_METHOD(exports, "mgFilter", MG::_mgFilter);
-        NODE_SET_METHOD(exports, "mgFairV", MG::_mgFairV);
-        NODE_SET_METHOD(exports, "mgEwmaLong", MG::_mgEwmaLong);
-        NODE_SET_METHOD(exports, "mgEwmaMedium", MG::_mgEwmaMedium);
-        NODE_SET_METHOD(exports, "mgEwmaShort", MG::_mgEwmaShort);
-        NODE_SET_METHOD(exports, "mgTBP", MG::_mgTBP);
-};
+   public:
+     static void main(Local<Object> exports) {
+       load();
+       thread([&]() {
+         if (uv_timer_init(uv_default_loop(), &mgStats_)) { cout << FN::uiT() << "Errrror: GW mgStats_ init timer failed." << endl; exit(1); }
+         mgStats_.data = NULL;
+         if (uv_timer_start(&mgStats_, [](uv_timer_t *handle) {
+           if (mgfairV) {
+             if (++mgT == 60) {
+               mgT = 0;
+               // updateEwmaValues();
+               ewmaPUp();
+             }
+             stdevPUp();
+           } else cout << FN::uiT() << "Market Stats notice: missing fair value." << endl;
+         }, 0, 1000)) { cout << FN::uiT() << "Errrror: GW mgStats_ start timer failed." << endl; exit(1); }
+       }).detach();
+       EV::evOn("MarketTradeGateway", [](json k) {
+         mGWmt t(
+           gw->exchange,
+           gw->base,
+           gw->quote,
+           k["price"].get<double>(),
+           k["size"].get<double>(),
+           FN::T(),
+           (mSide)k["make_side"].get<int>()
+         );
+         mGWmt_.push_back(t);
+         if (mGWmt_.size()>69) mGWmt_.erase(mGWmt_.begin());
+         EV::evUp("MarketTrade");
+         UI::uiSend(uiTXT::MarketTrade, tradeUp(t));
+       });
+       EV::evOn("MarketDataGateway", [](json o) {
+         mktUp(o);
+       });
+       EV::evOn("GatewayMarketConnect", [](json k) {
+         if ((mConnectivityStatus)k["/0"_json_pointer].get<int>() == mConnectivityStatus::Disconnected)
+           mktUp({});
+       });
+       EV::evOn("QuotingParameters", [](json k) {
+         fairV();
+       });
+       UI::uiSnap(uiTXT::MarketTrade, &onSnapTrade);
+       UI::uiSnap(uiTXT::FairValue, &onSnapFair);
+       NODE_SET_METHOD(exports, "mgFilter", MG::_mgFilter);
+       NODE_SET_METHOD(exports, "mgFairV", MG::_mgFairV);
+       NODE_SET_METHOD(exports, "mgEwmaLong", MG::_mgEwmaLong);
+       NODE_SET_METHOD(exports, "mgEwmaMedium", MG::_mgEwmaMedium);
+       NODE_SET_METHOD(exports, "mgEwmaShort", MG::_mgEwmaShort);
+       NODE_SET_METHOD(exports, "mgTBP", MG::_mgTBP);
+       NODE_SET_METHOD(exports, "mgEwmaProtection", MG::_mgEwmaProtection);
+       NODE_SET_METHOD(exports, "mgStdevProtection", MG::_mgStdevProtection);
+     };
 private:
 static void load() {
         json k = DB::load(uiTXT::EWMAChart);
