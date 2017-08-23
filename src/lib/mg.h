@@ -133,7 +133,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
 
-        if(mGWSMA33.size() > 1)
+        if(mGWSMA33.size() > qpRepo["safetytime"].get<int>()) // checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
         {
                 if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                 {
