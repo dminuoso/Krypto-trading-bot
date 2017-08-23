@@ -149,7 +149,7 @@ namespace K {
       };
       static void _mgEwmaShort(const FunctionCallbackInfo<Value>& args) {
         mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
-        out << "New Long: " << mgEwmaS << "\n";
+        cout << "New Long: " << mgEwmaS << "\n";
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaS));
       };
       static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
@@ -159,6 +159,10 @@ namespace K {
         double newShort = args[3]->NumberValue();
         cout << "Short: " << newShort << "\n";
         cout << "Long: " << newLong << "\n";
+        cout << "FV: " << args[0]->NumberValue()  << "\n";
+        cout << "----------"
+        cout << "Short: " << args[3]->NumberValue() << "\n";
+        cout << "Long: " << args[1]->NumberValue() << "\n";
         cout << "FV: " << args[0]->NumberValue()  << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
