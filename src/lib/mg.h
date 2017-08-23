@@ -155,9 +155,9 @@ namespace K {
         double newLong = args[1]->NumberValue();
         double newMedium = args[2]->NumberValue();
         double newShort = args[3]->NumberValue();
-        cout << "Short: " << newShort;
-        cout << "Long: " << newLong;
-        cout << "FV: " << args[0]->NumberValue();
+        cout << "Short: " << newShort << "\n";
+        cout << "Long: " << newLong << "\n";
+        cout << "FV: " << args[0]->NumberValue();  << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
