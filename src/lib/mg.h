@@ -160,7 +160,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
                         qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
                 }
-                if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100
+                if (  (mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 )
                 &&   qpRepo["safetyactive"].get<bool>() == false
                 &&   qpRepo["safetynet"].get<bool>() == true
                 )
