@@ -115,7 +115,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
           //  pdiv changes here..
 
           }
-          printf("ASP: ASPVALUE %d  ASPHIGH: %d  ASPLOW: %d\n", qpRepo["ASPVALUE"], qpRepo["asp_high"], qpRepo["asp_low"], qpRepo["aspactive"].get<bool>()  );
+          printf("ASP: ASPVALUE %f  ASPHIGH: %df ASPLOW: %f  ASPACTIVE: %d\n", qpRepo["ASPVALUE"], qpRepo["asp_high"], qpRepo["asp_low"], qpRepo["aspactive"].get<bool>()  );
         // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         // lets do some SMA math to see if we can buy or sell safety time!
