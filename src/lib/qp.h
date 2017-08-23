@@ -48,7 +48,33 @@ namespace K {
     {  "cleanPongsAuto",                0                                      },
     {  "profitHourInterval",            decimal_cast<1>("0.5").getAsDouble()   },
     {  "audio",                         false                                  },
-    {  "delayUI",                       7                                      }
+    {  "delayUI",                       7                                      },
+    {  "moveit",                        (int)mMoveit::unknown                  },
+    {  "movement",                      (int)mMovemomentum::unknown            },
+    {  "upnormallow",                   decimal_cast<1>("-0.5").getAsDouble()  },
+    { "upnormalhigh",                   decimal_cast<1>("0.5").getAsDouble()   },
+    {  "upmidlow",                      decimal_cast<1>("0.5").getAsDouble()   },
+    {  "upmidhigh",                     decimal_cast<1>("1").getAsDouble()     },
+    {  "upfastlow",                     decimal_cast<1>("1").getAsDouble()     },
+    {  "dnnormallow",                   decimal_cast<1>("-0.5").getAsDouble()  },
+    {  "dnnormalhigh",                  decimal_cast<1>("0.5").getAsDouble()   },
+    {  "dnmidlow",                      decimal_cast<1>("-0.5").getAsDouble()  },
+    {  "dnmidhigh",                     decimal_cast<1>("-1").getAsDouble()    },
+    {  "dnfastlow",                     decimal_cast<1>("-1").getAsDouble()    },
+    {  "asp_low",                       decimal_cast<1>("-5").getAsDouble()    },
+    {  "asp_high",                      decimal_cast<1>("5").getAsDouble()     },
+    {  "aspactive",                     false                                  },
+    {  "aspvalue",                      decimal_cast<1>("0").getAsDouble()     },
+    {  "safetynet",                     false                                  },
+    {  "safetyactive",                  false                                  },
+    {  "safeZ",                         decimal_cast<1>("0").getAsDouble()     },
+    {  "safetytime",                     5                                     }, // safetime in minutes.
+    {  "safetimeOver",                   5                                     }, // safetime in minutes.
+    {  "safetyP",                        20                                    },
+    {  "safemode",                      (int)mSafeMode::unknown                },
+    {  "safetimestart",                 0                                      },
+    {  "safetyduration",                0                                      }
+
   };
   static vector<string> boolQP = {
     "widthPercentage", "bestWidth", "sellSizeMax", "buySizeMax", "percentageValues",

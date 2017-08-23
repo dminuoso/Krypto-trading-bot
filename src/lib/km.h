@@ -26,6 +26,9 @@ namespace K {
   enum class mQuotingMode: unsigned int { Top, Mid, Join, InverseJoin, InverseTop, PingPong, Boomerang, AK47, HamelinRat, Depth };
   enum class mFairValueModel: unsigned int { BBO, wBBO };
   enum class mAutoPositionMode: unsigned int { Manual, EWMA_LS, EWMA_LMS };
+  enum class mMoveit: unsigned int { up, down, unknown };
+  enum class mMovemomentum: unsigned int {normal, mid, fast, unknown };
+  enum class mSafeMode:  unsigned int {buy, sell, unknown };
   enum class mAPR: unsigned int { Off, Size, SizeWidth };
   enum class mSOP: unsigned int { Off, x2trades, x3trades, x2Size, x3Size, x2tradesSize, x3tradesSize };
   enum class mSTDEV: unsigned int{ Off, OnFV, OnFVAPROff, OnTops, OnTopsAPROff, OnTop, OnTopAPROff };
