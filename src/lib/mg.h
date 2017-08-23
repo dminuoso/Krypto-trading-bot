@@ -136,8 +136,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
 
 
-
+        printf("debug10\n");
         if(mGWSMA33.size() > 3) {
+          printf("debug11\n");
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::buy)
                 {
                         // activate Safety, Safety buySize
