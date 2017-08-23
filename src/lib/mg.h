@@ -160,7 +160,7 @@ namespace K {
         cout << "Short: " << newShort << "\n";
         cout << "Long: " << newLong << "\n";
         cout << "FV: " << args[0]->NumberValue()  << "\n";
-        cout << "----------";
+        cout << "----------\n";
         cout << "Short: " << args[3]->NumberValue() << "\n";
         cout << "Long: " << args[1]->NumberValue() << "\n";
         cout << "FV: " << args[0]->NumberValue()  << "\n";
@@ -294,7 +294,7 @@ namespace K {
           double alpha = 2 / (periods + 1);
           return alpha * newValue + (1 - alpha) * previous;
         }
-        cout << "New EWMA Value: " << newValue << "\n";
+        cout << "New EWMA Value: " << newValue <<  "Period: " << periods << "\n";
         return newValue;
       };
   };
