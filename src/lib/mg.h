@@ -93,7 +93,7 @@ namespace K {
         for (vector<double>::iterator it = mGWSMA33.begin(); it != mGWSMA33.end(); ++it)
         // log the time
         int SMA33STARTTIME = std::time(nullptr);
-        mSMATIME.push_back(SMA33STARTTIME);
+        mSMATIME.push_back((int)SMA33STARTTIME);
         if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
 
 
@@ -118,13 +118,13 @@ namespace K {
       {
           // activate Safety, Safety buySize
            qpRepo["mSafeMode"] = (int)mSafeMode::buy;
-           qpRepo["safetimestart"] = SMA33STARTTIME;
+           qpRepo["safetimestart"] = (int)SMA33STARTTIME;
           printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
       }
       if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 )
       {
           qpRepo["mSafeMode"] = (int)mSafeMode::sell;
-          qpRepo["safetimestart"] = SMA33STARTTIME;
+          qpRepo["safetimestart"] = (int)SMA33STARTTIME;
           printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
       }
 //  if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) > (params.safetyP/100))
