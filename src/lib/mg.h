@@ -114,7 +114,7 @@ namespace K {
         // lets do some SMA math to see if we can buy or sell safety time!
 
 
-            double  startSMA33 = (mGWSMA33.end()-1 * 100);
+            double  startSMA33 = (mGWSMA33.end()-1) * 100;
         if (  startSMA33 / mGWSMA33.begin() - 100 ) > 5 )
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
