@@ -196,10 +196,10 @@ export class TargetBasePositionManager {
 
 
     this._newTargetPosition = this._mgTBP(this.fairValue, this.newLong, this.newMedium, this.newShort);
-    console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');
+  //  console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');
     this.recomputeTargetPosition();
 
-    console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
+//    console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
     this._dbInsert(Models.Topics.EWMACurrent, new Models.EWMACurrent(this.newShort , this.newLong, this.newMedium));
 
 
