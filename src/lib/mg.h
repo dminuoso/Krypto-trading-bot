@@ -166,6 +166,9 @@ namespace K {
         cout << "FV: " << args[0]->NumberValue()  << "\n";
         cout << "Short Period: " << qpRepo["shortEwmaPeridos"].get<int>() << "\n";
         cout << "Long Period: " << qpRepo["longEwmaPeridos"].get<int>() << "\n";
+        double testShort = 0;
+        testShort = _mgEwmaShort(args[0]->NumberValue());
+        cout << "Test Short: " << testShort << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
