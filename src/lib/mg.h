@@ -85,6 +85,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         printf("Short: %f Medium: %f Long: %f \n", newShort, newMedium, newLong);
         if (mGWSMA3.size()>3) mGWSMA3.erase(mGWSMA3.begin(), mGWSMA3.end()-3);
         double SMA3 = 0;
+        double SMA33 = 0;
         for (vector<double>::iterator it = mGWSMA3.begin(); it != mGWSMA3.end(); ++it)
                 SMA3 += *it;
         SMA3 /= mGWSMA3.size();
@@ -94,8 +95,10 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         // lets make a SMA logging average
         mGWSMA33.push_back(SMA3);
         if (mGWSMA33.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
-        for (vector<double>::iterator it = mGWSMA33.begin(); it != mGWSMA33.end(); ++it)
-                // log the time
+        for (vector<double>::iterator iz = mGWSMA33.begin(); iz != mGWSMA33.end(); ++iz)
+                SMA33 += *iz
+            SMA33 /= mGWSMA33.size();
+
 
                 mSMATIME.push_back((int)SMA33STARTTIME);
         if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
@@ -141,6 +144,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
           printf("debug11\n");
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::buy)
                 {
+                  printf("debug12\n";
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
                         qpRepo["safetyactive"] = 1;
@@ -151,6 +155,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 }
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 &&  qpRepo["safetyactive"].get<bool>() == false &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::sell )
                 {
+                  printf("debug13\n");
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
                         qpRepo["safetimestart"] = (unsigned long int)SMA33STARTTIME;
                         qpRepo["safetyactive"] = 1;
