@@ -140,6 +140,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
 
         printf("debug10\n");
+        printf("array size: %lu \n", mGWSMA33.size());
         if(mGWSMA33.size() > 3) {
           printf("debug11\n");
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true)
