@@ -150,7 +150,7 @@ static void _mgEwmaShort(const FunctionCallbackInfo<Value>& args) {
         mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaS));
 };
-static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
+static void _mgTBP( FunctionCallbackInfo<Value>& args) {
         mgSMA3.push_back(args[0]->NumberValue());
         double newLong = args[1]->NumberValue();
         double newMedium = args[2]->NumberValue();
