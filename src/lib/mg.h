@@ -166,7 +166,6 @@ namespace K {
         cout << "FV: " << args[0]->NumberValue()  << "\n";
         cout << "Short Period: " << qpRepo["shortEwmaPeridos"].get<int>() << "\n";
         cout << "Long Period: " << qpRepo["longEwmaPeridos"].get<int>() << "\n";
-        double testShort = 0;
         mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         cout << "Test Short: " << mgEwmaS << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
@@ -295,6 +294,7 @@ namespace K {
         return sqrt(variance) * f;
       };
       static double calcEwma(double newValue, double previous, int periods) {
+        cout << "Previou Value: " << previous << " \n"; 
         if (previous) {
           double alpha = 2 / (periods + 1);
           return alpha * newValue + (1 - alpha) * previous;
