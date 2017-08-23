@@ -297,10 +297,11 @@ namespace K {
         cout << "Previou Value: " << previous << " \n";
         if (previous) {
           double alpha = 2 / (periods + 1);
-          cout << "New EWMA: " << alpha * newValue + (1 - alpha) * previous << " \n"; 
-          return alpha * newValue + (1 - alpha) * previous;
+          double newAlpha = alpha * newValue + (1 - alpha) * previous;
+          cout << "New Alpha: " << newAlpha << " Period:" << periods << " \n"; 
+          return newAlpha;
         }
-        cout << "New EWMA Value: " << newValue <<  "Period: " << periods << "\n";
+        //cout << "New EWMA Value: " << newValue <<  "Period: " << periods << "\n";
         return newValue;
       };
   };
