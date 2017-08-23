@@ -110,7 +110,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
 
-      // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
+        // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
@@ -152,13 +152,13 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         if( qpRepo["aspactive"] && qpRepo["safetynet"] && (mSafeMode)qpRepo["mSafeMode"].get<int>() == mSafeMode::buy  )
         {
-          newTargetPosition = 1;
+                newTargetPosition = 1;
         } else if( qpRepo["aspactive"] && qpRepo["safetynet"] && (mSafeMode)qpRepo["mSafeMode"].get<int>() == mSafeMode::sell  )
         {
-          newTargetPosition = -1;
+                newTargetPosition = -1;
         }
 
-          args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
+        args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
 
 
