@@ -160,7 +160,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         }
 
-        printf("Duration: %d  Start time: %n Time Starated: %d\n", qpRepo["safetyduration"].get<int>(), std::time(nullptr), qpRepo["safetimestart"].get<int>() );
+        printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<int>(), std::time(nullptr), qpRepo["safetimestart"].get<int>() );
         if(mGWSMA33.size() > 3  ) {
           printf("Debug1\n");
                 if(mGWSMA33.size() > qpRepo["safetytime"].get<int>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
