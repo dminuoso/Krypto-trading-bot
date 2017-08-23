@@ -113,7 +113,11 @@ namespace K {
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
-        printf("SMA33: %f\n", mGWSMA33.end()-1);
+      if ( mGWSMA33.end()-1 * 100 >  qpRepo["safetyP"].get<double>() )
+      {
+        
+      }
+//  if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) > (params.safetyP/100))
 
       };
 
