@@ -138,7 +138,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         //  printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
         //  printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
 
-
+        for (std::vector<char>::const_iterator i = qpRepo.begin(); i != qpRepo.end(); ++i)
+              std::cout << *i << ' ';
 
         printf("Array size %lu \n", mGWSMA33.size() );
 
