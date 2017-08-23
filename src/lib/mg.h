@@ -112,6 +112,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 printf("ASP: value: %f\n", newTargetPosition);
         }
         newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+        printf("ASP: ewma?: %f", qpRepo["ewmaSensiblityPercentage"].get<double>() );
         qpRepo["aspvalue"] = newTargetPosition;
         printf("ASP: value: %f\n", newTargetPosition);
         printf("ASP: testvalue: %f\n", ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()) );
