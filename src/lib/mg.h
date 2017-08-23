@@ -295,11 +295,11 @@ namespace K {
         return sqrt(variance) * f;
       };
       static double calcEwma(double newValue, double previous, int periods) {
-        cout << "New Value: " << newValue << "Previou Value: " << previous << " \n";
+      //  cout << "New Value: " << newValue << "Previou Value: " << previous << " \n";
         if (previous) {
           double alpha = 2 / (periods + 1);
           double newAlpha = alpha * newValue + (1 - alpha) * previous;
-          cout << "New Alpha: " << newAlpha << " Period:" << periods << " \n";
+          cout << "New Alpha: " << newAlpha << " Period:" << periods << "previous: " << previous << " \n";
           return newAlpha;
         }
         //cout << "New EWMA Value: " << newValue <<  "Period: " << periods << "\n";
