@@ -202,10 +202,10 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         }
             printf("Debug1111\n");
          printf("safetyactive: %d safetynet: %d safemode: %d\n", qpRepo["safetyactive"].get<bool>(), qpRepo["safetynet"].get<bool>(), qpRepo["mSafeMode"].get<int>() );
-        if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["mSafeMode"].get<int>() == mSafeMode::buy  )
+        if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && qpRepo["mSafeMode"].get<int>() == mSafeMode::buy  )
         {
                 newTargetPosition = 1;
-        } else if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["mSafeMode"].get<int>() == mSafeMode::sell  )
+        } else if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && qpRepo["mSafeMode"].get<int>() == mSafeMode::sell  )
         {
                 newTargetPosition = -1;
         }
