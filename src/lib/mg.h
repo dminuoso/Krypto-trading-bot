@@ -184,9 +184,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                                 printf("debug4\n");
                         }
                         printf("debugzz\n");
-                        double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>());
+                      //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                       if( (mGWSMA33.back() > spacer ) )
+                       if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>()  )
                         {
                           printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
