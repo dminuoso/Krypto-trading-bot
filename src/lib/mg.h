@@ -104,18 +104,18 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 double newTrend = ((SMA3 * 100 / newLong) - 100);
                 double newEwmacrossing = ((newShort * 100 / newMedium) - 100);
                 newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-                qpRepo["aspvalue"] = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+                qpRepo["aspvalue"] = newTargetPosition;
         } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS) {
                 newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-                qpRepo["aspvalue"] = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()); // comppute and save ASPVALUE
+                qpRepo["aspvalue"] = newTargetPosition;
         } if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
 
         if ( (qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>() || qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()) && qpRepo["aspactive"].get<bool>() == true ) {
-          //  pdiv changes here..
+                //  pdiv changes here..
 
-          }
-          printf("ASP: ASPVALUE %f  ASPHIGH: %f ASPLOW: %f  ASPACTIVE: %d\n", qpRepo["aspvalue"].get<double>(), qpRepo["asp_high"].get<double>(), qpRepo["asp_low"].get<double>(), qpRepo["aspactive"].get<bool>()  );
+        }
+        printf("ASP: ASPVALUE %f  ASPHIGH: %f ASPLOW: %f  ASPACTIVE: %d\n", qpRepo["aspvalue"].get<double>(), qpRepo["asp_high"].get<double>(), qpRepo["asp_low"].get<double>(), qpRepo["aspactive"].get<bool>()  );
         // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         // lets do some SMA math to see if we can buy or sell safety time!
@@ -128,7 +128,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 {
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
-                          qpRepo["safetyactive"] = 1;
+                        qpRepo["safetyactive"] = 1;
                         qpRepo["safetimestart"] = (int)SMA33STARTTIME;
                         printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
                         printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
@@ -137,7 +137,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 {
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
                         qpRepo["safetimestart"] = (int)SMA33STARTTIME;
-                           qpRepo["safetyactive"] = 1;
+                        qpRepo["safetyactive"] = 1;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
                         printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
                 }
@@ -149,13 +149,13 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                 {
                         qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
-                           qpRepo["safetyactive"] = 0;
+                        qpRepo["safetyactive"] = 0;
                         printf("SMA33 Safety Mode is over \n");
                 }
                 if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                 {
                         qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
-                           qpRepo["safetyactive"] = 0;
+                        qpRepo["safetyactive"] = 0;
                         printf("SMA33 Safety Mode is over \n");
                 }
         }
