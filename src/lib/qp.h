@@ -72,7 +72,8 @@ namespace K {
     {  "safetimeOver",                   5                                     }, // safetime in minutes.
     {  "safetyP",                        20                                    },
     {  "safemode",                      (int)mSafeMode::unknown                },
-    {  "safetimestart",                 0                                      }
+    {  "safetimestart",                 0                                      },
+    {  "safetyduration",                0                                      }
 
   };
   static vector<string> boolQP = {

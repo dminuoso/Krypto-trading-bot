@@ -135,6 +135,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
         printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
 
+
+
         if(mGWSMA33.size() > 3) {
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::buy)
                 {
@@ -144,6 +146,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         qpRepo["safetimestart"] = (int)SMA33STARTTIME;
                         printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
                         printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
+                        qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
                 }
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 &&  qpRepo["safetyactive"].get<bool>() == false &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::sell )
                 {
@@ -152,17 +155,18 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         qpRepo["safetyactive"] = 1;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
                         printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
+                       qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
                 }
-                int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
+
         }
 
-        printf("Duration: %f  Start time: %s Time Starated: %s\n" duration, std::time(nullptr), qpRepo["safetimestart"].get<int>() );
+        printf("Duration: %f  Start time: %f Time Starated: %f\n" qpRepo["safetyduration"].get<int>(), std::time(nullptr), qpRepo["safetimestart"].get<int>() );
         if(mGWSMA33.size() > 3  ) {
           printf("Debug1\n");
                 if(mGWSMA33.size() > qpRepo["safetytime"].get<int>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
                   printf("debug2\n");
-                        if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
+                        if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<int>() >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                         {
                           printf("debug3\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
@@ -170,7 +174,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                                 printf("SMA33 Safety Mode is over \n");
                                 printf("debug4\n");
                         }
-                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
+                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<int>() >= (qpRepo["safetimeOver"].get<int>() * 60000)))
                         {
                           printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
