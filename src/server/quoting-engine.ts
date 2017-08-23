@@ -80,7 +80,7 @@ export class QuotingEngine {
     }
 
 
-    public aspvalue: number = null;
+  //  public aspvalue: number = null;
 
 
 
@@ -137,7 +137,7 @@ export class QuotingEngine {
               ? 3 : 1))
         ] : [1, 1];
 
-        let aspvalue = ((this._targetPosition.latestEMACurrent.currentShort * 100/ this._targetPosition.latestEMACurrent.currentLong - 100) * (1 / params.ewmaSensiblityPercentage));
+        //let aspvalue = ((this._targetPosition.latestEMACurrent.currentShort * 100/ this._targetPosition.latestEMACurrent.currentLong - 100) * (1 / params.ewmaSensiblityPercentage));
 
         var pDiv : number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
@@ -149,7 +149,7 @@ export class QuotingEngine {
           //  console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue);
           //console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
           //console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
-
+/*
           if ( (aspvalue >= params.asp_high || aspvalue <= params.asp_low) && params.aspactive ) {
             pDiv = 0;
             console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv Value Changed to: 0');
@@ -164,7 +164,7 @@ export class QuotingEngine {
             pDiv = 0;
             console.warn(new Date().toISOString().slice(11, -1), 'SMA33-pDiv', 'Changing pDiv to 0' );
           }
-
+*/
         if (superTradesMultipliers[1] > 1) {
           if (!params.buySizeMax) unrounded.bidSz = Math.min(superTradesMultipliers[1]*buySize, (latestPosition.quoteAmount / fv) / 2);
           if (!params.sellSizeMax) unrounded.askSz = Math.min(superTradesMultipliers[1]*sellSize, latestPosition.baseAmount / 2);
