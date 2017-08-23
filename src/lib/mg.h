@@ -210,7 +210,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 newTargetPosition = -1;
         }
 
-                if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
+          ///      if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
 
