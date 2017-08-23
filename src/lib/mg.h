@@ -86,13 +86,13 @@ namespace K {
         for (vector<double>::iterator it = mGWSMA3.begin(); it != mGWSMA3.end(); ++it)
           SMA3 += *it;
         SMA3 /= mGWSMA3.size();
-
+        int SMA33STARTTIME = std::time(nullptr);
         // lets make a SMA logging average
         mGWSMA33.push_back(SMA3);
         if (mGWSMA33.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
         for (vector<double>::iterator it = mGWSMA33.begin(); it != mGWSMA33.end(); ++it)
         // log the time
-        int SMA33STARTTIME = std::time(nullptr);
+
         mSMATIME.push_back((int)SMA33STARTTIME);
         if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
 
@@ -127,7 +127,7 @@ namespace K {
           qpRepo["safetimestart"] = (int)SMA33STARTTIME;
           printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
       }
-//  if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) > (params.safetyP/100))
+
 
 
       };
