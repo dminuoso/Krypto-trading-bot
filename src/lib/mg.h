@@ -109,7 +109,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         qpRepo["ASPVALUE"] = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());   // comppute and save ASPVALUE
         if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
-        args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
+
+      // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
@@ -148,6 +149,19 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         printf("SMA33 Safety Mode is over \n");
                 }
         }
+
+        if( qpRepo["aspactive"] && qpRepo["safetynet"] && (mSafeMode)qpRepo["mSafeMode"].get<int>() == mSafeMode::buy  )
+        {
+          newTargetPosition = 1;
+        } else if( qpRepo["aspactive"] && qpRepo["safetynet"] && (mSafeMode)qpRepo["mSafeMode"].get<int>() == mSafeMode::sell  )
+        {
+          newTargetPosition = -1;
+        }
+
+          args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
+
+
+
 
 
 
