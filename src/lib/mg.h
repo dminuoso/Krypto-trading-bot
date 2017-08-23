@@ -95,9 +95,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         // lets make a SMA logging average
         mGWSMA33.push_back(SMA3);
         if (mGWSMA33.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
-        for (vector<double>::iterator iz = mGWSMA33.begin(); iz != mGWSMA33.end(); ++iz)
-                SMA33 += *iz;
-        SMA33 /= mGWSMA33.size();
+      //  for (vector<double>::iterator iz = mGWSMA33.begin(); iz != mGWSMA33.end(); ++iz)
+        //        SMA33 += *iz;
+      //  SMA33 /= mGWSMA33.size();
 
 
         mSMATIME.push_back((int)SMA33STARTTIME);
