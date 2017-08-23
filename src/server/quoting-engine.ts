@@ -2,7 +2,6 @@ import Models = require("../share/models");
 import Utils = require("./utils");
 import Safety = require("./safety");
 import PositionManagement = require("./position-management");
-import Statistics = require("./statistics");
 import moment = require('moment');
 import QuotingStyleRegistry = require("./quoting-styles/style-registry");
 import {QuoteInput} from "./quoting-styles/helpers";
@@ -53,8 +52,8 @@ export class QuotingEngine {
       private _positionBroker,
       private _minTick: number,
       private _minSize: number,
-      private _ewma: Statistics.EWMAProtectionCalculator,
-      private _stdev: Statistics.STDEVProtectionCalculator,
+      private _ewma,
+      private _stdev,
       private _targetPosition: PositionManagement.TargetBasePositionManager,
       private _safeties: Safety.SafetyCalculator,
       private _evOn,
@@ -65,8 +64,8 @@ export class QuotingEngine {
 
       this._evOn('EWMAProtectionCalculator', () => {
         this.recalcQuote();
-        _targetPosition.quoteEwma = _ewma.latest;
-        _targetPosition.widthStdev = _stdev.latest;
+        _targetPosition.quoteEwma = _ewma();
+        _targetPosition.widthStdev = _stdev();
       });
       this._evOn('FilteredMarket', this.recalcQuote);
       this._evOn('QuotingParameters', this.recalcQuote);
@@ -170,9 +169,10 @@ export class QuotingEngine {
           if (!params.sellSizeMax) unrounded.askSz = Math.min(superTradesMultipliers[1]*sellSize, latestPosition.baseAmount / 2);
         }
 
-        if (params.quotingEwmaProtection && this._ewma.latest !== null) {
-            unrounded.askPx = Math.max(this._ewma.latest, unrounded.askPx);
-            unrounded.bidPx = Math.min(this._ewma.latest, unrounded.bidPx);
+        const ewma = this._ewma();
+        if (params.quotingEwmaProtection && ewma) {
+            unrounded.askPx = Math.max(ewma, unrounded.askPx);
+            unrounded.bidPx = Math.min(ewma, unrounded.bidPx);
         }
 
         if (totalBasePosition < targetBasePosition - pDiv) {
@@ -194,23 +194,23 @@ export class QuotingEngine {
             }
         }
 
-        if (params.quotingStdevProtection !== Models.STDEV.Off && this._stdev.latest !== null) {
+        if (params.quotingStdevProtection !== Models.STDEV.Off && this._stdev() !== null) {
             if (unrounded.askPx && (params.quotingStdevProtection === Models.STDEV.OnFV || params.quotingStdevProtection === Models.STDEV.OnTops || params.quotingStdevProtection === Models.STDEV.OnTop || sideAPR !== 'Sell'))
-              unrounded.askPx = Math.max((params.quotingStdevBollingerBands ? this._stdev.latest[
+              unrounded.askPx = Math.max((params.quotingStdevBollingerBands ? this._stdev()[
                 (params.quotingStdevProtection === Models.STDEV.OnFV || params.quotingStdevProtection === Models.STDEV.OnFVAPROff)
                   ? 'fvMean' : ((params.quotingStdevProtection === Models.STDEV.OnTops || params.quotingStdevProtection === Models.STDEV.OnTopsAPROff)
                     ? 'topsMean' : 'askMean' )
-              ]: fv) + this._stdev.latest[
+              ]: fv) + this._stdev()[
                 (params.quotingStdevProtection === Models.STDEV.OnFV || params.quotingStdevProtection === Models.STDEV.OnFVAPROff)
                   ? 'fv' : ((params.quotingStdevProtection === Models.STDEV.OnTops || params.quotingStdevProtection === Models.STDEV.OnTopsAPROff)
                     ? 'tops' : 'ask' )
               ], unrounded.askPx);
             if (unrounded.bidPx && (params.quotingStdevProtection === Models.STDEV.OnFV || params.quotingStdevProtection === Models.STDEV.OnTops || params.quotingStdevProtection === Models.STDEV.OnTop || sideAPR !== 'Bid'))
-              unrounded.bidPx = Math.min((params.quotingStdevBollingerBands ? this._stdev.latest[
+              unrounded.bidPx = Math.min((params.quotingStdevBollingerBands ? this._stdev()[
                 (params.quotingStdevProtection === Models.STDEV.OnFV || params.quotingStdevProtection === Models.STDEV.OnFVAPROff)
                   ? 'fvMean' : ((params.quotingStdevProtection === Models.STDEV.OnTops || params.quotingStdevProtection === Models.STDEV.OnTopsAPROff)
                     ? 'topsMean' : 'bidMean' )
-              ]  : fv) - this._stdev.latest[
+              ]  : fv) - this._stdev()[
                 (params.quotingStdevProtection === Models.STDEV.OnFV || params.quotingStdevProtection === Models.STDEV.OnFVAPROff)
                   ? 'fv' : ((params.quotingStdevProtection === Models.STDEV.OnTops || params.quotingStdevProtection === Models.STDEV.OnTopsAPROff)
                     ? 'tops' : 'bid' )

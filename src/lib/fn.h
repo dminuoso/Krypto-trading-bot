@@ -9,6 +9,14 @@ namespace K {
       static Local<String> v8S(string k) { return String::NewFromUtf8(Isolate::GetCurrent(), k.data()); };
       static Local<String> v8S(Isolate* isolate, string k) { return String::NewFromUtf8(isolate, k.data()); };
       static string S8v(Local<String> k) { return string(*String::Utf8Value(k)); };
+      static double roundNearest(double value, double minTick) { return round(value / minTick) * minTick; };
+      static double roundUp(double value, double minTick) { return ceil(value / minTick) * minTick; };
+      static double roundDown(double value, double minTick) { return floor(value / minTick) * minTick; };
+      static double roundSide(double oP, double minTick, mSide oS) {
+        if (oS == mSide::Bid) return roundDown(oP, minTick);
+        else if (oS == mSide::Ask) return roundUp(oP, minTick);
+        else return roundNearest(oP, minTick);
+      };
       static unsigned long T() { return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count(); };
       static string uiT() {
         typedef chrono::duration<int, ratio_multiply<chrono::hours::period, ratio<24>>::type> fnT;
@@ -26,8 +34,12 @@ namespace K {
         t -= milliseconds;
         auto microseconds = chrono::duration_cast<chrono::microseconds>(t);
         stringstream T;
-        T << hours.count() << ":" << minutes.count() << ":" << seconds.count()
-          << "." << milliseconds.count() << microseconds.count() << " ";
+        T << setfill('0')
+          << setw(2) << hours.count() << ":"
+          << setw(2) << minutes.count() << ":"
+          << setw(2) << seconds.count() << "."
+          << setw(3) << milliseconds.count()
+          << setw(3) << microseconds.count() << " ";
         return T.str();
       };
       static string oHex(string k) {

@@ -51,10 +51,9 @@ using namespace v8;
 using namespace nlohmann;
 using namespace dec;
 
+#include "km.h"
 #include "fn.h"
 #include "ev.h"
-#include "km.h"
-#include "sd.h"
 #include "cf.h"
 #include "db.h"
 #include "ui.h"
@@ -69,15 +68,14 @@ using namespace dec;
 ;;namespace K {;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;void main(Local<Object> exports) {;;
 ;;;;;;EV::main(exports);;;;;;;;;;;;;;;;;
-;;;;;;SD::main(exports);;    ;;;;    ;;;
-;;;;;;UI::main(exports);;    ;;    ;;;;;
-;;;;;;DB::main(exports);;        ;;;;;;;
+;;;;;;UI::main(exports);;    ;;;;    ;;;
+;;;;;;DB::main(exports);;    ;;    ;;;;;
 ;;;;;;QP::main(exports);;        ;;;;;;;
-;;;;;;OG::main(exports);;    ;;    ;;;;;
-;;;;;;MG::main(exports);;    ;;;;    ;;;
+;;;;;;OG::main(exports);;        ;;;;;;;
+;;;;;;MG::main(exports);;    ;;    ;;;;;
 ;;;;;;PG::main(exports);;    ;;;;    ;;;
-;;;;;;GW::main(exports);;;;;;;;;;    ;;;
-;;;;};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;GW::main(exports);;    ;;;;    ;;;
+;;;;};;;;;;;;;;;;;;;;;;;;;;;;;;;;    ;;;
 ;;};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
