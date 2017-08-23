@@ -113,7 +113,7 @@ namespace K {
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
-      if (  mGWSMA33.back() * 100  >  qpRepo["safetyP"].get<double>() )
+      if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100 )
       {
 
       }
