@@ -95,7 +95,7 @@ export class TargetBasePositionManager {
     this.newMedium = this._mgEwmaMedium(this.fairValue);
     this.newLong = this._mgEwmaLong(this.fairValue);
     this._newTargetPosition = this._mgTBP(this.fairValue, this.newLong, this.newMedium, this.newShort);
-    // console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');
+     console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');
     this.recomputeTargetPosition();
 
     this._uiSend(Models.Topics.EWMAChart, new Models.EWMAChart(
