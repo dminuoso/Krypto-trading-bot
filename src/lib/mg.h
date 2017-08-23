@@ -104,10 +104,11 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 double newTrend = ((SMA3 * 100 / newLong) - 100);
                 double newEwmacrossing = ((newShort * 100 / newMedium) - 100);
                 newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS)
+                qpRepo["ASPVALUE"] = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+        } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS) {
                 newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        qpRepo["ASPVALUE"] = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());   // comppute and save ASPVALUE
-        if (newTargetPosition > 1) newTargetPosition = 1;
+                qpRepo["ASPVALUE"] = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()); // comppute and save ASPVALUE
+        } if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
 
         // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
