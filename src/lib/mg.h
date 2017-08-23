@@ -105,14 +105,14 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
                 double newTrend = ((SMA3 * 100 / newLong) - 100);
                 double newEwmacrossing = ((newShort * 100 / newMedium) - 100);
-                newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+        double        newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
                 qpRepo["aspvalue"] = newTargetPosition;
         } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS) {
-                newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+          double      newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
                 qpRepo["aspvalue"] = newTargetPosition;
                 printf("ASP: value: %f\n", newTargetPosition);
         }
-        newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+      double  newTargetPosition = ((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
         printf("ASP: ewma?: %f", qpRepo["ewmaSensiblityPercentage"].get<double>() );
          qpRepo["aspvalue"] = newTargetPosition;
         printf("ASP: value: %f\n", newTargetPosition);
@@ -122,6 +122,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
+            args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         if ( (qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>() || qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()) && qpRepo["aspactive"].get<bool>() == true ) {
                 //  pdiv changes here..
@@ -180,7 +181,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 newTargetPosition = -1;
         }
 
-        args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
+
 
 
 
