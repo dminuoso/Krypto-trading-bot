@@ -138,8 +138,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
       //  printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
       //  printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
 
-      for (std::vector<double>::const_iterator i = mGWSMA33.begin(); i != mGWSMA33.end(); ++i)
-      std::cout << *i << ' ';
+      for( int i = 0; i < mGWSMA33.size(); i += 2 )
+      cout << mGWSMA33[i] << '-' << mGWSMA33[i+1] << '\n';
 
         printf("debug10\n");
         printf("array size: %lu \n", mGWSMA33.size());
@@ -202,7 +202,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         }
             printf("Debug1111\n");
          printf("safetyactive: %d safetynet: %d safemode: %d\n", qpRepo["safetyactive"].get<bool>(), qpRepo["safetynet"].get<bool>(), qpRepo["mSafeMode"].get<int>() );
-        if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && qpRepo["mSafeMode"].get<int>() == mSafeMode::buy  )
+        if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() and qpRepo["mSafeMode"].get<int>() == mSafeMode::buy  )
         {
                 newTargetPosition = 1;
         } else if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && qpRepo["mSafeMode"].get<int>() == mSafeMode::sell  )
@@ -210,7 +210,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 newTargetPosition = -1;
         }
 
-
+                if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
 
