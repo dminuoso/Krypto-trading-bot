@@ -115,7 +115,7 @@ namespace K {
 
 
 
-        if ( (mGWSMA33.end()-1 * 100 / mGWSMA33.begin() - 100 ) > 5 )
+        if ( (( mGWSMA33.end()-1 * 100) / mGWSMA33.begin() - 100 ) > 5 )
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
     //  params.safetimestart = currenttime.getTime();
