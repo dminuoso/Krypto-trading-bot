@@ -184,7 +184,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         {
                                 printf("debug3\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
-                                qpRepo["safetyactive"] = 0;
+                                qpRepo["safetyactive"] = false;
                                 printf("SMA33 Safety Mode is over \n");
                                 printf("debug4\n");
                         }
@@ -195,7 +195,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         {
                                 printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
-                                qpRepo["safetyactive"] = 0;
+                                qpRepo["safetyactive"] = false;
                                 printf("SMA33 Safety Mode is over \n");
                                 printf("debug6\n");
                         }
