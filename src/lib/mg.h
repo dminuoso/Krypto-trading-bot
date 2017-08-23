@@ -140,7 +140,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
 
 
-
+        printf("Array size %lu \n", mGWSMA33.size() );
 
         if(mGWSMA33.size() > 3) {
                 if (
