@@ -167,7 +167,7 @@ namespace K {
         cout << "Short Period: " << qpRepo["shortEwmaPeridos"].get<int>() << "\n";
         cout << "Long Period: " << qpRepo["longEwmaPeridos"].get<int>() << "\n";
 */
-        mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
+      //  mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         cout << "Test Short: " << mgEwmaS << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
