@@ -200,6 +200,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>())  )
                         {
+                                printf("Current Short: %d   old Short: %d\n" mGWSMA33.back(),  mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()));
                               //  printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
