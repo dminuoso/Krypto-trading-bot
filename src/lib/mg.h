@@ -111,6 +111,11 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         } if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
 
+        if ( (qpRepo["ASPVALUE"] >= qpRepo["asp_high"] || qpRepo["ASPVALUE"] <= qpRepo["asp_low"]) && qpRepo["aspactive"].get<bool>() == true ) {
+          //  pdiv changes here..
+
+          }
+          printf("ASP: ASPVALUE %d  ASPHIGH: %d  ASPLOW: %d\n", qpRepo["ASPVALUE"], qpRepo["asp_high"], qpRepo["asp_low"], qpRepo["aspactive"].get<bool>()  );
         // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         // lets do some SMA math to see if we can buy or sell safety time!
