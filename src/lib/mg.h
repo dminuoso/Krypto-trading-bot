@@ -149,7 +149,7 @@ namespace K {
       };
       static void _mgEwmaShort(const FunctionCallbackInfo<Value>& args) {
         mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
-        cout << "New Long: " << mgEwmaS << "\n";
+        cout << "New Short: " << mgEwmaS << "\n";
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaS));
       };
       static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
