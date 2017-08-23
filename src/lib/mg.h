@@ -10,8 +10,8 @@ namespace K {
   static double mGWEwmaM = 0;
   static double mGWEwmaS = 0;
   static vector<double> mGWSMA3;
-  static vector<double> mGWSMA33; // Logging SMA3 values
-  static vector<double> mSMATIME; // logging SMA3 value timestamps
+   vector<double> mGWSMA33; // Logging SMA3 values
+   vector<double> mSMATIME; // logging SMA3 value timestamps
   class MG {
     public:
       static void main(Local<Object> exports) {
