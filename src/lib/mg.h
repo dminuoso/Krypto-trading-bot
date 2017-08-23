@@ -290,7 +290,7 @@ namespace K {
           double alpha = 2 / (periods + 1);
           return alpha * newValue + (1 - alpha) * previous;
         }
-        cout << "New EWMA Value: " << newValue >> "\n";
+        cout << "New EWMA Value: " << newValue << "\n";
         return newValue;
       };
   };
