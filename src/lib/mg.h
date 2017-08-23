@@ -99,9 +99,6 @@ namespace K {
         if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
 
 
-
-
-
         double newTargetPosition = 0;
         if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
           double newTrend = ((SMA3 * 100 / newLong) - 100);
@@ -132,8 +129,12 @@ namespace K {
           printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
       }
 
+      int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
 
-
+      if( mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) )
+      {
+        
+      }
 
 
       };
