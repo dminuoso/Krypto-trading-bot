@@ -190,7 +190,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         printf("debug2\n");
                         //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                       //  printf("arraySize: %lu\n", mGWSMA33.size() );
-                        if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) )
+                        //if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) )
                                 if((mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) or (qpRepo["safetyduration"].get<unsigned long int>() >= std::time(nullptr) ) )
                                 {
                                         printf("debug3\n");
