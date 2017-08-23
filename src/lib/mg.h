@@ -16,6 +16,8 @@ namespace K {
   static vector<double> mgStatBid;
   static vector<double> mgStatAsk;
   static vector<double> mgStatTop;
+  static vector<double> mgWSMA33;    // Logging SMA3 values
+  static vector<double> mgMATIME;    // logging SMA3 value timestamps
   static double mgStdevFV;
   static double mgStdevFVMean;
   static double mgStdevBid;
@@ -153,6 +155,9 @@ namespace K {
         double newLong = args[1]->NumberValue();
         double newMedium = args[2]->NumberValue();
         double newShort = args[3]->NumberValue();
+        cout << "Short: " newShort;
+        cout << "Long: " newLong;
+        cout << "FV: " args[0]->NumberValue();
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
