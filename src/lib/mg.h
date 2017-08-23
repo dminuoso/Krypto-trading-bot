@@ -196,7 +196,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         }
                 }
         }
-         printf("safetyactive: %f safetynet: %f safemode: %f\n", qpRepo["safetyactive"].get<bool>(), qpRepo["safetynet"].get<bool>(), qpRepo["mSafeMode"].get<int>() );
+         printf("safetyactive: %d safetynet: %d safemode: %d\n", qpRepo["safetyactive"].get<bool>(), qpRepo["safetynet"].get<bool>(), qpRepo["mSafeMode"].get<int>() );
         if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["mSafeMode"].get<int>() == mSafeMode::buy  )
         {
                 newTargetPosition = 1;
