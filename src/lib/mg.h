@@ -114,8 +114,8 @@ namespace K {
         // lets do some SMA math to see if we can buy or sell safety time!
 
 
-          
-        if ( vector<double>::iterator it = mGWSMA3.end()-1  )
+
+        if ( ( vector<double>::iterator it = mGWSMA3.end()-1; it * 100 / vector<double>::iterator ir = mGWSMA3.begin(); ir - 100 ) >  (qpRepo["safetyP"].get<double>() / 100) )
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
     //  params.safetimestart = currenttime.getTime();
