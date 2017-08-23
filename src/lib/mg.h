@@ -121,16 +121,18 @@ namespace K {
           // activate Safety, Safety buySize
            qpRepo["mSafeMode"] = (int)mSafeMode::buy;
            qpRepo["safetimestart"] = (int)SMA33STARTTIME;
-          printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
-          printf("SMA33 Start Time started at: %d", qpRepo["safetimestart"].get<int>());
+          printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
+          printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
       }
       if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 )
       {
           qpRepo["mSafeMode"] = (int)mSafeMode::sell;
           qpRepo["safetimestart"] = (int)SMA33STARTTIME;
-          printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
-          printf("SMA33 Start Time started at: %d", qpRepo["safetimestart"].get<int>());
+          printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
+          printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
       }
+
+
 
 
 
