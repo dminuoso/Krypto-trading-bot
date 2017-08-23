@@ -131,9 +131,9 @@ namespace K {
 
       int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
 
-      if( mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) )
+      if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimestart"].get<int>() * 60000)))
       {
-        
+
       }
 
 
