@@ -89,7 +89,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 SMA3 += *it;
         SMA3 /= mGWSMA3.size();
 
-        int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
+        unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
 
         // lets make a SMA logging average
         mGWSMA33.push_back(SMA3);
@@ -143,30 +143,30 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
                         qpRepo["safetyactive"] = 1;
-                        qpRepo["safetimestart"] = (int)SMA33STARTTIME;
+                        qpRepo["safetimestart"] = (unsigned long int)SMA33STARTTIME;
                         printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
-                        printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
-                        qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
+                        printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
+                        qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
                 }
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 &&  qpRepo["safetyactive"].get<bool>() == false &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::sell )
                 {
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
-                        qpRepo["safetimestart"] = (int)SMA33STARTTIME;
+                        qpRepo["safetimestart"] = (unsigned long int)SMA33STARTTIME;
                         qpRepo["safetyactive"] = 1;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
-                        printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
-                       qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
+                        printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
+                       qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
                 }
 
         }
 
-        printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<int>(), std::time(nullptr), qpRepo["safetimestart"].get<int>() );
+        printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<unsigned long int>(), std::time(nullptr), qpRepo["safetimestart"].get<unsigned long int>() );
         if(mGWSMA33.size() > 3  ) {
           printf("Debug1\n");
                 if(mGWSMA33.size() > qpRepo["safetytime"].get<int>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
                   printf("debug2\n");
-                        if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<int>() >= (qpRepo["safetimeOver"].get<int>() * 60000)))
+                        if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         {
                           printf("debug3\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
@@ -174,7 +174,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                                 printf("SMA33 Safety Mode is over \n");
                                 printf("debug4\n");
                         }
-                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<int>() >= (qpRepo["safetimeOver"].get<int>() * 60000)))
+                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         {
                           printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
