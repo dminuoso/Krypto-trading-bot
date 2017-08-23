@@ -115,7 +115,7 @@ namespace K {
 
 
 
-        if (( double((mSMATIME.end()-1) * 100) / double(mSMATIME.begin()) - 100) > (qpRepo["safetyP"].get<double>() / 100))
+        if ( mGWSMA33.end()-1 > mGWSMA33.begin() )
         {
     //  params.mSafeMode = Models.mSafeMode.buy;
     //  params.safetimestart = currenttime.getTime();
