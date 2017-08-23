@@ -116,11 +116,12 @@ namespace K {
       if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100 )
       {
           // activate Safety, Safety buySize
-           qpRepo["mSafeMode"] = 1;
+           qpRepo["mSafeMode"] = (int)mSafeMode::buy;
           printf("SMA33 First Value: %f  Second Value %f", mGWSMA33.back(), mGWSMA33.front() );
       }
       if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 )
       {
+          qpRepo["mSafeMode"] = (int)mSafeMode::sell;
           printf("SMA33 First Value: %f  Second Value %f", mGWSMA33.back(), mGWSMA33.front() );
       }
 //  if (((this._SMA33[this._SMA33.length-1] * 100 / this._SMA33[0]) - 100) > (params.safetyP/100))
