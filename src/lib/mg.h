@@ -183,7 +183,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
                 }
 
-        }
+        } 
 
 
         printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<unsigned long int>(), std::time(nullptr), qpRepo["safetimestart"].get<unsigned long int>() );
