@@ -159,7 +159,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                     )
                 )
               {
-                        printf("debug12\n");
+                      //  printf("debug12\n");
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
                         qpRepo["safetyactive"] = true;

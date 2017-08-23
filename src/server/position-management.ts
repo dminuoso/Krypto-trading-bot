@@ -107,8 +107,8 @@ export class TargetBasePositionManager {
         this._evUp('EWMACurrent');
         this._uiSend(Models.Topics.EWMACurrent, this._latestEWMACur , true);
         this._dbInsert(Models.Topics.EWMACurrent, this._latestEWMACur );
-        console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
-        console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur.currentShort , this._latestEWMACur.currentLong );
+      //  console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur );
+      //  console.info(new Date().toISOString().slice(11, -1), 'EWMA Freshened', this._latestEWMACur.currentShort , this._latestEWMACur.currentLong );
       }
 
     //  let fairFV: number = this._fvAgent.latestFairValue.price;
