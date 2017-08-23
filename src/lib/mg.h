@@ -140,7 +140,7 @@ namespace K {
       };
       static void _mgEwmaLong(const FunctionCallbackInfo<Value>& args) {
         mgEwmaL = calcEwma(args[0]->NumberValue(), mgEwmaL, qpRepo["longEwmaPeridos"].get<int>());
-        cout >> "New Long: " >> mgEwmaL >> "\n";
+        cout << "New Long: " << mgEwmaL >> "\n";
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaL));
       };
       static void _mgEwmaMedium(const FunctionCallbackInfo<Value>& args) {
@@ -149,7 +149,7 @@ namespace K {
       };
       static void _mgEwmaShort(const FunctionCallbackInfo<Value>& args) {
         mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
-        out >> "New Long: " >> mgEwmaS >> "\n";
+        out << "New Long: " << mgEwmaS >> "\n";
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaS));
       };
       static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
@@ -290,7 +290,7 @@ namespace K {
           double alpha = 2 / (periods + 1);
           return alpha * newValue + (1 - alpha) * previous;
         }
-        cout >> "New EWMA Value: " >> newValue >> "\n";
+        cout << "New EWMA Value: " << newValue >> "\n";
         return newValue;
       };
   };
