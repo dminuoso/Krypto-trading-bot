@@ -140,7 +140,7 @@ namespace K {
       };
       static void _mgEwmaLong(const FunctionCallbackInfo<Value>& args) {
         mgEwmaL = calcEwma(args[0]->NumberValue(), mgEwmaL, qpRepo["longEwmaPeridos"].get<int>());
-        cout << "New Long: " << mgEwmaL << "\n";
+//      cout << "New Long: " << mgEwmaL << "\n";
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaL));
       };
       static void _mgEwmaMedium(const FunctionCallbackInfo<Value>& args) {
@@ -149,7 +149,7 @@ namespace K {
       };
       static void _mgEwmaShort(const FunctionCallbackInfo<Value>& args) {
         mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
-        cout << "New Short: " << mgEwmaS << "\n";
+    //    cout << "New Short: " << mgEwmaS << "\n";
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaS));
       };
       static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
@@ -157,7 +157,7 @@ namespace K {
         double newLong = args[1]->NumberValue();
         double newMedium = args[2]->NumberValue();
         double newShort = args[3]->NumberValue();
-        cout << "Short: " << newShort << "\n";
+    /*    cout << "Short: " << newShort << "\n";
         cout << "Long: " << newLong << "\n";
         cout << "FV: " << args[0]->NumberValue()  << "\n";
         cout << "----------\n";
@@ -166,6 +166,7 @@ namespace K {
         cout << "FV: " << args[0]->NumberValue()  << "\n";
         cout << "Short Period: " << qpRepo["shortEwmaPeridos"].get<int>() << "\n";
         cout << "Long Period: " << qpRepo["longEwmaPeridos"].get<int>() << "\n";
+*/
         mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         cout << "Test Short: " << mgEwmaS << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
@@ -298,7 +299,7 @@ namespace K {
         if (previous) {
           double alpha = 2 / (periods + 1);
           double newAlpha = alpha * newValue + (1 - alpha) * previous;
-          cout << "New Alpha: " << newAlpha << " Period:" << periods << " \n"; 
+          cout << "New Alpha: " << newAlpha << " Period:" << periods << " \n";
           return newAlpha;
         }
         //cout << "New EWMA Value: " << newValue <<  "Period: " << periods << "\n";
