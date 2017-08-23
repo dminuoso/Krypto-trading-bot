@@ -117,12 +117,11 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
          qpRepo["aspvalue"] = newTargetPosition;
         printf("ASP: value: %f\n", newTargetPosition);
         printf("ASP: value: %f\n", qpRepo["aspvalue"].get<double>());
-        printf("ASP: testvalue: %f\n", ((newShort * 100/ newLong)  - 100)  );
+        printf("ASP: testvalue: %f\n",((newShort * 100/ newLong) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()));
 
 
         if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
-            args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
         if ( (qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>() || qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()) && qpRepo["aspactive"].get<bool>() == true ) {
                 //  pdiv changes here..
@@ -182,6 +181,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         }
 
 
+        args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
 
 
