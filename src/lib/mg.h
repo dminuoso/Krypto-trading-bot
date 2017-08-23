@@ -135,14 +135,14 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
-        printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
-        printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
+      //  printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
+      //  printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
 
 
         printf("debug10\n");
         if(mGWSMA33.size() > 3) {
           printf("debug11\n");
-                if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::buy)
+                if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true)
                 {
                   printf("debug12\n");
                         // activate Safety, Safety buySize
@@ -153,7 +153,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
                         qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
                 }
-                if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 &&  qpRepo["safetyactive"].get<bool>() == false &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::sell )
+                if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 &&  qpRepo["safetyactive"].get<bool>() == false &&  qpRepo["safetynet"].get<bool>() == true)
                 {
                   printf("debug13\n");
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
