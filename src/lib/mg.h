@@ -138,7 +138,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         //  printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
         //  printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
 
-      
+
 
         printf("Array size %lu \n", mGWSMA33.size() );
 
@@ -190,7 +190,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         if(mGWSMA33.size() > 3  ) {
                 printf("Debug1\n");
                 printf("SMA33 Safetytime: %f\n", qpRepo["safetytime"].get<double>());
-                if(mGWSMA33.size() > qpRepo["safetytime"].get<double>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
+                if(mGWSMA33.size() > qpRepo["safetytime"].get<double>() and qpRepo["safetyactive"].get<bool> == true )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
                       //  printf("debug2\n");
                         //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
