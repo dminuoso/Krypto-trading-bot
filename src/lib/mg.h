@@ -165,7 +165,7 @@ namespace K {
         cout << "Long: " << args[1]->NumberValue() << "\n";
         cout << "FV: " << args[0]->NumberValue()  << "\n";
         cout << "Short: " << qpRepo["shortEwmaPeridos"].get<int>() << "\n";
-        cout << "Long: " << qpRepo["LongEwmaPeridos"].get<int>() << "\n";
+        cout << "Long: " << qpRepo["longEwmaPeridos"].get<int>() << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
