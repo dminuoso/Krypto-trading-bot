@@ -150,7 +150,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         printf("debug12\n");
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
-                        qpRepo["safetyactive"] = 1;
+                        qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = (unsigned long int)SMA33STARTTIME;
                         printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
                         printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
@@ -161,7 +161,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         printf("debug13\n");
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
                         qpRepo["safetimestart"] = (unsigned long int)SMA33STARTTIME;
-                        qpRepo["safetyactive"] = 1;
+                        qpRepo["safetyactive"] = true;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
                         printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
                         qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
@@ -201,10 +201,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         }
                 }
         }
-        printf("Debug1111\n");
-        printf("safetyactive: %d \n",qpRepo["safetyactive"].get<bool>());
-        printf("safetyactive: %d \n", qpRepo["safetynet"].get<bool>());
-        printf("safemode %d\n", qpRepo["safemode"].get<int>() );
+
         // printf("safetyactive: %d safetynet: %d safemode: %d\n", qpRepo["safetyactive"].get<bool>(), qpRepo["safetynet"].get<bool>(), qpRepo["mSafeMode"].get<int>() );
         if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::buy)
         {
