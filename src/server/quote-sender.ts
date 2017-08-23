@@ -29,7 +29,7 @@ export class QuoteSender {
     });
     _uiSnap(Models.Topics.QuoteStatus, () => [this._latestStatus]);
   }
-//
+
   private checkCrossedQuotes = (side: Models.Side, px: number): boolean => {
     var oppSide = side === Models.Side.Bid ? Models.Side.Ask : Models.Side.Bid;
 

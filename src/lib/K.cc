@@ -36,12 +36,8 @@
 #include <uv.h>
 #include <uWS.h>
 
-//zaks librariess
-#include <ctime>
-
 using namespace std;
 using namespace v8;
-
 
 #include "png.h"
 #include "json.h"
@@ -62,7 +58,6 @@ using namespace dec;
 #include "mg.h"
 #include "pg.h"
 #include "gw.h"
-#include "passback.h"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;namespace K {;;;;;;;;;;;;;;;;;;;;;;;;;

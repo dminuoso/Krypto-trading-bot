@@ -27,9 +27,6 @@ namespace K {
   enum class mFairValueModel: unsigned int { BBO, wBBO };
   enum class mAutoPositionMode: unsigned int { Manual, EWMA_LS, EWMA_LMS };
   enum class mAPR: unsigned int { Off, Size, SizeWidth };
-  enum class mMoveit: unsigned int { up, down, unknown };
-  enum class mMovemomentum: unsigned int {normal, mid, fast, unknown };
-  enum class mSafeMode:  unsigned int {buy, sell, unknown };
   enum class mSOP: unsigned int { Off, x2trades, x3trades, x2Size, x3Size, x2tradesSize, x3tradesSize };
   enum class mSTDEV: unsigned int{ Off, OnFV, OnFVAPROff, OnTops, OnTopsAPROff, OnTop, OnTopAPROff };
   enum class uiBIT: unsigned char { MSG = '-', SNAP = '=' };
@@ -41,7 +38,7 @@ namespace K {
     MarketTrade = 'r', Trades = 's', ExternalValuation = 't', QuoteStatus = 'u',
     TargetBasePosition = 'v', TradeSafetyValue = 'w', CancelAllOrders = 'x',
     CleanAllClosedOrders = 'y', CleanAllOrders = 'z', CleanTrade = 'A', TradesChart = 'B',
-    WalletChart = 'C', EWMAChart = 'D',   EWMACurrent = 'Z'
+    WalletChart = 'C', EWMAChart = 'D'
   };
   class Gw {
     public:
@@ -64,9 +61,7 @@ namespace K {
       int base = 0;
       virtual mExchange config() = 0;
       virtual void pos() = 0;
-
       virtual void book() = 0;
-
       virtual void send(string oI, mSide oS, double oP, double oQ, mOrderType oLM, mTimeInForce oTIF, bool oPO, unsigned long oT) = 0;
       virtual void cancel(string oI, string oE, mSide oS, unsigned long oT) = 0;
       virtual void cancelAll() = 0;

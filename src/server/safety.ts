@@ -26,7 +26,7 @@ export class SafetyCalculator {
     private _sells: ITrade[] = [];
 
     public targetPosition: PositionManagement.TargetBasePositionManager;
-//
+
     constructor(
       private _fvEngine,
       private _qpRepo,

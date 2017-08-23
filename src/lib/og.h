@@ -359,8 +359,8 @@ namespace K {
         o->Set(FN::v8S("exchange"), Number::New(isolate, j["exchange"].get<int>()));
         Local<Object> o_ = Object::New(isolate);
         o_->Set(FN::v8S("base"), Number::New(isolate, j["/pair/base"_json_pointer].get<int>()));
-	      o_->Set(FN::v8S("quote"), Number::New(isolate, j["/pair/quote"_json_pointer].get<int>()));
-	      o->Set(FN::v8S("pair"), o_);
+        o_->Set(FN::v8S("quote"), Number::New(isolate, j["/pair/quote"_json_pointer].get<int>()));
+        o->Set(FN::v8S("pair"), o_);
         o->Set(FN::v8S("side"), Number::New(isolate, j["side"].get<int>()));
         o->Set(FN::v8S("price"), Number::New(isolate, j["price"].get<double>()));
         o->Set(FN::v8S("quantity"), Number::New(isolate, j["quantity"].get<double>()));
