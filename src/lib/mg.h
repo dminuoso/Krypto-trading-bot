@@ -294,9 +294,10 @@ namespace K {
         return sqrt(variance) * f;
       };
       static double calcEwma(double newValue, double previous, int periods) {
-        cout << "Previou Value: " << previous << " \n"; 
+        cout << "Previou Value: " << previous << " \n";
         if (previous) {
           double alpha = 2 / (periods + 1);
+          cout << "New EWMA: " << alpha * newValue + (1 - alpha) * previous << " \n"; 
           return alpha * newValue + (1 - alpha) * previous;
         }
         cout << "New EWMA Value: " << newValue <<  "Period: " << periods << "\n";
