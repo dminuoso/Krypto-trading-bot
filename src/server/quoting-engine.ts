@@ -5,7 +5,7 @@ import PositionManagement = require("./position-management");
 import moment = require('moment');
 import QuotingStyleRegistry = require("./quoting-styles/style-registry");
 import {QuoteInput} from "./quoting-styles/helpers";
-// test
+
 const quoteChanged = (o: Models.Quote, n: Models.Quote, tick: number) : boolean => {
    if ((!o && n) || (o && !n)) return true;
    if (!o && !n) return false;
@@ -73,24 +73,15 @@ export class QuotingEngine {
       this._evOn('TargetPosition', this.recalcQuote);
       this._evOn('Safety', this.recalcQuote);
 
-
-
       setInterval(this.recalcQuote, moment.duration(1, "seconds"));
     }
-
-
-  //  public aspvalue: number = null;
-
-
-
-
 
     private computeQuote(filteredMkt: Models.Market, fv: number) {
         const latestPosition = this._positionBroker();
         if (this._targetPosition.latestTargetPosition === null || latestPosition === null) return null;
         const targetBasePosition = this._targetPosition.latestTargetPosition.tbp;
-        const fvv = this._fvEngine;
-        var params = this._qpRepo();
+
+        const params = this._qpRepo();
         const widthPing = (params.widthPercentage)
           ? params.widthPingPercentage * fv / 100
           : params.widthPing;
@@ -136,34 +127,10 @@ export class QuotingEngine {
               ? 3 : 1))
         ] : [1, 1];
 
-        //let aspvalue = ((this._targetPosition.latestEMACurrent.currentShort * 100/ this._targetPosition.latestEMACurrent.currentLong - 100) * (1 / params.ewmaSensiblityPercentage));
-
-        var pDiv : number  = (params.percentageValues)
+        let pDiv: number  = (params.percentageValues)
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
-//
-        //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params. ) ;
-        //  console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  this._targetPosition.latestEMACurrent.currentShort );
-        //  console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  this._targetPosition.latestEMACurrent.currentLong);
-          //  console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue);
-          //console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Low:' ,  params.asp_low) ;
-          //console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP High:' ,  params.asp_high) ;
-/*
-          if ( (aspvalue >= params.asp_high || aspvalue <= params.asp_low) && params.aspactive ) {
-            pDiv = 0;
-            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv Value Changed to: 0');
 
-          }
-          if(params.safetynet &&  params.mSafeMode == Models.mSafeMode.buy ) {
-
-            pDiv = 0;
-            console.warn(new Date().toISOString().slice(11, -1), 'SMA33-pDiv', 'Anti Slip changing pDiv to Zero' );
-          }
-          if(params.safetynet &&  params.mSafeMode == Models.mSafeMode.sell ) {
-            pDiv = 0;
-            console.warn(new Date().toISOString().slice(11, -1), 'SMA33-pDiv', 'Changing pDiv to 0' );
-          }
-*/
         if (superTradesMultipliers[1] > 1) {
           if (!params.buySizeMax) unrounded.bidSz = Math.min(superTradesMultipliers[1]*buySize, (latestPosition.quoteAmount / fv) / 2);
           if (!params.sellSizeMax) unrounded.askSz = Math.min(superTradesMultipliers[1]*sellSize, latestPosition.baseAmount / 2);
