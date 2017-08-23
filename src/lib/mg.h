@@ -173,9 +173,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 if(mGWSMA33.size() > qpRepo["safetytime"].get<double>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
                   printf("debug2\n");
-                      //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
+                      //
                       printf("arraySize: %lu\n", mGWSMA33.size() );
-                        if( (mGWSMA33.back() < mGWSMA33.at(2)) )
+                        if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         {
                           printf("debug3\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
@@ -184,7 +184,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                                 printf("debug4\n");
                         }
                         printf("debugzz\n");
-                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
+                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         {
                           printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
