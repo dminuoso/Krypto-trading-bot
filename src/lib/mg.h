@@ -100,7 +100,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         SMA33 /= mGWSMA33.size();
 
 
-                mSMATIME.push_back((int)SMA33STARTTIME);
+        mSMATIME.push_back((int)SMA33STARTTIME);
         if (mSMATIME.size()>100) mSMATIME.erase(mSMATIME.begin(), mSMATIME.end()-1);
 
 
@@ -135,19 +135,19 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         // lets do some SMA math to see if we can buy or sell safety time!
 
-      //  printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
-      //  printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
+        //  printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
+        //  printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
 
-      for( int i = 0; i < mGWSMA33.size(); i += 2 )
-      cout << mGWSMA33[i] << '-' << mGWSMA33[i+1] << '\n';
+        for( int i = 0; i < mGWSMA33.size(); i += 2 )
+                cout << mGWSMA33[i] << '-' << mGWSMA33[i+1] << '\n';
 
         printf("debug10\n");
         printf("array size: %lu \n", mGWSMA33.size());
         if(mGWSMA33.size() > 3) {
-          printf("debug11\n");
+                printf("debug11\n");
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true)
                 {
-                  printf("debug12\n");
+                        printf("debug12\n");
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
                         qpRepo["safetyactive"] = 1;
@@ -158,41 +158,42 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                 }
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 &&  qpRepo["safetyactive"].get<bool>() == false &&  qpRepo["safetynet"].get<bool>() == true)
                 {
-                  printf("debug13\n");
+                        printf("debug13\n");
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
                         qpRepo["safetimestart"] = (unsigned long int)SMA33STARTTIME;
                         qpRepo["safetyactive"] = 1;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
                         printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
-                       qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
+                        qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>();
                 }
 
         }
-          printf("array size2: %lu \n", mGWSMA33.size());
+        printf("array size2: %lu \n", mGWSMA33.size());
 
         printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<unsigned long int>(), std::time(nullptr), qpRepo["safetimestart"].get<unsigned long int>() );
         if(mGWSMA33.size() > 3  ) {
-          printf("Debug1\n");
-          printf("SMA33 Safetytime: %f\n", qpRepo["safetytime"].get<double>());
+                printf("Debug1\n");
+                printf("SMA33 Safetytime: %f\n", qpRepo["safetytime"].get<double>());
                 if(mGWSMA33.size() > qpRepo["safetytime"].get<double>()  )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
-                  printf("debug2\n");
-                      //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                      printf("arraySize: %lu\n", mGWSMA33.size() );
+                        printf("debug2\n");
+                        //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
+                        printf("arraySize: %lu\n", mGWSMA33.size() );
                         if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) )
+                        if((mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         {
-                          printf("debug3\n");
+                                printf("debug3\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = 0;
                                 printf("SMA33 Safety Mode is over \n");
                                 printf("debug4\n");
                         }
                         printf("debugzz\n");
-                      //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
+                        //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                       if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>())  )
+                        if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>())  )
                         {
-                          printf("debug5\n");
+                                printf("debug5\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = 0;
                                 printf("SMA33 Safety Mode is over \n");
@@ -200,20 +201,20 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         }
                 }
         }
-            printf("Debug1111\n");
-            printf("safetyactive: %d \n",qpRepo["safetyactive"].get<bool>());
-            printf("safetyactive: %d \n", qpRepo["safetynet"].get<bool>());
-            printf("safemode %d\n", qpRepo["safemode"].get<int>() );
+        printf("Debug1111\n");
+        printf("safetyactive: %d \n",qpRepo["safetyactive"].get<bool>());
+        printf("safetyactive: %d \n", qpRepo["safetynet"].get<bool>());
+        printf("safemode %d\n", qpRepo["safemode"].get<int>() );
         // printf("safetyactive: %d safetynet: %d safemode: %d\n", qpRepo["safetyactive"].get<bool>(), qpRepo["safetynet"].get<bool>(), qpRepo["mSafeMode"].get<int>() );
-        if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
+        if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::buy)
         {
                 newTargetPosition = 1;
-        } else if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell )
+        } else if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::sell )
         {
                 newTargetPosition = -1;
         }
 
-          //      if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
+        //      if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 
 
