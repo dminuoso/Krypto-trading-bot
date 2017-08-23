@@ -120,7 +120,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
       //  qpRepo["aspvalue"] = newTargetPosition;
       //  printf("ASP: value: %f\n", newTargetPosition);
       //  printf("ASP: value: %f\n", qpRepo["aspvalue"].get<double>());
-        printf("ASP: testvalue: %f\n",((newShort * 100/ newLong) - 100));
+        printf("ASP: testvalue: %f\n", ((newShort * 100/ newLong) - 100));
 
 
         if (newTargetPosition > 1) newTargetPosition = 1;
@@ -128,27 +128,19 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         if ( (qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>() || qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()) && qpRepo["aspactive"].get<bool>() == true ) {
                 //  pdiv changes here..
-
         }
         printf("ASP: ASPVALUE %f  ASPHIGH: %f ASPLOW: %f  ASPACTIVE: %d\n", qpRepo["aspvalue"].get<double>(), qpRepo["asp_high"].get<double>(), qpRepo["asp_low"].get<double>(), qpRepo["aspactive"].get<bool>()  );
         // relocating this for now...  args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
-
         // lets do some SMA math to see if we can buy or sell safety time!
-
         //  printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
           printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
-
-
-
-        printf("Array size %lu \n", mGWSMA33.size() );
+          printf("Array size %lu \n", mGWSMA33.size() );
 
         if(mGWSMA33.size() > 3) {
                 if (
                        ( mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100 )
                         &&  qpRepo["safetyactive"].get<bool>() == false
                         &&  qpRepo["safetynet"].get<bool>() == true
-
-
               )
               {
                       //  printf("debug12\n");
@@ -191,7 +183,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                       //  printf("arraySize: %lu\n", mGWSMA33.size() );
                         //if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) )
-                                if((mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) or (qpRepo["safetyduration"].get<unsigned long int>() >= std::time(nullptr) ) )
+                                if((mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) or ( std::time(nullptr) > qpRepo["safetyduration"].get<unsigned long int>()  ) )
                                 {
                                         printf("debug3\n");
                                         qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
@@ -202,7 +194,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                       //  printf("debugzz\n");
                         //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>())  ) or  (qpRepo["safetyduration"].get<unsigned long int>() >= std::time(nullptr) ) )
+                        if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>())  ) or  ( std::time(nullptr) > qpRepo["safetyduration"].get<unsigned long int>() ) )
                         {
                                 printf("Current Short: %f   old Short: %f\n", mGWSMA33.back(),  mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()));
                               //  printf("debug5\n");
