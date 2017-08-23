@@ -117,6 +117,7 @@ namespace K {
       {
           // activate Safety, Safety buySize
            qpRepo["mSafeMode"] = (int)mSafeMode::buy;
+           qpRepo["aspactive"] = true;
            qpRepo["safetimestart"] = (int)SMA33STARTTIME;
           printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
           printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
@@ -125,16 +126,26 @@ namespace K {
       {
           qpRepo["mSafeMode"] = (int)mSafeMode::sell;
           qpRepo["safetimestart"] = (int)SMA33STARTTIME;
+          qpRepo["aspactive"] = true;
           printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
           printf("SMA33 Start Time started at: %d \n", qpRepo["safetimestart"].get<int>());
       }
 
       int duration = std::time(nullptr) - qpRepo["safetimestart"].get<int>();
 
-      if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimestart"].get<int>() * 60000)))
+      if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
       {
-
+          qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
+          qpRepo["aspactive"] = false;
+          printf("SMA33 Safety Mode is over \n");
       }
+      if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (duration >= (qpRepo["safetimeOver"].get<int>() * 60000)))
+      {
+          qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
+          qpRepo["aspactive"] = false;
+          printf("SMA33 Safety Mode is over \n");
+      }
+
 
 
       };
