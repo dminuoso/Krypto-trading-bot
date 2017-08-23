@@ -143,7 +143,7 @@ export class QuotingEngine {
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 //
-        //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params.aspvalue ) ;
+        //            console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  params. ) ;
         //  console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Short:' ,  this._targetPosition.latestEMACurrent.currentShort );
         //  console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv fv Long:' ,  this._targetPosition.latestEMACurrent.currentLong);
           //  console.warn(new Date().toISOString().slice(11, -1), 'pDiv', 'pDiv ASP Value:' ,  aspvalue);

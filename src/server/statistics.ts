@@ -18,7 +18,7 @@ export class EWMAProtectionCalculator {
     private _qpRepo,
     private _evUp,
   ) {
-    setInterval(this.onTick, moment.duration(5, "seconds"));
+    setInterval(this.onTick, moment.duration(1, "minutes"));
   }
 
 
