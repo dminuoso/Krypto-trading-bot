@@ -81,6 +81,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         double newLong = args[1]->NumberValue();
         double newMedium = args[2]->NumberValue();
         double newShort = args[3]->NumberValue();
+        printf("Short: %f Medium: %f Long: %f \n", newShort, newMedium, newLong);
         if (mGWSMA3.size()>3) mGWSMA3.erase(mGWSMA3.begin(), mGWSMA3.end()-3);
         double SMA3 = 0;
         for (vector<double>::iterator it = mGWSMA3.begin(); it != mGWSMA3.end(); ++it)
