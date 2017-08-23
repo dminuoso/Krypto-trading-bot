@@ -86,7 +86,9 @@ namespace K {
         for (vector<double>::iterator it = mGWSMA3.begin(); it != mGWSMA3.end(); ++it)
           SMA3 += *it;
         SMA3 /= mGWSMA3.size();
-        int SMA33STARTTIME = std::time(nullptr);
+
+        int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
+
         // lets make a SMA logging average
         mGWSMA33.push_back(SMA3);
         if (mGWSMA33.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
@@ -120,12 +122,14 @@ namespace K {
            qpRepo["mSafeMode"] = (int)mSafeMode::buy;
            qpRepo["safetimestart"] = (int)SMA33STARTTIME;
           printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f", mGWSMA33.back(), mGWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
+          printf("SMA33 Start Time started at: $f", qpRepo["safetimestart"]);
       }
       if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 )
       {
           qpRepo["mSafeMode"] = (int)mSafeMode::sell;
           qpRepo["safetimestart"] = (int)SMA33STARTTIME;
           printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f", mGWSMA33.back(), mGWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
+          printf("SMA33 Start Time started at: $f", qpRepo["safetimestart"]);
       }
 
 
