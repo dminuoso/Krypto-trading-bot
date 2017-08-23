@@ -1,4 +1,5 @@
 const packageConfig = require("./../../package.json");
+
 const noop = () => {};
 const bindings = ((K) => { try {
   console.log(K.join('.'));
@@ -18,7 +19,7 @@ import Safety = require("./safety");
 import PositionManagement = require("./position-management");
 import QuotingEngine = require("./quoting-engine");
 
-let happyEnding = () => { console.info(new Date().toISOString().slice(11, -1), 'main', 'Error', 'THE END IS NEVER THE END'); };
+let happyEnding = () => { console.info(new Date().toISOString().slice(11, -1), 'main', 'Error', 'THE END IS NEVER '.repeat(21)+'THE END'); };
 
 const processExit = () => {
   happyEnding();
@@ -47,7 +48,7 @@ process.on("SIGINT", () => {
 process.on("exit", (code) => {
   console.info(new Date().toISOString().slice(11, -1), 'main', 'Exit code', code);
 });
-//
+
 new QuoteSender.QuoteSender(
   new QuotingEngine.QuotingEngine(
     bindings.mgFairV,
@@ -72,9 +73,7 @@ new QuoteSender.QuoteSender(
       bindings.uiSend,
       bindings.evOn,
       bindings.evUp,
-      bindings.dbLoad(Models.Topics.TargetBasePosition),
-      bindings.dbLoad(Models.Topics.EWMACurrent)
-
+      bindings.dbLoad(Models.Topics.TargetBasePosition)
     ),
     new Safety.SafetyCalculator(
       bindings.mgFairV,
