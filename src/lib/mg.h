@@ -160,7 +160,7 @@ namespace K {
         cout << "Short: " << newShort << "\n";
         cout << "Long: " << newLong << "\n";
         cout << "FV: " << args[0]->NumberValue()  << "\n";
-        cout << "----------"
+        cout << "----------";
         cout << "Short: " << args[3]->NumberValue() << "\n";
         cout << "Long: " << args[1]->NumberValue() << "\n";
         cout << "FV: " << args[0]->NumberValue()  << "\n";
