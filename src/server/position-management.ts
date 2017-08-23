@@ -193,6 +193,8 @@ export class TargetBasePositionManager {
     this.newShort = this._mgEwmaShort(this.fairValue);
     this.newMedium = this._mgEwmaMedium(this.fairValue);
     this.newLong = this._mgEwmaLong(this.fairValue);
+
+
     this._newTargetPosition = this._mgTBP(this.fairValue, this.newLong, this.newMedium, this.newShort);
     console.info(new Date().toISOString().slice(11, -1), 'tbp', 'recalculated ewma [ FV | L | M | S ] = [',this.fairValue,'|',this.newLong,'|',this.newMedium,'|',this.newShort,']');
     this.recomputeTargetPosition();
