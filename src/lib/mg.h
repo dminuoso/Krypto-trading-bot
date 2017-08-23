@@ -74,7 +74,7 @@ static void _mgEwmaMedium(const FunctionCallbackInfo<Value>& args) {
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mGWEwmaM));
 };
 static void _mgEwmaShort(const FunctionCallbackInfo<Value>& args) {
-        mGWEwmaS = calcEwma(args[0]->NumberValue(), mGWEwmaL, qpRepo["shortEwmaPeridos"].get<int>());
+        mGWEwmaS = calcEwma(args[0]->NumberValue(), mGWEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), mGWEwmaS));
 };
 static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
