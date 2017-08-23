@@ -117,7 +117,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
          qpRepo["aspvalue"] = newTargetPosition;
         printf("ASP: value: %f\n", newTargetPosition);
         printf("ASP: value: %f\n", qpRepo["aspvalue"].get<double>());
-        printf("ASP: testvalue: %f\n", (newShort * 100/ newLong)  );
+        printf("ASP: testvalue: %f\n", ((newShort * 100/ newLong)  - 100)  );
 
 
         if (newTargetPosition > 1) newTargetPosition = 1;
