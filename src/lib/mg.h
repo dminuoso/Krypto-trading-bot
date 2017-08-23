@@ -155,7 +155,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         double newLong = args[1]->NumberValue();
         double newMedium = args[2]->NumberValue();
         double newShort = args[3]->NumberValue();
-        printf("Short: %f Medium: %f Long: %f \n", newShort, newMedium, newLong);
+        printf("Short: %f Medium: %f Long: %f \n", args[0]->NumberValue(), newMedium, newLong);
 
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
