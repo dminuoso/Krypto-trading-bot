@@ -116,7 +116,7 @@ namespace K {
       if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100 )
       {
           // activate Safety, Safety buySize
-           qpRepo["mSafeMode"] = mSafeMode::buy;
+           qpRepo["mSafeMode"] = 1;
           printf("SMA33 First Value: %f  Second Value %f", mGWSMA33.back(), mGWSMA33.front() );
       }
       if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 )
