@@ -96,8 +96,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         mGWSMA33.push_back(SMA3);
         if (mGWSMA33.size()>100) mGWSMA33.erase(mGWSMA33.begin(), mGWSMA33.end()-1);
         for (vector<double>::iterator iz = mGWSMA33.begin(); iz != mGWSMA33.end(); ++iz)
-                SMA33 += *iz
-            SMA33 /= mGWSMA33.size();
+                SMA33 += *iz;
+        SMA33 /= mGWSMA33.size();
 
 
                 mSMATIME.push_back((int)SMA33STARTTIME);
@@ -144,7 +144,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
           printf("debug11\n");
                 if (  mGWSMA33.back() * 100 / mGWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100  &&  qpRepo["safetyactive"].get<bool>() == false  &&  qpRepo["safetynet"].get<bool>() == true && (mSafeMode)qpRepo["mSafeMode"].get<int>() != mSafeMode::buy)
                 {
-                  printf("debug12\n";
+                  printf("debug12\n");
                         // activate Safety, Safety buySize
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
                         qpRepo["safetyactive"] = 1;
