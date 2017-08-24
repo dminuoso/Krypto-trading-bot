@@ -322,6 +322,8 @@ static void calcTargetPos() {
 static void calcASP() {
         cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()) << "\n";
         cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
+        cout <<  "ASP Evaluation: fairV: " << mgfairV << "\n";
+        cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3.back() << "\n";
         if (
                 (
                         (
