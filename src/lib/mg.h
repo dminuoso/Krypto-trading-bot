@@ -327,7 +327,7 @@ static void calcSafety() {
         if (mgWSMA33.size()>100) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
         double newTargetPosition = 0;
         if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
-                double newTrend = ((SMA3 * 100 / mgEwmaL) - 100);
+                double newTrend = ((mgSMA3.back() * 100 / mgEwmaL) - 100);
                 double newEwmacrossing = ((mgEwmaS * 100 / mgEwmaM) - 100);
                 qpRepo["aspvalue"] = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
         } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS) {
