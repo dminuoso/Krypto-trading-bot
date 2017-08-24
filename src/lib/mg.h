@@ -196,6 +196,7 @@ static void ewmaUp() {
         calcEwma(&mgEwmaM, qpRepo["mediumEwmaPeridos"].get<int>());
         calcEwma(&mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         calcTargetPos();
+        calcSafety();
         EV::evUp("PositionBroker");
         UI::uiSend(uiTXT::EWMAChart, {
                                 {"stdevWidth", {
@@ -404,6 +405,16 @@ static void calcSafety() {
                                 //  printf("debug6\n");
                         }
                 }
+        }
+        // Set newTargetPosition
+        if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
+        {
+                mgTargetPos = 1;
+                cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety buy Action\n";
+        } else if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell )
+        {
+                mgTargetPos = -1;
+                cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
         }
 
 
