@@ -438,11 +438,11 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                difftime(mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>(),qpRepo["safetimestart"].get<double>()))
+                                                difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>())
                                         )
                                         <
                                         (
-                                                qpRepo["safetimestart"].get<int>()
+                                                (qpRepo["safetyduration"].get<double>() * 60)
                                         )
                                 )
                                 and
@@ -468,11 +468,11 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                difftime(mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>(),qpRepo["safetimestart"].get<double>()))
+                                                difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>())
                                         )
-                                        <
+                                        >
                                         (
-                                                qpRepo["safetimestart"].get<int>()
+                                                (qpRepo["safetyduration"].get<double>() * 60)
                                         )
                                 )
                                 and
