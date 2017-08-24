@@ -361,8 +361,8 @@ static void calcSafety() {
             //  cout << "ASP high?: " << qpRepo["aspvalue"].get<double>() " >= " << qpRepo["asp_high"].get<double>() << " or asp low?: " << qpRepo["aspvalue"].get<double>() << "<= " << qpRepo["asp_low"].get<double>()) << "\n";
               cout << "ASP Active! pDiv should be set to Zero!\n";
               cout << "fv: " << mgfairV << " Current Short: " << mgEwmaS << "\n";
-              cout << ASP Value: qpRepo["aspvalue"].get<double>() << " >= " <<  qpRepo["asp_high"].get<double>() << "\n";
-              cout << ASP Value: qpRepo["aspvalue"].get<double>() << " >= " <<  qpRepo["asp_low"].get<double>() << "\n";
+              cout << "ASP Value:" << qpRepo["aspvalue"].get<double>() << " >= " <<  qpRepo["asp_high"].get<double>() << "\n";
+              cout << "ASP Value:" << qpRepo["aspvalue"].get<double>() << " >= " <<  qpRepo["asp_low"].get<double>() << "\n";
         }
         // Safety time Active Start Checking
         if(mgWSMA33.size() > qpRepo["safetytime"].get<int>()) {
