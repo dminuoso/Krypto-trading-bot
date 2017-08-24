@@ -569,9 +569,9 @@ static void ProfitTest() {
 
                 }
         }
-        cout << "Periods: " << qpRepo["shortEwmaPeridos"].get<int>() << "ArrayEwmaSGood: " << ArrayEwmaSGood <<  "\n";
-        cout << "Periods: " << qpRepo["longEwmaPeridos"].get<int>() << "ArrayEwmaMGood: " << ArrayEwmaMGood << "\n";
-        cout << "Periods: " << qpRepo["mediumEwmaPeridos"].get<int>() << "ArrayEwmaLGood: " << ArrayEwmaLGood << "\n";
+        cout << "Periods: " << qpRepo["shortEwmaPeridos"].get<int>() << " ArrayEwmaSGood: " << ArrayEwmaSGood <<  "\n";
+        cout << "Periods: " << qpRepo["longEwmaPeridos"].get<int>() << " ArrayEwmaMGood: " << ArrayEwmaMGood << "\n";
+        cout << "Periods: " << qpRepo["mediumEwmaPeridos"].get<int>() << " ArrayEwmaLGood: " << ArrayEwmaLGood << "\n";
 
 
 }
