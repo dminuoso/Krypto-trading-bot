@@ -527,7 +527,7 @@ static void ProfitTest() {
         if (ArrayEwmaS.size()>MaxArraySize) ArrayEwmaS.erase(ArrayEwmaS.begin(), ArrayEwmaS.begin()+1);
 
         for (vector<double>::iterator it = ArrayEwmaL.begin(); it != ArrayEwmaL.end(); ++it)
-                cout << it << "\n";
+                cout << *it << "\n";
 }
 
 };
