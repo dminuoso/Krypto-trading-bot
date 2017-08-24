@@ -427,7 +427,7 @@ static void calcSafety() {
                   cout << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                   cout << "time back at time index: " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
                   cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
-                  cout << "time counter: " <<   qpRepo["safetimeOver"].get<int>() * 60000 << "\n";
+                  cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
 
                         if(
                           (
