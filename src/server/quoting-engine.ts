@@ -130,10 +130,12 @@ export class QuotingEngine {
           if(params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low)
           {
             pDiv = 0;
+            console.info(new Date().toISOString().slice(11, -1), 'ASP Activated pDiv to Zero');
           }
           if(params.safetyactive == true)
           {
             pDiv = 0;
+            console.info(new Date().toISOString().slice(11, -1), 'Safety Activated pDiv to Zero');
           }
 
         if (superTradesMultipliers[1] > 1) {

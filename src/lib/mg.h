@@ -207,7 +207,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
         printf("Array size %lu \n", mgWSMA33.size() );
 
-        if(mgWSMA33.size() > 3) {
+        if(mgWSMA33.size() > qpRepo["safetytime"].get<double>()) {
                 if (
                         ((mgWSMA33.back() * 100 / mgWSMA33.front() - 100) >  (qpRepo["safetyP"].get<double>()/100) )
                         &&  qpRepo["safetyactive"].get<bool>() == false
@@ -248,7 +248,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         //   }
 
         printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<unsigned long int>(), std::time(nullptr), qpRepo["safetimestart"].get<unsigned long int>() );
-        if(mgWSMA33.size() > 3  ) {
+        if(mgWSMA33.size() > qpRepo["safetytime"].get<double>() ) {
                 printf("Debug1\n");
                 if(mgWSMA33.size() > qpRepo["safetytime"].get<double>() and qpRepo["safetyactive"].get<bool>() == true )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
@@ -283,14 +283,16 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
         {
                 newTargetPosition = 1;
+                cout << "newTargetPosition activated to: " << newTargetPosition << "via Safety buy Action\n";
         } else if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell )
         {
                 newTargetPosition = -1;
+                cout << "newTargetPosition activated to: " << newTargetPosition << "via Safety sell Action\n";
         }
 
         //      if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
 
-        
+
 
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 };
