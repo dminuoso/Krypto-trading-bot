@@ -17,7 +17,7 @@ static vector<double> mgStatBid;
 static vector<double> mgStatAsk;
 static vector<double> mgStatTop;
 static vector<double> mgWSMA33;      // Logging SMA3 values
-static vector<unsigned long int> mgMATIME;      // logging SMA3 value timestamps
+static vector<int> mgMATIME;      // logging SMA3 value timestamps
 static double mgStdevFV;
 static double mgStdevFVMean;
 static double mgStdevBid;
@@ -222,9 +222,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         printf("SMA33 Buy Mode Active  First Value: %f  Last Value %f safetyPercent: %f \n", mgWSMA33.back(), mgWSMA33.front(), qpRepo["safetyP"].get<double>()/100);
-                        printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
+                        printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<int>());
                         //  qpRepo["safetyduration"] = std::time(nullptr) + qpRepo["safetimestart"].get<unsigned long int>();
-                        qpRepo["safetyduration"] = qpRepo["safetimestart"].get<unsigned long int>() + (qpRepo["safetimeOver"].get<unsigned long int>() * 60000);
+                        qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
                 }
 
                    if (  (
@@ -238,8 +238,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyactive"] = true;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mgWSMA33.back(), mgWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
-                        printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
-                        qpRepo["safetyduration"] = qpRepo["safetimestart"].get<unsigned long int>() + (qpRepo["safetimeOver"].get<unsigned long int>() * 60000);
+                        printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<int>());
+                        qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
                    }
 
 
