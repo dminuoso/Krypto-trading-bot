@@ -211,7 +211,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         if(mgWSMA33.size() > qpRepo["safetytime"].get<double>()) {
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << "Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                 if (
-                        (mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) >  (qpRepo["safetyP"].get<double>()/100) )
+                        ( (mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) >  (qpRepo["safetyP"].get<double>()/100) )
                         &&  qpRepo["safetyactive"].get<bool>() == false
                         &&  qpRepo["safetynet"].get<bool>() == true
                         )
@@ -227,7 +227,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<unsigned long int>() + (qpRepo["safetimeOver"].get<unsigned long int>() * 60000);
                 }
 
-                   if (  ((mgWSMA33.back() * 100 / mgWSMA33.front() - 100) <  (qpRepo["safetyP"].get<double>()/100) )
+                   if (  (
+                          (mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) >  (qpRepo["safetyP"].get<double>()/100))
                       &&   qpRepo["safetyactive"].get<bool>() == false
                       &&   qpRepo["safetynet"].get<bool>() == true
                       )
