@@ -209,7 +209,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
 
         if(mgWSMA33.size() > 3) {
                 if (
-                        ( mgWSMA33.back() * 100 / mgWSMA33.front() - 100 >  qpRepo["safetyP"].get<double>()/100 )
+                        ((mgWSMA33.back() * 100 / mgWSMA33.front() - 100) >  (qpRepo["safetyP"].get<double>()/100) )
                         &&  qpRepo["safetyactive"].get<bool>() == false
                         &&  qpRepo["safetynet"].get<bool>() == true
                         )
@@ -225,7 +225,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<unsigned long int>() + (qpRepo["safetimeOver"].get<unsigned long int>() * 60000);
                 }
 
-                   if (  (mgWSMA33.back() * 100 / mgWSMA33.front() - 100 <  qpRepo["safetyP"].get<double>()/100 )
+                   if (  ((mgWSMA33.back() * 100 / mgWSMA33.front() - 100) <  (qpRepo["safetyP"].get<double>()/100) )
                       &&   qpRepo["safetyactive"].get<bool>() == false
                       &&   qpRepo["safetynet"].get<bool>() == true
                       )
@@ -289,6 +289,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         }
 
         //      if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
+
+        
 
         args.GetReturnValue().Set(Number::New(args.GetIsolate(), newTargetPosition));
 };
