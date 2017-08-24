@@ -259,7 +259,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         //  printf("arraySize: %lu\n", mGWSMA33.size() );
                         //if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) )
-                        if((mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  )
+                        if((mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<unsigned long int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  )
                         {
 
                                 printf("debug3\n");
@@ -271,7 +271,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         //  printf("debugzz\n");
                         //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                      if((mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  )
+                      if((mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<unsigned long int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  )
                         {
                                 printf("Current Short: %f   old Short: %f\n", mgWSMA33.back(),  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<double>()));
                                 //  printf("debug5\n");
