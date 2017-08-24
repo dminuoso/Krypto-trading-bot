@@ -443,6 +443,7 @@ static void calcSafety() {
                               qpRepo["safetimeOver"].get<int>() * 60000
                             )
                           )
+                        )
                         {
                                 cout << "Breaking Safey BUY Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << (mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) << "\n";
                                 cout << "Breaking Safey BUY Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was less than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
