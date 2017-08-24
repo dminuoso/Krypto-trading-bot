@@ -19,7 +19,7 @@ static vector<double> mgStatAsk;
 static vector<double> mgStatTop;
 static vector<double> mgWSMA33;        // Logging SMA3 values
 static vector<int> mgMATIME;
-static double mgSMA3G; // global SMA3 current value 
+static double mgSMA3G; // global SMA3 current value
 static double mgStdevFV;
 static double mgStdevFVMean;
 static double mgStdevBid;
@@ -322,7 +322,8 @@ static void calcTargetPos() {
         mgTargetPos = newTargetPosition;
 };
 static void calcASP() {
-        cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()) << "\n";
+        qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100);
+        cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
         cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
         cout <<  "ASP Evaluation: fairV: " << mgfairV << "\n";
         cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
@@ -368,14 +369,6 @@ static void calcSafety() {
         // lets make a SMA logging average
         mgWSMA33.push_back(mgSMA3.back());
         if (mgWSMA33.size()>100) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
-        double newTargetPosition = 0;
-        if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
-                double newTrend = ((mgSMA3.back() * 100 / mgEwmaL) - 100);
-                double newEwmacrossing = ((mgEwmaS * 100 / mgEwmaM) - 100);
-                qpRepo["aspvalue"] = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS) {
-                qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        }
         // Safety time Active Start Checking
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
