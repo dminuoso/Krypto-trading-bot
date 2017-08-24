@@ -17,7 +17,7 @@ static vector<double> mgStatBid;
 static vector<double> mgStatAsk;
 static vector<double> mgStatTop;
 static vector<double> mgWSMA33;      // Logging SMA3 values
-static vector<unsigned long int>> mgMATIME;      // logging SMA3 value timestamps
+static vector<unsigned long int> mgMATIME;      // logging SMA3 value timestamps
 static double mgStdevFV;
 static double mgStdevFVMean;
 static double mgStdevBid;
@@ -270,7 +270,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         //  printf("debugzz\n");
                         //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                      if((mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  ) 
+                      if((mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  )
                         {
                                 printf("Current Short: %f   old Short: %f\n", mgWSMA33.back(),  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<double>()));
                                 //  printf("debug5\n");
