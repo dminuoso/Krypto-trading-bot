@@ -385,7 +385,7 @@ static void calcSafety() {
                 {
                         //  printf("debug12\n");
                         // activate Safety, Safety buySize
-                        double SafeBuyValuation =   (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) );
+                        double SafeBuyValuation =   (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
@@ -401,7 +401,7 @@ static void calcSafety() {
                          &&   qpRepo["safetynet"].get<bool>() == true// make sure safey checkbox is active on UI
                          )
                 {
-                        double SafeSellValuation = mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>());
+                        double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
