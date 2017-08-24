@@ -2,39 +2,39 @@
 #define K_MG_H_
 
 namespace K {
-int mgT = 0;
-static uv_timer_t mgStats_;
-static vector<mGWmt> mGWmt_;
-static json mGWmkt;
-static json mGWmktFilter;
-static double mgfairV = 0;
-static double mgEwmaL = 0;
-static double mgEwmaM = 0;
-static double mgEwmaS = 0;
-static double mgEwmaP = 0;
-static vector<double> mgSMA3;
-static vector<double> mgStatFV;
-static vector<double> mgStatBid;
-static vector<double> mgStatAsk;
-static vector<double> mgStatTop;
-static vector<double> mgWSMA33;        // Logging SMA3 values
-static vector <double> ArrayEwmaL;  // vector for EwmaL
-static vector <double> ArrayEwmaS;  // vector for EwmaS
-static vector <double> ArrayEwmaM; // vector for EwmaM
-static vector <int> mgMATIME;
-static double mgSMA3G; // global SMA3 current value
-static double mgStdevFV;
-static double mgStdevFVMean;
-static double mgStdevBid;
-static double mgStdevBidMean;
-static double mgStdevAsk;
-static double mgStdevAskMean;
-static double mgStdevTop;
-static double mgStdevTopMean;
-static double mgTargetPos = 0;
-class MG {
-public:
-static void main(Local<Object> exports) {
+  int mgT = 0;
+  static uv_timer_t mgStats_;
+  static vector<mGWmt> mGWmt_;
+  static json mGWmkt;
+  static json mGWmktFilter;
+  static double mgfairV = 0;
+  static double mgEwmaL = 0;
+  static double mgEwmaM = 0;
+  static double mgEwmaS = 0;
+  static double mgEwmaP = 0;
+  static vector<double> mgSMA3;
+  static vector<double> mgStatFV;
+  static vector<double> mgStatBid;
+  static vector<double> mgStatAsk;
+  static vector<double> mgStatTop;
+  static vector<double> mgWSMA33;        // Logging SMA3 values
+  static vector <double> ArrayEwmaL;  // vector for EwmaL
+  static vector <double> ArrayEwmaS;  // vector for EwmaS
+  static vector <double> ArrayEwmaM; // vector for EwmaM
+  static vector <int> mgMATIME;
+  static double mgSMA3G; // global SMA3 current value
+  static double mgStdevFV = 0;
+  static double mgStdevFVMean = 0;
+  static double mgStdevBid = 0;
+  static double mgStdevBidMean = 0;
+  static double mgStdevAsk = 0;
+  static double mgStdevAskMean = 0;
+  static double mgStdevTop = 0;
+  static double mgStdevTopMean = 0;
+  static double mgTargetPos = 0;
+  class MG {
+    public:
+      static void main(Local<Object> exports) {
         load();
         thread([&]() {
                                 if (uv_timer_init(uv_default_loop(), &mgStats_)) { cout << FN::uiT() << "Errrror: GW mgStats_ init timer failed." << endl; exit(1); }
