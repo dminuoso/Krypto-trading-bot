@@ -103,7 +103,10 @@ namespace K {
         json qp = DB::load(uiTXT::QuotingParametersChange);
         if (qp.size())
           for (json::iterator it = qp["/0"_json_pointer].begin(); it != qp["/0"_json_pointer].end(); ++it)
+          {
             qpRepo[it.key()] = it.value();
+          }
+            qpRepo["safetyactive"] = false;
         cleanBool();
       };
       static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
