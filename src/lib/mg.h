@@ -508,6 +508,11 @@ static void calcSafety() {
 }
 static void ProfitTest() {
         int MaxArraySize = 50;
+        bool ArrayEwmaLGood = false;
+        bool ArrayEwmaMGood = false;
+        bool ArrayEwmaSGood = false;
+        double PreviousValue = 0;
+        int GoBack = 5;
         /*
         DB::insert(uiTXT::EWMAChart, {
                                 {"fairValue", mgfairV},
@@ -519,6 +524,9 @@ static void ProfitTest() {
                                 static vector <double> ArrayEwmaS
                                 static vector <double> ArrayEwmaM
         */
+        if(ArrayEwmaL.size()< GoBack && ArrayEwmaM.size() < GoBack && ArrayEwmaS.size() < GoBack) {
+                return;
+        }
         ArrayEwmaL.push_back(mgEwmaL);
         if (ArrayEwmaL.size()>MaxArraySize) ArrayEwmaL.erase(ArrayEwmaL.begin(), ArrayEwmaM.begin()+1);
         ArrayEwmaM.push_back(mgEwmaM);
@@ -526,8 +534,42 @@ static void ProfitTest() {
         ArrayEwmaS.push_back(mgEwmaS);
         if (ArrayEwmaS.size()>MaxArraySize) ArrayEwmaS.erase(ArrayEwmaS.begin(), ArrayEwmaS.begin()+1);
 
+        bool starting = true;
         for (vector<double>::iterator it = ArrayEwmaL.begin(); it != ArrayEwmaL.end(); ++it)
-                cout << *it << "\n";
+        {
+                if(starting) { ArrayEwmaLGood= true; starting = false; PreviousValue = *it; } else {
+                        if(*it > PreviousValue) {
+                                PreviousValue = *it;
+                                ArrayEwmaLGood = true;
+                        } else { ArrayEwmaLGood = false; break; }
+
+                }
+        }
+        starting = true;
+        previous = 0;
+        for (vector<double>::iterator it = ArrayEwmaM.end() - GoBack; it != ArrayEwmaM.end(); ++it)
+        {
+                if(starting) { ArrayEwmaMGood= true; starting = false; PreviousValue = *it; } else {
+                        if(*it > PreviousValue) {
+                                PreviousValue = *it;
+                                ArrayEwmaMGood = true;
+                        } else { ArrayEwmaMGood = false; break; }
+
+                }
+        }
+        starting = true;
+        previous = 0;
+        for (vector<double>::iterator it = ArrayEwmaS.end() - GoBack; it != ArrayEwmaS.end(); ++it)
+        {
+                if(starting) { ArrayEwmaSGood= true; starting = false; PreviousValue = *it; } else {
+                        if(*it > PreviousValue) {
+                                PreviousValue = *it;
+                                ArrayEwmaSGood = true;
+                        } else { ArrayEwmaSGood = false; break; }
+
+                }
+        }
+
 }
 
 };
