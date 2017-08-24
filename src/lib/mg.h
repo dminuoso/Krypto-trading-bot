@@ -436,11 +436,11 @@ static void calcSafety() {
                           and
                           (
                             (
-                              mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()
+                              mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) + (qpRepo["safetimeOver"].get<int>() * 60000)
                             )
                             >
                             (
-                              qpRepo["safetimeOver"].get<int>() * 60000
+                              qpRepo["safetimestart"].get<int>()
                             )
                           )
                         )
@@ -460,12 +460,12 @@ static void calcSafety() {
                               mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
                             )
                         and (
+                             (
+                               mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) + (qpRepo["safetimeOver"].get<int>() * 60000)
+                             )
+                           >
                               (
-                                mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()
-                              )
-                              >
-                              (
-                                qpRepo["safetimeOver"].get<int>() * 60000
+                                qpRepo["safetimestart"].get<int>()
                               )
                              )
                            )
