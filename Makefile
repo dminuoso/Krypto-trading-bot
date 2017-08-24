@@ -1,3 +1,4 @@
+LOGGING ?= true
 KCONFIG ?= K
 V_UWS   := 0.14.3
 V_PNG   := 1.6.31
@@ -12,7 +13,11 @@ G_ARG   := -std=c++11 -DUSE_LIBUV -O3 -rdynamic -shared -fPIC -Ibuild/node-$(NOD
   build/uWebSockets-$(V_UWS)/src/Socket.cpp     build/uWebSockets-$(V_UWS)/src/Epoll.cpp         \
   -Lbuild/libpng-$(V_PNG)/lib -Ldist/lib -Wl,-rpath,'$$ORIGIN'                                   \
 src/lib/K.cc -lsqlite3 -lpthread -lssl -lcrypto -lz -lK -lpng16 -lquickfix -lcurl
-
+ifeq ($(LOGGING), true)
+	LOGFILE = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))/$(KCONFIG).log
+else
+	LOGFILE = /dev/null
+endif
 
 all: K
 
@@ -173,7 +178,7 @@ stop:
 
 start:
 	@test -d app || $(MAKE) install
-	./node_modules/.bin/forever start --minUptime 1 --spinSleepTime 21000 --uid $(KCONFIG) -a -l /home/Krypto-trading-bot/K.log K.js
+	./node_modules/.bin/forever start --minUptime 1 --spinSleepTime 21000 --uid $(KCONFIG) -a -l $(LOGFILE) K.js
 	@$(MAKE) stunnel -s
 
 stunnel: dist/K-stunnel.conf
