@@ -19,6 +19,7 @@ static vector<double> mgStatAsk;
 static vector<double> mgStatTop;
 static vector<double> mgWSMA33;        // Logging SMA3 values
 static vector<int> mgMATIME;
+static double mgSMA3G; // global SMA3 current value 
 static double mgStdevFV;
 static double mgStdevFVMean;
 static double mgStdevBid;
@@ -308,6 +309,7 @@ static void calcTargetPos() {
         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
                 SMA3 += *it;
         SMA3 /= mgSMA3.size();
+        mgSMA3G =  SMA3;
         double newTargetPosition = 0;
         if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
                 double newTrend = ((SMA3 * 100 / mgEwmaL) - 100);
@@ -323,12 +325,12 @@ static void calcASP() {
         cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()) << "\n";
         cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
         cout <<  "ASP Evaluation: fairV: " << mgfairV << "\n";
-        cout <<  "ASP Evaluation: SMA3 Latest: " << mgWSMA33.back() << "\n";
+        cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
         if (
                 (
                         (
                                 (
-                                        mgfairV > mgWSMA33.back()
+                                        mgfairV > mgSMA3G
                                 )
                                 and
                                 (
