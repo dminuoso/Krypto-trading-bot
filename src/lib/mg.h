@@ -538,7 +538,7 @@ static void ProfitTest() {
         for (vector<double>::iterator it = ArrayEwmaL.begin(); it != ArrayEwmaL.end(); ++it)
         {
                 if(starting) { ArrayEwmaLGood= true; starting = false; PreviousValue = *it; } else {
-                        if(*it > PreviousValue) {
+                        if(*it >= PreviousValue) {
                                 PreviousValue = *it;
                                 ArrayEwmaLGood = true;
                         } else { ArrayEwmaLGood = false; break; }
@@ -550,7 +550,7 @@ static void ProfitTest() {
         for (vector<double>::iterator it = ArrayEwmaM.end() - GoBack; it != ArrayEwmaM.end(); ++it)
         {
                 if(starting) { ArrayEwmaMGood= true; starting = false; PreviousValue = *it; } else {
-                        if(*it > PreviousValue) {
+                        if(*it >= PreviousValue) {
                                 PreviousValue = *it;
                                 ArrayEwmaMGood = true;
                         } else { ArrayEwmaMGood = false; break; }
@@ -562,13 +562,17 @@ static void ProfitTest() {
         for (vector<double>::iterator it = ArrayEwmaS.end() - GoBack; it != ArrayEwmaS.end(); ++it)
         {
                 if(starting) { ArrayEwmaSGood= true; starting = false; PreviousValue = *it; } else {
-                        if(*it > PreviousValue) {
+                        if(*it >= PreviousValue) {
                                 PreviousValue = *it;
                                 ArrayEwmaSGood = true;
                         } else { ArrayEwmaSGood = false; break; }
 
                 }
         }
+        cout << "Periods: " << qpRepo["shortEwmaPeridos"].get<int>() << "ArrayEwmaSGood: " << ArrayEwmaSGood <<  "\n";
+        cout << "Periods: " << qpRepo["longEwmaPeridos"].get<int>() << "ArrayEwmaMGood: " << ArrayEwmaMGood << "\n";
+        cout << "Periods: " << qpRepo["mediumEwmaPeridos"].get<int>() << "ArrayEwmaLGood: " << ArrayEwmaLGood << "\n";
+
 
 }
 
