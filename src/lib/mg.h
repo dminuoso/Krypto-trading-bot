@@ -17,7 +17,7 @@ static vector<double> mgStatBid;
 static vector<double> mgStatAsk;
 static vector<double> mgStatTop;
 static vector<double> mgWSMA33;      // Logging SMA3 values
-static vector<double> mgMATIME;      // logging SMA3 value timestamps
+static vector<unsigned long int>> mgMATIME;      // logging SMA3 value timestamps
 static double mgStdevFV;
 static double mgStdevFVMean;
 static double mgStdevBid;
@@ -176,7 +176,8 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         SMA3 /= mgSMA3.size();
         unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
 
-
+        mgMATIME.push_back(std::time(nullptr));
+        if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
 
         // lets make a SMA logging average
         mgWSMA33.push_back(SMA3);
@@ -208,8 +209,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         printf("Array size %lu \n", mgWSMA33.size() );
 
         if(mgWSMA33.size() > qpRepo["safetytime"].get<double>()) {
+                cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << "Target SMA3 " << qpRepo["safetytime"].get<int> << " Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                 if (
-                        ((mgWSMA33.back() * 100 / mgWSMA33.front() - 100) >  (qpRepo["safetyP"].get<double>()/100) )
+                        (mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) >  (qpRepo["safetyP"].get<double>()/100) )
                         &&  qpRepo["safetyactive"].get<bool>() == false
                         &&  qpRepo["safetynet"].get<bool>() == true
                         )
@@ -247,7 +249,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         //     qpRepo["safetyduration"] = std::time(nullptr) - qpRepo["safetimestart"].get<unsigned long int>() ;
         //   }
 
-        printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<unsigned long int>(), std::time(nullptr), qpRepo["safetimestart"].get<unsigned long int>() );
+      //  printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<unsigned long int>(), std::time(nullptr), qpRepo["safetimestart"].get<unsigned long int>() );
         if(mgWSMA33.size() > qpRepo["safetytime"].get<double>() ) {
                 printf("Debug1\n");
                 if(mgWSMA33.size() > qpRepo["safetytime"].get<double>() and qpRepo["safetyactive"].get<bool>() == true )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
@@ -256,8 +258,9 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         //  printf("arraySize: %lu\n", mGWSMA33.size() );
                         //if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) )
-                        if((mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) )or ( std::time(nullptr) < qpRepo["safetyduration"].get<unsigned long int>()  ) )
+                        if((mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  )
                         {
+
                                 printf("debug3\n");
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
@@ -267,7 +270,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                         //  printf("debugzz\n");
                         //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                        if( (mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<double>())  )or  ( std::time(nullptr) < qpRepo["safetyduration"].get<unsigned long int>() ) )
+                      if((mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) and ((mgMATIME.at(mgMATIME.size() - mgMATIME["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<unsigned long int>() * 60000))  ) 
                         {
                                 printf("Current Short: %f   old Short: %f\n", mgWSMA33.back(),  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<double>()));
                                 //  printf("debug5\n");
