@@ -447,7 +447,7 @@ static void calcSafety() {
                                 )
                                 and
                                 (
-                                        (mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::sell
+                                        (mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::buy
                                 )
                                 )
                         {
