@@ -18,10 +18,10 @@ static vector<double> mgStatBid;
 static vector<double> mgStatAsk;
 static vector<double> mgStatTop;
 static vector<double> mgWSMA33;        // Logging SMA3 values
-static vector <double> ArrayEwmaL  // vector for EwmaL
-static vector <double> ArrayEwmaS  // vector for EwmaS
-static vector <double> ArrayEwmaM // vector for EwmaM
-static vector<int> mgMATIME;
+static vector <double> ArrayEwmaL;  // vector for EwmaL
+static vector <double> ArrayEwmaS;  // vector for EwmaS
+static vector <double> ArrayEwmaM; // vector for EwmaM
+static vector <int> mgMATIME;
 static double mgSMA3G; // global SMA3 current value
 static double mgStdevFV;
 static double mgStdevFVMean;
