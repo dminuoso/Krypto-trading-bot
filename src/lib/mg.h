@@ -348,7 +348,7 @@ static void calcASP() {
                 qpRepo["asptriggered"] = true;
                 cout << "ASP Active! pDiv should be set to Zero!\n";
         } else {
-              if(qpRepo["aspactive"].get<bool>() == true && qpRepo["asptriggered"].get<bool() == true)
+              if(qpRepo["aspactive"].get<bool>() == true && qpRepo["asptriggered"].get<bool>() == true)
               {
                 qpRepo["asptriggered"] = false;
                 cout << "ASP Deactivated" << "\n";
