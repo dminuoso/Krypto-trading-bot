@@ -126,12 +126,12 @@ export class QuotingEngine {
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
-          if((params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low) && params.aspactive == true)
+          if( params.asptriggered == true && params.aspactive == true)
           {
             pDiv = 0;
 
           }
-          if(params.safetyactive == true)
+          if(params.safetyactive == true && params.safetynet == true)
           {
             pDiv = 0;
           }

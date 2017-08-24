@@ -197,6 +197,7 @@ static void ewmaUp() {
         calcEwma(&mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         calcTargetPos();
         calcSafety();
+        calcASP();
         EV::evUp("PositionBroker");
         UI::uiSend(uiTXT::EWMAChart, {
                                 {"stdevWidth", {
@@ -318,6 +319,40 @@ static void calcTargetPos() {
         else if (newTargetPosition < -1) newTargetPosition = -1;
         mgTargetPos = newTargetPosition;
 };
+static void calcASP() {
+        cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()) << "\n";
+        cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
+        if (
+                (
+                        (
+                                (
+                                        mgfairV > mgSMA3.back()
+                                )
+                                and
+                                (
+                                        (
+                                                qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>()
+                                        )
+                                )
+                        )
+                        ||
+                        (
+                                (
+                                        qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()
+                                )
+                        )
+                )
+                && qpRepo["aspactive"].get<bool>() == true
+                ) {
+                //  cout << "ASP high?: " << qpRepo["aspvalue"].get<double>() " >= " << qpRepo["asp_high"].get<double>() << " or asp low?: " << qpRepo["aspvalue"].get<double>() << "<= " << qpRepo["asp_low"].get<double>()) << "\n";
+                qpRepo["asptriggered"] = true;
+                cout << "ASP Active! pDiv should be set to Zero!\n";
+        } else {
+                qpRepo["asptriggered"] = false;
+                cout << "ASP Deactivated" << "\n";
+        }
+
+}
 static void calcSafety() {
         //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
 
@@ -333,36 +368,6 @@ static void calcSafety() {
                 qpRepo["aspvalue"] = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
         } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS) {
                 qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        }
-        cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()) << "\n";
-        cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
-        if (
-             (
-              (
-                (
-                  mgfairV > mgSMA3.back()
-                )
-                and
-                (
-                  (
-                    qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>()
-                  )
-                )
-               )
-            ||
-               (
-                 (
-                    qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()
-                 )
-               )
-             )
-          && qpRepo["aspactive"].get<bool>() == true
-          ) {
-            //  cout << "ASP high?: " << qpRepo["aspvalue"].get<double>() " >= " << qpRepo["asp_high"].get<double>() << " or asp low?: " << qpRepo["aspvalue"].get<double>() << "<= " << qpRepo["asp_low"].get<double>()) << "\n";
-              cout << "ASP Active! pDiv should be set to Zero!\n";
-              cout << "fv: " << mgfairV << " Current Short: " << mgEwmaS << "\n";
-              cout << "ASP Value:" << qpRepo["aspvalue"].get<double>() << " >= " <<  qpRepo["asp_high"].get<double>() << "\n";
-              cout << "ASP Value:" << qpRepo["aspvalue"].get<double>() << " <= " <<  qpRepo["asp_low"].get<double>() << "\n";
         }
         // Safety time Active Start Checking
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
@@ -408,7 +413,7 @@ static void calcSafety() {
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
 
-          cout << "SAFETY!" << "pDiv should now be set to ZERO.\n";
+                cout << "SAFETY!" << "pDiv should now be set to ZERO.\n";
 
         }
         // check for safety time is over
