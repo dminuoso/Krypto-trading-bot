@@ -380,7 +380,7 @@ static void calcSafety() {
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << "Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                 if (
                         (
-                                (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) >  (qpRepo["safetyP"].get<double>()/100)
+                                ((mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100 ) >  (qpRepo["safetyP"].get<double>()/100)
                         )
                         &&  qpRepo["safetyactive"].get<bool>() == false // make sure we are not already in a safety active state
                         &&  qpRepo["safetynet"].get<bool>() == true // make sure safey checkbox is active on UI
@@ -398,8 +398,8 @@ static void calcSafety() {
                 }
 
                 if (     (
-                                 (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) <  -(qpRepo["safetyP"].get<double>()/100)
-                                 )
+                                   ((mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100 ) <  -(qpRepo["safetyP"].get<double>()/100)
+                         )
                          &&   qpRepo["safetyactive"].get<bool>() == false// make sure we are not already in a safety active state
                          &&   qpRepo["safetynet"].get<bool>() == true// make sure safey checkbox is active on UI
                          )
