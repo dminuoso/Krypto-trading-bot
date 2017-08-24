@@ -232,7 +232,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
                    {
                         printf("debug13\n");
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
-                        qpRepo["safetimestart"] = (std::time(nullptr);
+                        qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyactive"] = true;
                         printf("SMA33 Sell Mode Active: First Value: %f  Last Value %f safetyPercent: %f \n", mgWSMA33.back(), mgWSMA33.front(),qpRepo["safetyP"].get<double>()/100 );
                         printf("SMA33 Start Time started at: %lu \n", qpRepo["safetimestart"].get<unsigned long int>());
