@@ -208,7 +208,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         printf("SMA33 Debugging:  Is SafetyActive: %d  Is Safety Even On: %d\n",qpRepo["safetyactive"].get<bool>(),qpRepo["safetynet"].get<bool>()  );
         printf("Array size %lu \n", mgWSMA33.size() );
 
-        if(mgWSMA33.size() > qpRepo["safetytime"].get<int>()) {
+        if(mgWSMA33.size() > 5) {
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << "Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                 if (
                         ( (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) >  (qpRepo["safetyP"].get<double>()/100) )
@@ -251,7 +251,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         //   }
 
       //  printf("Duration: %lu  Start time: %lu Time Starated: %lu\n", qpRepo["safetyduration"].get<unsigned long int>(), std::time(nullptr), qpRepo["safetimestart"].get<unsigned long int>() );
-        if(mgWSMA33.size() > qpRepo["safetytime"].get<int>() ) {
+        if(mgWSMA33.size() > 5 ) {
                 printf("Debug1\n");
                 if(mgWSMA33.size() > qpRepo["safetytime"].get<double>() and qpRepo["safetyactive"].get<bool>() == true )// checking to make sure array size is larger than what we are looking for.. otherwise.. KABOOOM!
                 {
