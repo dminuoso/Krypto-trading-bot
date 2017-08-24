@@ -73,8 +73,8 @@ namespace K {
     {  "safetyP",                        20                                    },
     {  "safemode",                      (int)mSafeMode::unknown                },
     {  "safetimestart",                 0                                      },
-    {  "safetyduration",                0                                      }
-
+    {  "safetyduration",                0                                      },
+    {  "pDivHolder",                    0                                      }
   };
   static vector<string> boolQP = {
     "widthPercentage", "bestWidth", "sellSizeMax", "buySizeMax", "percentageValues",

@@ -127,6 +127,15 @@ export class QuotingEngine {
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
+          if(params.aspvalue >= params.asp_high || params.aspvalue <= params.asp_low)
+          {
+            pDiv = 0;
+          }
+          if(params.safetyactive == true)
+          {
+            pDiv = 0;
+          }
+
         if (superTradesMultipliers[1] > 1) {
           if (!params.buySizeMax) unrounded.bidSz = Math.min(superTradesMultipliers[1]*buySize, (latestPosition.quoteAmount / fv) / 2);
           if (!params.sellSizeMax) unrounded.askSz = Math.min(superTradesMultipliers[1]*sellSize, latestPosition.baseAmount / 2);
