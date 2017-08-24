@@ -18,6 +18,9 @@ static vector<double> mgStatBid;
 static vector<double> mgStatAsk;
 static vector<double> mgStatTop;
 static vector<double> mgWSMA33;        // Logging SMA3 values
+static vector <double> ArrayEwmaL  // vector for EwmaL
+static vector <double> ArrayEwmaS  // vector for EwmaS
+static vector <double> ArrayEwmaM // vector for EwmaM
 static vector<int> mgMATIME;
 static double mgSMA3G; // global SMA3 current value
 static double mgStdevFV;
@@ -199,6 +202,7 @@ static void ewmaUp() {
         calcTargetPos();
         calcSafety();
         calcASP();
+        ProfitTest();
         EV::evUp("PositionBroker");
         UI::uiSend(uiTXT::EWMAChart, {
                                 {"stdevWidth", {
@@ -502,6 +506,30 @@ static void calcSafety() {
 
 
 }
+static void ProfitTest() {
+        int MaxArraySize = 50;
+        /*
+        DB::insert(uiTXT::EWMAChart, {
+                                {"fairValue", mgfairV},
+                                {"ewmaLong", mgEwmaL},
+                                {"ewmaMedium", mgEwmaM},
+                                {"ewmaShort", mgEwmaS}
+
+                                static vector <double> ArrayEwmaL
+                                static vector <double> ArrayEwmaS
+                                static vector <double> ArrayEwmaM
+        */
+        ArrayEwmaL.push_back(mgEwmaL);
+        if (ArrayEwmaL.size()>MaxArraySize) ArrayEwmaL.erase(ArrayEwmaL.begin(), ArrayEwmaM.begin()+1;
+        ArrayEwmaM.push_back(mgEwmaM);
+        if (ArrayEwmaM.size()>MaxArraySize) ArrayEwmaM.erase(ArrayEwmaM.begin(), ArrayEwmaM.begin()+1;
+        ArrayEwmaS.push_back(mgEwmaS);
+        if (ArrayEwmaS.size()>MaxArraySize) ArrayEwmaS.erase(ArrayEwmaS.begin(), ArrayEwmaS.begin()+1);
+
+        for (vector<double>::iterator it = ArrayEwmaL.begin(); it != ArrayEwmaL.end(); ++it)
+                cout << it << "\n";
+}
+
 };
 }
 
