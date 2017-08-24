@@ -382,17 +382,16 @@ static void calcSafety() {
         }
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
-          cout << "pDiv should now be set to ZERO.\n";
+
+          cout << "SAFETY!" << "pDiv should now be set to ZERO.\n";
+
         }
         // check for safety time is over
         if(mgWSMA33.size() > qpRepo["safetytime"].get<int>() ) {
                 cout << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)// Check to make sure we ae currently in active safety state and safety box in UI is active
                 {
-                        printf("debug2\n");
-                        //  if( (mGWSMA33.back() < mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                        //  printf("arraySize: %lu\n", mGWSMA33.size() );
-                        //if( mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()) )
+
                         if((mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) )and ((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<int>() * 60000))  )
                         {
                                 cout << "Breaking Safey BUY Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << (mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) << "\n";
@@ -412,7 +411,6 @@ static void calcSafety() {
                                 qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
                                 cout << "Exiting safety mode sell\n";
-                                //  printf("debug6\n");
                         }
                 }
         }
