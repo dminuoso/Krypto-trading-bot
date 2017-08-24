@@ -340,7 +340,7 @@ static void calcSafety() {
              (
               (
                 (
-                  mgfairV > mgEwmaS
+                  mgfairV > mgSMA3.back()
                 )
                 and
                 (
