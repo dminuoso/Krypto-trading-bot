@@ -379,7 +379,7 @@ static void calcSafety() {
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
         }
-        if(qpRepo["safetyactive"].get<bool> == true and qpRepo["safetynet"].get<bool>() == true)
+        if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
           cout << "pDiv should now be set to ZERO.\n";
         }
