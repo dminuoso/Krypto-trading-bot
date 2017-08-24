@@ -520,9 +520,9 @@ static void ProfitTest() {
                                 static vector <double> ArrayEwmaM
         */
         ArrayEwmaL.push_back(mgEwmaL);
-        if (ArrayEwmaL.size()>MaxArraySize) ArrayEwmaL.erase(ArrayEwmaL.begin(), ArrayEwmaM.begin()+1;
+        if (ArrayEwmaL.size()>MaxArraySize) ArrayEwmaL.erase(ArrayEwmaL.begin(), ArrayEwmaM.begin()+1);
         ArrayEwmaM.push_back(mgEwmaM);
-        if (ArrayEwmaM.size()>MaxArraySize) ArrayEwmaM.erase(ArrayEwmaM.begin(), ArrayEwmaM.begin()+1;
+        if (ArrayEwmaM.size()>MaxArraySize) ArrayEwmaM.erase(ArrayEwmaM.begin(), ArrayEwmaM.begin()+1);
         ArrayEwmaS.push_back(mgEwmaS);
         if (ArrayEwmaS.size()>MaxArraySize) ArrayEwmaS.erase(ArrayEwmaS.begin(), ArrayEwmaS.begin()+1);
 
