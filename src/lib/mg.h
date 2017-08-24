@@ -406,7 +406,7 @@ static void calcSafety() {
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -(qpRepo["safetyP"].get<double>()/100) << "\n";
+                        cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -(qpRepo["safetyP"].get<double>()/100) << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
         }
@@ -419,10 +419,30 @@ static void calcSafety() {
         // check for safety time is over
         if(mgWSMA33.size() > qpRepo["safetytime"].get<int>() ) {
                 cout << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
+
                 if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)// Check to make sure we ae currently in active safety state and safety box in UI is active
                 {
+                  cout << "is Timer Over?:" << "\n";
+                  cout << "Current Value: " << mgWSMA33.back() << "\n";
+                  cout << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                  cout << "time back at time index: " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                  cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
+                  cout << "time counter: " <<   qpRepo["safetimeOver"].get<int>() * 60000 << "\n";
 
-                        if((mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) )and ((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<int>() * 60000))  )
+                        if(
+                          (
+                            mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
+                          )
+                          and
+                          (
+                            (
+                              mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()
+                            )
+                            >
+                            (
+                              qpRepo["safetimeOver"].get<int>() * 60000
+                            )
+                          )
                         {
                                 cout << "Breaking Safey BUY Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << (mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) << "\n";
                                 cout << "Breaking Safey BUY Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was less than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
@@ -434,7 +454,20 @@ static void calcSafety() {
                         //  printf("debugzz\n");
                         //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                        if((mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) )and ((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) > (qpRepo["safetimeOver"].get<int>() * 60000))  )
+                        if(
+                            (
+                              mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
+                            )
+                        and (
+                              (
+                                mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()
+                              )
+                              >
+                              (
+                                qpRepo["safetimeOver"].get<int>() * 60000
+                              )
+                             )
+                           )
                         {
                                 cout << "Breaking Safey SELL Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << (mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) << "\n";
                                 cout << "Breaking Safey SELL Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was Greater than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
