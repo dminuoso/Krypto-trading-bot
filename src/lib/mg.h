@@ -422,13 +422,14 @@ static void calcSafety() {
 
                 if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)// Check to make sure we ae currently in active safety state and safety box in UI is active
                 {
+
                         cout << "is Timer Over?:" << "\n";
                         cout << "Current Value: " << mgWSMA33.back() << "\n";
                         cout << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                         cout << "time back at time index: " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
                         cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
                         cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
-                        cout << "time Difference: " << difftime(qpRepo["safetimestart"].get<double>(), mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) ) << "\n";
+                        cout << "time Difference: " << difftime(mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>(),qpRepo["safetimestart"].get<double>())) << "\n";
 
                         if(
                                 (
@@ -437,9 +438,9 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) + (qpRepo["safetimeOver"].get<int>() * 60000)
+                                                difftime(mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>(),qpRepo["safetimestart"].get<double>()))
                                         )
-                                        >
+                                        <
                                         (
                                                 qpRepo["safetimestart"].get<int>()
                                         )
@@ -467,9 +468,9 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) + (qpRepo["safetimeOver"].get<int>() * 60000)
+                                                difftime(mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>(),qpRepo["safetimestart"].get<double>()))
                                         )
-                                        >
+                                        <
                                         (
                                                 qpRepo["safetimestart"].get<int>()
                                         )
