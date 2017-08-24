@@ -444,7 +444,7 @@ static void calcSafety() {
                                         (
                                                 difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>())
                                         )
-                                        <
+                                        >
                                         (
                                                 (qpRepo["safetyduration"].get<double>() * 60)
                                         )
