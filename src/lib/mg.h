@@ -336,7 +336,28 @@ static void calcSafety() {
         }
         cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()) << "\n";
         cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
-        if ( ( ( mgfairV > mgEwmaS) and (qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>() ) ) || qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()) && qpRepo["aspactive"].get<bool>() == true) {
+        if (
+             (
+              (
+                (
+                  mgfairV > mgEwmaS
+                )
+                and
+                (
+                  (
+                    qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>()
+                  )
+                )
+               )
+            ||
+               (
+                 (
+                    qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()
+                 )
+               )
+             )
+          && qpRepo["aspactive"].get<bool>() == true
+          ) {
             //  cout << "ASP high?: " << qpRepo["aspvalue"].get<double>() " >= " << qpRepo["asp_high"].get<double>() << " or asp low?: " << qpRepo["aspvalue"].get<double>() << "<= " << qpRepo["asp_low"].get<double>()) << "\n";
               cout << "ASP Active! pDiv should be set to Zero!\n";
               cout << "fv: " << mgfairV << " Current Short: " << mgEwmaS << "\n";
