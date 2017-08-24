@@ -157,7 +157,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
         double newLong = args[1]->NumberValue();
         double newMedium = args[2]->NumberValue();
         double newShort = args[3]->NumberValue();
-        /*    cout << "Short: " << newShort << "\n";
+            cout << "Short: " << newShort << "\n";
             cout << "Long: " << newLong << "\n";
             cout << "FV: " << args[0]->NumberValue()  << "\n";
             cout << "----------\n";
@@ -166,7 +166,7 @@ static void _mgTBP(const FunctionCallbackInfo<Value>& args) {
             cout << "FV: " << args[0]->NumberValue()  << "\n";
             cout << "Short Period: " << qpRepo["shortEwmaPeridos"].get<int>() << "\n";
             cout << "Long Period: " << qpRepo["longEwmaPeridos"].get<int>() << "\n";
-         */
+
         //  mgEwmaS = calcEwma(args[0]->NumberValue(), mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         //  cout << "Test Short: " << mgEwmaS << "\n";
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
