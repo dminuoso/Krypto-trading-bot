@@ -546,7 +546,7 @@ static void ProfitTest() {
                 }
         }
         starting = true;
-        previous = 0;
+        PreviousValue = 0;
         for (vector<double>::iterator it = ArrayEwmaM.end() - GoBack; it != ArrayEwmaM.end(); ++it)
         {
                 if(starting) { ArrayEwmaMGood= true; starting = false; PreviousValue = *it; } else {
@@ -558,7 +558,7 @@ static void ProfitTest() {
                 }
         }
         starting = true;
-        previous = 0;
+        PreviousValue = 0;
         for (vector<double>::iterator it = ArrayEwmaS.end() - GoBack; it != ArrayEwmaS.end(); ++it)
         {
                 if(starting) { ArrayEwmaSGood= true; starting = false; PreviousValue = *it; } else {
