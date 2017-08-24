@@ -362,9 +362,11 @@ static void calcSafety() {
               cout << "ASP Active! pDiv should be set to Zero!\n";
               cout << "fv: " << mgfairV << " Current Short: " << mgEwmaS << "\n";
               cout << "ASP Value:" << qpRepo["aspvalue"].get<double>() << " >= " <<  qpRepo["asp_high"].get<double>() << "\n";
-              cout << "ASP Value:" << qpRepo["aspvalue"].get<double>() << " >= " <<  qpRepo["asp_low"].get<double>() << "\n";
+              cout << "ASP Value:" << qpRepo["aspvalue"].get<double>() << " <= " <<  qpRepo["asp_low"].get<double>() << "\n";
         }
         // Safety time Active Start Checking
+        cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
+        cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
         if(mgWSMA33.size() > qpRepo["safetytime"].get<int>()) {
                 cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << "Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
