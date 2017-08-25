@@ -480,7 +480,8 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>())
+
+                                                difftime(mgMATIME.back(),(mgMATIME.at(mgMATIME.size() - qpRepo["safetimestart"].get<int>())))
                                         )
                                         >
                                         (
@@ -510,7 +511,7 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>())
+                                                  difftime(mgMATIME.back(),(mgMATIME.at(mgMATIME.size() - qpRepo["safetimestart"].get<int>())))
                                         )
                                         >
                                         (
@@ -542,7 +543,7 @@ static void calcSafety() {
                 mgTargetPos = -1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
         }
-        
+
 
 
 
