@@ -416,7 +416,10 @@ static void calcSafety() {
         }
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
-                cout << "SAFETY! " <<   qpRepo["mSafeMode"].get<int>(mSafeMode) << "\n";
+                if ((mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::sell)
+                        cout << "SAFETY! Safe Mode Selling! " << "\n";
+                if((mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::buy)
+                        cout << "SAFETY! Safe Mode Buying! " << "\n";
                 cout << "SAFETY! " << " pDiv should now be set to ZERO.\n";
 
         }
