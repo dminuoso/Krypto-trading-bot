@@ -405,8 +405,8 @@ static void calcSafety() {
                         //  printf("debug12\n");
                         // activate Safety, Safety buySize
                         double SafeBuyValuation =   (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
-                        qpRepo["mSafeMode"] = (int)mSafeMode::buy;
-                        cout << "Setting SafeMode: "<< qpRepo["mSafeMode"].get<int>() << " ENUM Value: " << (int)mSafeMode::buy << "\n";
+                        qpRepo["safemode"] = (int)mSafeMode::buy;
+                        cout << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::buy << "\n";
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
@@ -422,8 +422,8 @@ static void calcSafety() {
                          )
                 {
                         double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
-                        qpRepo["mSafeMode"] = (int)mSafeMode::sell;
-                        cout << "Setting SafeMode: "<< qpRepo["mSafeMode"].get<int>() << " ENUM Value: " << (int)mSafeMode::sell << "\n";
+                        qpRepo["safemode"] = (int)mSafeMode::sell;
+                        cout << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::sell << "\n";
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
@@ -513,7 +513,7 @@ static void calcSafety() {
                         {
                                 cout << "Breaking Safey SELL Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << (mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) - mgMATIME.back()) << "\n";
                                 cout << "Breaking Safey SELL Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was Greater than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                                qpRepo["mSafeMode"] = (int)mSafeMode::unknown;
+                                qpRepo["safemode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
                                 cout << "Exiting safety mode sell\n";
                         }
