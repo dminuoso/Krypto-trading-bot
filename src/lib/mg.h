@@ -372,7 +372,7 @@ static void calcASP() {
 }
 static void calcSafety() {
         //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
-
+        if (qpRepo["safetynet"].get<bool>() == false) { return; }
         mgMATIME.push_back(std::time(nullptr));
         if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
