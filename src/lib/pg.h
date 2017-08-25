@@ -3,7 +3,6 @@
 
 namespace K {
   static json pgPos;
-  static uv_timer_t pgStats_;
   static vector<json> pgDiff;
   static map<int, json> pgCur;
   static double pgTargetBasePos = 0;
@@ -13,14 +12,6 @@ namespace K {
     public:
       static void main(Local<Object> exports) {
         load();
-        thread([&]() {
-          if (uv_timer_init(uv_default_loop(), &pgStats_)) { cout << FN::uiT() << "Errrror: GW pgStats_ init timer failed." << endl; exit(1); }
-          pgStats_.data = NULL;
-          if (uv_timer_start(&pgStats_, [](uv_timer_t *handle) {
-            if (mgfairV) calc();
-            else cout << FN::uiT() << "Unable to calculate stats, missing fair value." << endl;
-          }, 0, 1000)) { cout << FN::uiT() << "Errrror: GW pgStats_ start timer failed." << endl; exit(1); }
-        }).detach();
         EV::evOn("PositionGateway", [](json k) {
           posUp(k);
         });
@@ -51,10 +42,7 @@ namespace K {
           if (k["/0/sideAPR"_json_pointer].is_string())
             pgSideAPR = k["/0/sideAPR"_json_pointer].get<string>();
         }
-        cout << FN::uiT() << "TBP = " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << " loaded from DB." << endl;
-      };
-      static void calc() {
-        MG::calc();
+        cout << FN::uiT() << "TBP " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << " loaded from DB." << endl;
       };
       static json onSnapTargetBasePos(json z) {
         return {{
@@ -145,7 +133,7 @@ namespace K {
       };
       static void calcTargetBasePos() {
         if (pgPos.is_null()) {
-          cout << FN::uiT() << "Position Stats notice: missing market data." << endl;
+          cout << FN::uiT() << "Wallet Stats notice: missing market data." << endl;
           return;
         }
         double targetBasePosition = ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::Manual)
