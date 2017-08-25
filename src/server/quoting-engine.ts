@@ -129,11 +129,13 @@ export class QuotingEngine {
           if( params.asptriggered == true && params.aspactive == true)
           {
             pDiv = 0;
+            console.info(new Date().toISOString().slice(11, -1), 'PDIV', ' pDiv Set to Zero via ASP');
 
           }
           if(params.safetyactive == true && params.safetynet == true)
           {
             pDiv = 0;
+            console.info(new Date().toISOString().slice(11, -1), 'PDIV', ' pDiv Set to Zero via Safety');
           }
 
         if (superTradesMultipliers[1] > 1) {
