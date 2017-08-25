@@ -367,7 +367,7 @@ static void calcASP() {
                         cout << "ASP Deactivated" << "\n";
                 }
         }
-        =
+        
 
 }
 static void calcSafety() {
