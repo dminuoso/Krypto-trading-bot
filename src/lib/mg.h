@@ -201,7 +201,7 @@ static void ewmaUp() {
         calcEwma(&mgEwmaS, qpRepo["shortEwmaPeridos"].get<int>());
         calcTargetPos();
         calcSafety();
-        calcASP();
+        //calcASP();
         ProfitTest();
         EV::evUp("PositionBroker");
         UI::uiSend(uiTXT::EWMAChart, {
