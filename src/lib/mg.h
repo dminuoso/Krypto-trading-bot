@@ -532,7 +532,7 @@ static void calcSafety() {
                 }
         }
         // Set newTargetPosition
-/*
+
         if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
         {
                 mgTargetPos = 1;
@@ -542,7 +542,7 @@ static void calcSafety() {
                 mgTargetPos = -1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
         }
-        */
+        
 
 
 
