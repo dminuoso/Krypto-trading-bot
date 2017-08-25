@@ -391,6 +391,7 @@ static void calcSafety() {
                         // activate Safety, Safety buySize
                         double SafeBuyValuation =   (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
                         qpRepo["mSafeMode"] = (int)mSafeMode::buy;
+                        cout << "Setting SafeMode: "<< qpRepo["mSafeMode"].get<int>() << " ENUM Value: " << (int)mSafeMode::buy << "\n";
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
@@ -407,6 +408,7 @@ static void calcSafety() {
                 {
                         double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
                         qpRepo["mSafeMode"] = (int)mSafeMode::sell;
+                        cout << "Setting SafeMode: "<< qpRepo["mSafeMode"].get<int>() << " ENUM Value: " << (int)mSafeMode::sell << "\n";
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
@@ -423,7 +425,7 @@ static void calcSafety() {
                         cout << "SAFETY! Safe Mode Buying! " << "\n";
                 }
                 if((mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::unknown){
-                        cout << "SAFETY! Safe Mode Buying! " << "\n";
+                        cout << "SAFETY! Safe Mode unknown!! " << "\n";
                 }
                 cout << "SAFETY! " << " pDiv should now be set to ZERO.\n";
                 cout << "SAFETY! " << qpRepo["safemode"].get<int>() << "\n";
