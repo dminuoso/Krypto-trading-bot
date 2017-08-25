@@ -381,6 +381,16 @@ static void calcSafety() {
         // Safety time Active Start Checking
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
+        if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
+                cout << "SAFETY! Safe Mode Selling! " << "\n";
+        }
+        if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy){
+                cout << "SAFETY! Safe Mode Buying! " << "\n";
+        }
+        if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown){
+                cout << "SAFETY! Safe Mode unknown!! " << "\n";
+        }
+        cout << "SAFETY! " << qpRepo["safemode"].get<int>() << "\n";
         if(mgWSMA33.size() > qpRepo["safetytime"].get<int>()) {
                 cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << "Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
@@ -423,13 +433,13 @@ static void calcSafety() {
         }
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
-                if ((mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::sell) {
+                if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
                         cout << "SAFETY! Safe Mode Selling! " << "\n";
                 }
-                if((mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::buy){
+                if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy){
                         cout << "SAFETY! Safe Mode Buying! " << "\n";
                 }
-                if((mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::unknown){
+                if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown){
                         cout << "SAFETY! Safe Mode unknown!! " << "\n";
                 }
                 cout << "SAFETY! " << " pDiv should now be set to ZERO.\n";
@@ -467,7 +477,7 @@ static void calcSafety() {
                                 )
                                 and
                                 (
-                                        (mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::buy
+                                        (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy
                                 )
                                 )
                         {
