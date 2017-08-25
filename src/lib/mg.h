@@ -416,8 +416,8 @@ static void calcSafety() {
         }
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
-
-                cout << "SAFETY!" << "pDiv should now be set to ZERO.\n";
+                cout << "SAFETY! " << (mSafeMode)qpRepo["safemode"].get<int>() << "\n";
+                cout << "SAFETY! " << " pDiv should now be set to ZERO.\n";
 
         }
         // check for safety time is over
