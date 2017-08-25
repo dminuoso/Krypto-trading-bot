@@ -367,6 +367,7 @@ static void calcASP() {
                         cout << "ASP Deactivated" << "\n";
                 }
         }
+        =
 
 }
 static void calcSafety() {
@@ -509,6 +510,7 @@ static void calcSafety() {
                 }
         }
         // Set newTargetPosition
+        /*
         if( qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true and (mSafeMode) qpRepo["safemode"].get<int>() == mSafeMode::buy)
         {
                 mgTargetPos = 1;
@@ -518,6 +520,7 @@ static void calcSafety() {
                 mgTargetPos = -1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
         }
+        */
 
 
 }
