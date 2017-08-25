@@ -331,6 +331,8 @@ static void calcASP() {
         cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
         cout <<  "ASP Evaluation: fairV: " << mgfairV << "\n";
         cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
+        cout << "Current Short: " << mgEwmaS << "\n";
+        cout << "Current Long: " << mgEwmaL << "\n";
         if (
                 (
                         (
