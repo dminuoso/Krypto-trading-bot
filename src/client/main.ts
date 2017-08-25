@@ -776,7 +776,7 @@ class ClientComponent implements OnInit {
     this.toggleConfigs = (showConfigs:boolean) => {
       this.fireFactory
         .getFire(Models.Topics.ToggleConfigs)
-        .fire(showConfigs);
+        .fire([showConfigs]);
       setTimeout(this.resizeMatryoshka, 100);
     }
 
