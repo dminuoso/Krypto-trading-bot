@@ -372,7 +372,7 @@ static void calcASP() {
 }
 static void calcSafety() {
         //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
-        if (qpRepo["safetynet"].get<bool>() == false) { return; }
+        if (qpRepo["safetynet"].get<bool>() == false) { qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown; return; }
         mgMATIME.push_back(std::time(nullptr));
         if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
@@ -520,7 +520,7 @@ static void calcSafety() {
                 }
         }
         // Set newTargetPosition
-
+/*
         if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
         {
                 mgTargetPos = 1;
@@ -530,6 +530,7 @@ static void calcSafety() {
                 mgTargetPos = -1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
         }
+        */
 
 
 

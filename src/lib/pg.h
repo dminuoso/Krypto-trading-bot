@@ -42,7 +42,7 @@ namespace K {
           if (k["/0/sideAPR"_json_pointer].is_string())
             pgSideAPR = k["/0/sideAPR"_json_pointer].get<string>();
         }
-        cout << FN::uiT() << "TBP " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << " loaded from DB." << endl;
+      //  cout << FN::uiT() << "TBP " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << " loaded from DB." << endl;
       };
       static json onSnapTargetBasePos(json z) {
         return {{
@@ -147,7 +147,7 @@ namespace K {
         EV::evUp("TargetPosition");
         UI::uiSend(uiTXT::TargetBasePosition, {{"tbp", pgTargetBasePos},{"sideAPR", pgSideAPR}}, true);
         DB::insert(uiTXT::TargetBasePosition, {{"tbp", pgTargetBasePos},{"sideAPR", pgSideAPR}});
-        cout << FN::uiT() << "TBP = " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << endl;
+      //  cout << FN::uiT() << "TBP = " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << endl;
       };
   };
 }
