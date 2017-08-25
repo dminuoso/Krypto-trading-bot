@@ -126,13 +126,13 @@ export class QuotingEngine {
           ? params.positionDivergencePercentage * latestPosition.value / 100
           : params.positionDivergence;
 
-          if( params.asptriggered == true && params.aspactive == true)
+          if( params.asptriggered == true)
           {
             pDiv = 0;
             console.info(new Date().toISOString().slice(11, -1), 'PDIV', ' pDiv Set to Zero via ASP');
 
           }
-          if(params.safetyactive == true && params.safetynet == true)
+          if(params.safetyactive == true)
           {
             pDiv = 0;
             console.info(new Date().toISOString().slice(11, -1), 'PDIV', ' pDiv Set to Zero via Safety');

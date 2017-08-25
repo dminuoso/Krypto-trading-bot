@@ -352,10 +352,13 @@ static void calcASP() {
                         )
                 )
                 && qpRepo["aspactive"].get<bool>() == true
-                && qpRepo["asptriggered"].get<bool>() == false
                 ) {
                 //  cout << "ASP high?: " << qpRepo["aspvalue"].get<double>() " >= " << qpRepo["asp_high"].get<double>() << " or asp low?: " << qpRepo["aspvalue"].get<double>() << "<= " << qpRepo["asp_low"].get<double>()) << "\n";
-                qpRepo["asptriggered"] = true;
+                if ( qpRepo["asptriggered"].get<bool>() == false)
+                {
+                        qpRepo["asptriggered"] = true;
+                        cout << "ASP has been activated! pDiv should be set to Zero!\n";
+                }
                 cout << "ASP Active! pDiv should be set to Zero!\n";
         } else {
                 if(qpRepo["aspactive"].get<bool>() == true && qpRepo["asptriggered"].get<bool>() == true)
