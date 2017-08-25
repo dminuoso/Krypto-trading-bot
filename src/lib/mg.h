@@ -70,9 +70,17 @@ namespace K {
         NODE_SET_METHOD(exports, "mgFairV", MG::_mgFairV);
         NODE_SET_METHOD(exports, "mgEwmaProtection", MG::_mgEwmaProtection);
         NODE_SET_METHOD(exports, "mgStdevProtection", MG::_mgStdevProtection);
-};
-private:
-static void load() {
+      };
+      static void calcStats() {
+        if (++mgT == 60) {
+          mgT = 0;
+          ewmaPUp();
+          ewmaUp();
+        }
+        stdevPUp();
+      };
+    private:
+      static void load() {
         json k = DB::load(uiTXT::EWMAChart);
         if (k.size()) {
                 if (k["/0/fairValue"_json_pointer].is_number())
@@ -95,9 +103,9 @@ static void load() {
                 }
                 calcStdev();
         }
-};
-static void stdevPUp() {
-        if (!mgfairV or empty()) return;
+      };
+      static void stdevPUp() {
+        if (empty()) return;
         mgStatFV.push_back(mgfairV);
         mgStatBid.push_back(mGWmktFilter["/bids/0/price"_json_pointer].get<double>());
         mgStatAsk.push_back(mGWmktFilter["/asks/0/price"_json_pointer].get<double>());
