@@ -382,7 +382,7 @@ static void calcASP() {
 }
 static void calcSafety() {
         //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
-        if (qpRepo["safetynet"].get<bool>() == false) { qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown; return; }
+        if (qpRepo["safetynet"].get<bool>() == false) { qpRepo["safemode"].get<int>() = (int)mSafeMode::unknown; return; }
         mgMATIME.push_back(std::time(nullptr));
         if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
@@ -480,7 +480,7 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-
+                                                difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>())
                                                 difftime(mgMATIME.back(),(mgMATIME.at(mgMATIME.size() - qpRepo["safetimestart"].get<int>())))
                                         )
                                         >
@@ -511,7 +511,7 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                  difftime(mgMATIME.back(),(mgMATIME.at(mgMATIME.size() - qpRepo["safetimestart"].get<int>())))
+                                                difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>())
                                         )
                                         >
                                         (
