@@ -105,6 +105,7 @@ static void load() {
                 else if (it.value().is_boolean()) defQP[it.key()] = (FN::S2u(k) == "TRUE" or k == "1");
                 else defQP[it.key()] = k;
         }
+        defQP["safemode"]  = (int)mSafeMode::unknown;
         qpRepo = defQP;
         json qp = DB::load(uiTXT::QuotingParametersChange);
         if (qp.size())
@@ -136,7 +137,10 @@ static json onHand(json k) {
             ) {
                 if ((mQuotingMode)k["mode"].get<int>() == mQuotingMode::Depth)
                         k["widthPercentage"] = false;
+
+                k["safemode"]  = (int)mSafeMode::unknown;
                 qpRepo = k;
+
                 clean();
                 DB::insert(uiTXT::QuotingParametersChange, k);
                 EV::evUp("QuotingParameters", k);
