@@ -318,7 +318,7 @@ static void calcASP() {
         qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100);
         cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
         cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
-        cout <<  "ASP Evaluation: fairV: " << mgfairV << "\n";
+        cout <<  "ASP Evaluation: fairV: " << mgFairValue << "\n";
         cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
         cout << "Current Short: " << mgEwmaS << "\n";
         cout << "Current Long: " << mgEwmaL << "\n";
@@ -363,7 +363,10 @@ static void calcASP() {
 }
 static void calcSafety() {
         //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
-        if (qpRepo["safetynet"].get<bool>() == false) { qpRepo["safemode"].get<int>() = (int)mSafeMode::unknown; return; }
+        if (qpRepo["safetynet"].get<bool>() == false) {
+                qpRepo["safemode"]  = (int)mSafeMode::unknown;
+                return;
+        }
         mgMATIME.push_back(std::time(nullptr));
         if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
@@ -381,8 +384,8 @@ static void calcSafety() {
         if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown) {
                 cout << "SAFETY! Safe Mode unknown!! " << "\n";
         }
-        cout << "SAFETY! " << qpRepo["safemode"].get<int>() << "\n";
-        if(mgWSMA33.size() > qpRepo["safetytime"].get<int>()) {
+        cout << "SAFETY! " << qpRepo["safemode"].get<signed int>() << "\n";
+        if(mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
                 cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                 cout << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
