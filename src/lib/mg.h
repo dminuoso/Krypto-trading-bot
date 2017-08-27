@@ -326,7 +326,7 @@ static void calcASP() {
                 (
                         (
                                 (
-                                        mgfairV > mgSMA3G
+                                        mgFairValue > mgSMA3G
                                 )
                                 and
                                 (
