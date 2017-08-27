@@ -109,51 +109,46 @@ static void load() {
         json qp = DB::load(uiTXT::QuotingParametersChange);
         if (qp.size())
                 for (json::iterator it = qp["/0"_json_pointer].begin(); it != qp["/0"_json_pointer].end(); ++it)
-                {
                         qpRepo[it.key()] = it.value();
-
-                        qpRepo["safetyactive"] = false;
-                        clean();
-                };
-        static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
-                Isolate* isolate = args.GetIsolate();
-                HandleScope scope(isolate);
-                Local<Object> o = Object::New(isolate);
-                for (json::iterator it = qpRepo.begin(); it != qpRepo.end(); ++it)
-                        if (it.value().is_number()) o->Set(FN::v8S(it.key()), Number::New(isolate, it.value()));
-                        else if (it.value().is_boolean()) o->Set(FN::v8S(it.key()), Boolean::New(isolate, it.value()));
-                args.GetReturnValue().Set(o);
-        };
-        static json onSnap(json z) {
-                return { qpRepo };
-        };
-        static json onHand(json k) {
-                if (k["buySize"].get<double>() > 0
-                    and k["sellSize"].get<double>() > 0
-                    and k["buySizePercentage"].get<double>() > 0
-                    and k["sellSizePercentage"].get<double>() > 0
-                    and k["widthPing"].get<double>() > 0
-                    and k["widthPong"].get<double>() > 0
-                    and k["widthPingPercentage"].get<double>() > 0
-                    and k["widthPongPercentage"].get<double>() > 0
-                    ) {
-                        if ((mQuotingMode)k["mode"].get<int>() == mQuotingMode::Depth)
-                                k["widthPercentage"] = false;
-                        qpRepo = k;
-                        clean();
-                        DB::insert(uiTXT::QuotingParametersChange, k);
-                        EV::evUp("QuotingParameters", k);
-                }
-                UI::uiSend(uiTXT::QuotingParametersChange, k);
-                return {};
-        };
-        static void clean() {
-                for (vector<string>::iterator it = boolQP.begin(); it != boolQP.end(); ++it)
-                {
-                        if (qpRepo[*it].is_number()) qpRepo[*it] = qpRepo[*it].get<int>() != 0;
-                }
-        };
+        clean();
+};
+static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
+        Isolate* isolate = args.GetIsolate();
+        HandleScope scope(isolate);
+        Local<Object> o = Object::New(isolate);
+        for (json::iterator it = qpRepo.begin(); it != qpRepo.end(); ++it)
+                if (it.value().is_number()) o->Set(FN::v8S(it.key()), Number::New(isolate, it.value()));
+                else if (it.value().is_boolean()) o->Set(FN::v8S(it.key()), Boolean::New(isolate, it.value()));
+        args.GetReturnValue().Set(o);
+};
+static json onSnap(json z) {
+        return { qpRepo };
+};
+static json onHand(json k) {
+        if (k["buySize"].get<double>() > 0
+            and k["sellSize"].get<double>() > 0
+            and k["buySizePercentage"].get<double>() > 0
+            and k["sellSizePercentage"].get<double>() > 0
+            and k["widthPing"].get<double>() > 0
+            and k["widthPong"].get<double>() > 0
+            and k["widthPingPercentage"].get<double>() > 0
+            and k["widthPongPercentage"].get<double>() > 0
+            ) {
+                if ((mQuotingMode)k["mode"].get<int>() == mQuotingMode::Depth)
+                        k["widthPercentage"] = false;
+                qpRepo = k;
+                clean();
+                DB::insert(uiTXT::QuotingParametersChange, k);
+                EV::evUp("QuotingParameters", k);
+        }
+        UI::uiSend(uiTXT::QuotingParametersChange, k);
+        return {};
+};
+static void clean() {
+        for (vector<string>::iterator it = boolQP.begin(); it != boolQP.end(); ++it)
+                if (qpRepo[*it].is_number()) qpRepo[*it] = qpRepo[*it].get<int>() != 0;
 };
 };
 }
+
 #endif
