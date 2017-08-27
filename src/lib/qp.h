@@ -149,9 +149,11 @@ static void load() {
         };
         static void clean() {
                 for (vector<string>::iterator it = boolQP.begin(); it != boolQP.end(); ++it)
+                {
                         if (qpRepo[*it].is_number()) qpRepo[*it] = qpRepo[*it].get<int>() != 0;
+                }
         };
 };
-}
+};
 }
 #endif
