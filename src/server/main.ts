@@ -1,3 +1,6 @@
+process.on("uncaughtException", err => { console.error(new Date().toISOString().slice(11, -1), 'main', 'Unhandled exception!', err); process.exit(); });
+process.on("unhandledRejection", (reason, p) => { console.error(new Date().toISOString().slice(11, -1), 'main', 'Unhandled rejection!', reason, p); process.exit(); });
+
 const packageConfig = require("./../../package.json");
 
 const noop = () => {};
@@ -6,46 +9,14 @@ const bindings = ((K) => { try {
   return require('./lib/'+K.join('.'));
 } catch (e) {
   if (process.version.substring(1).split('.').map((n) => parseInt(n))[0] < 8)
-    throw new Error('K requires Node.js v7.0.0 or greater.');
+    throw new Error('K requires Node.js v8.0.0 or greater.');
   else throw new Error(e);
 }})([packageConfig.name[0], process.platform, process.versions.modules]);
 bindings.uiLoop(noop);
 
-import request = require('request');
-
 import Models = require("../share/models");
 import QuoteSender = require("./quote-sender");
 import QuotingEngine = require("./quoting-engine");
-
-let happyEnding = () => { console.info(new Date().toISOString().slice(11, -1), 'main', 'Error', 'THE END IS NEVER '.repeat(21)+'THE END'); };
-
-const processExit = () => {
-  happyEnding();
-  setTimeout(process.exit, 2000);
-};
-
-process.on("uncaughtException", err => {
-  console.error(new Date().toISOString().slice(11, -1), 'main', 'Unhandled exception!', err);
-  processExit();
-});
-
-process.on("unhandledRejection", (reason, p) => {
-  console.error(new Date().toISOString().slice(11, -1), 'main', 'Unhandled rejection!', reason, p);
-  processExit();
-});
-
-process.on("SIGINT", () => {
-  process.stdout.write("\n"+new Date().toISOString().slice(11, -1)+' main Excellent decision! ');
-  request({url: 'https://api.icndb.com/jokes/random?escape=javascript&limitTo=[nerdy]',json: true,timeout:3000}, (err, resp, body) => {
-    if (!err && resp.statusCode === 200) process.stdout.write(body.value.joke);
-    process.stdout.write("\n");
-    processExit();
-  });
-});
-
-process.on("exit", (code) => {
-  console.info(new Date().toISOString().slice(11, -1), 'main', 'Exit code', code);
-});
 
 new QuoteSender.QuoteSender(
   new QuotingEngine.QuotingEngine(
@@ -73,11 +44,6 @@ new QuoteSender.QuoteSender(
   bindings.uiSend,
   bindings.evOn
 );
-
-happyEnding = () => {
-  bindings.cancelOpenOrders();
-  console.info(new Date().toISOString().slice(11, -1), 'main', 'Attempting to cancel all open orders, please wait..');
-};
 
 let highTime = process.hrtime();
 setInterval(() => {

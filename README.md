@@ -274,7 +274,11 @@ The bot has all features unlocked, but to support further development by ctubio,
 
 To unlock all features currently nothing has to be done, but maybe, soOn, a payment of 0.12100000 BTC will be required.
 
-You can always choose to not support further development of the bot by ctubio, just keep running some old commit and do not upgrade.
+ In case you are looking to extend the trial period, please generate a new API Key in your exchange (each API key have its own trial period). Otherwise if you choose to not support further development by ctubio, just keep running some old commit and do not upgrade.
+
+The current payment is to support further development by ctubio to fix all bugs on the market you are paying against (an alternative [Votes](#votes) system).
+
+To provide exclusivity to proefficient traders and to keep teenagers away, once the bot is bug-free, the payment required may be increased by a minimum of x3.
 
 ### Donations
 
@@ -286,11 +290,11 @@ or donate your time with programming or financial suggestions in the topical IRC
 
 ### Help
 
-If you need support contact me at [21.co/analpaper](https://21.co/analpaper/).
+If you need installation or usage support contact me at [21.co/analpaper](https://21.co/analpaper/) (non-free high-priority service).
 
 ### Issues
 
-To request new features open a [new issue](https://github.com/ctubio/Krypto-trading-bot/issues/new?title=Feature%20request) and explain your improvement.
+To request new features open a [new issue](https://github.com/ctubio/Krypto-trading-bot/issues/new?title=Feature%20request) and explain your improvement as you consider.
 
 To report errors open a [new issue](https://github.com/ctubio/Krypto-trading-bot/issues/new?title=Error%20report) only after collecting all the relevant log messages (run `nodejs K.js` to see the output).
 
@@ -322,3 +326,6 @@ What exchange you don't want to be deleted from the bot?
  - https://www.youtube.com/watch?v=4Ois3zB7SJ4
  - https://www.youtube.com/watch?v=_wGDcWD1E1A
  - https://www.youtube.com/watch?v=DVg2EJvvlF8
+ - add your song here (please open a [new issue](https://github.com/ctubio/Krypto-trading-bot/issues/new?title=Today,%20I%20sing) to share your link)
+
+ <p align="center"><img src="https://user-images.githubusercontent.com/1634027/29746351-7478d556-8ad7-11e7-8b27-445eefa8f960.jpg" /></p>

@@ -2,7 +2,7 @@
 #define K_QP_H_
 
 namespace K {
-  static json defQP {
+  json defQP {
     {  "widthPing",                     2                                      },
     {  "widthPingPercentage",           decimal_cast<2>("0.25").getAsDouble()  },
     {  "widthPong",                     2                                      },
@@ -32,15 +32,15 @@ namespace K {
     {  "tradesPerMinute",               decimal_cast<1>("0.9").getAsDouble()   },
     {  "tradeRateSeconds",              69                                     },
     {  "quotingEwmaProtection",         true                                   },
-    {  "quotingEwmaProtectionPeridos",  200                                    },
+    {  "quotingEwmaProtectionPeriods",  200                                    },
     {  "quotingStdevProtection",        (int)mSTDEV::Off                       },
     {  "quotingStdevBollingerBands",    false                                  },
     {  "quotingStdevProtectionFactor",  decimal_cast<1>("1.0").getAsDouble()   },
     {  "quotingStdevProtectionPeriods", 1200                                   },
     {  "ewmaSensiblityPercentage",      decimal_cast<1>("0.5").getAsDouble()   },
-    {  "longEwmaPeridos",               200                                    },
-    {  "mediumEwmaPeridos",             100                                    },
-    {  "shortEwmaPeridos",              50                                     },
+    {  "longEwmaPeriods",               200                                    },
+    {  "mediumEwmaPeriods",             100                                    },
+    {  "shortEwmaPeriods",              50                                     },
     {  "aprMultiplier",                 2                                      },
     {  "sopWidthMultiplier",            2                                      },
     {  "delayAPI",                      0                                      },
@@ -77,7 +77,7 @@ namespace K {
     {  "pDivHolder",                    0                                      },
     {  "asptriggered",                  false                                  }
   };
-  static vector<string> boolQP = {
+  vector<string> boolQP = {
     "widthPercentage", "bestWidth", "sellSizeMax", "buySizeMax", "percentageValues",
     "quotingEwmaProtection", "quotingStdevBollingerBands", "cancelOrdersAuto", "audio"
   };
@@ -90,15 +90,20 @@ namespace K {
         EV::evUp("QuotingParameters", qpRepo);
         NODE_SET_METHOD(exports, "qpRepo", QP::_qpRepo);
       }
+      static bool matchPings() {
+        mQuotingMode k = (mQuotingMode)qpRepo["mode"].get<int>();
+        return k == mQuotingMode::Boomerang
+            or k == mQuotingMode::HamelinRat
+            or k == mQuotingMode::AK47;
+      };
     private:
       static void load() {
         for (json::iterator it = defQP.begin(); it != defQP.end(); ++it) {
           string k = CF::cfString(it.key(), false);
-          if (k != "") {
-            if (it.value().is_number()) defQP[it.key()] = stod(k);
-            else if (it.value().is_boolean()) defQP[it.key()] = (FN::S2u(k) == "TRUE" or k == "1");
-            else defQP[it.key()] = k;
-          }
+          if (k == "") continue;
+          if (it.value().is_number()) defQP[it.key()] = stod(k);
+          else if (it.value().is_boolean()) defQP[it.key()] = (FN::S2u(k) == "TRUE" or k == "1");
+          else defQP[it.key()] = k;
         }
         qpRepo = defQP;
         json qp = DB::load(uiTXT::QuotingParametersChange);
@@ -106,9 +111,9 @@ namespace K {
           for (json::iterator it = qp["/0"_json_pointer].begin(); it != qp["/0"_json_pointer].end(); ++it)
           {
             qpRepo[it.key()] = it.value();
-          }
-            qpRepo["safetyactive"] = false;
-        cleanBool();
+
+        qpRepo["safetyactive"] = false;
+        clean();
       };
       static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
         Isolate* isolate = args.GetIsolate();
@@ -135,14 +140,14 @@ namespace K {
           if ((mQuotingMode)k["mode"].get<int>() == mQuotingMode::Depth)
             k["widthPercentage"] = false;
           qpRepo = k;
-          cleanBool();
+          clean();
           DB::insert(uiTXT::QuotingParametersChange, k);
           EV::evUp("QuotingParameters", k);
         }
         UI::uiSend(uiTXT::QuotingParametersChange, k);
         return {};
       };
-      static void cleanBool() {
+      static void clean() {
         for (vector<string>::iterator it = boolQP.begin(); it != boolQP.end(); ++it)
           if (qpRepo[*it].is_number()) qpRepo[*it] = qpRepo[*it].get<int>() != 0;
       };

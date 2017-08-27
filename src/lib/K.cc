@@ -6,22 +6,25 @@
 #include <thread>
 #include <chrono>
 #include <locale>
+#include <time.h>
 #include <math.h>
-#include <iomanip>
+#include <signal.h>
+#include <execinfo.h>
 #include <algorithm>
+#include <iomanip>
 #include <vector>
 #include <map>
 
+#include <sqlite3.h>
 #include <curl/curl.h>
 #include <openssl/hmac.h>
 #include <openssl/sha.h>
 #include <openssl/md5.h>
-#include <sqlite3.h>
 #include "quickfix/Application.h"
-#include "quickfix/FileStore.h"
 #include "quickfix/SocketInitiator.h"
-#include "quickfix/SessionSettings.h"
+#include "quickfix/FileStore.h"
 #include "quickfix/FileLog.h"
+#include "quickfix/SessionSettings.h"
 #include "quickfix/fix42/NewOrderSingle.h"
 #include "quickfix/fix42/ExecutionReport.h"
 #include "quickfix/fix42/OrderCancelRequest.h"
@@ -57,6 +60,7 @@ using namespace dec;
 #include "og.h"
 #include "mg.h"
 #include "pg.h"
+#include "qe.h"
 #include "gw.h"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,8 +73,9 @@ using namespace dec;
 ;;;;;;OG::main(exports);;        ;;;;;;;
 ;;;;;;MG::main(exports);;    ;;    ;;;;;
 ;;;;;;PG::main(exports);;    ;;;;    ;;;
-;;;;;;GW::main(exports);;    ;;;;    ;;;
-;;;;};;;;;;;;;;;;;;;;;;;;;;;;;;;;    ;;;
+;;;;;;QE::main(exports);;    ;;;;    ;;;
+;;;;;;GW::main(exports);;;;;;;;;;    ;;;
+;;;;};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

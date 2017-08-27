@@ -2,7 +2,18 @@ import Models = require("../share/models");
 import Utils = require("./utils");
 import moment = require('moment');
 import QuotingStyleRegistry = require("./quoting-styles/style-registry");
-import {QuoteInput} from "./quoting-styles/helpers";
+
+class QuoteInput {
+  constructor(
+    public market: Models.Market,
+    public fvPrice: number,
+    public widthPing: number,
+    public buySize: number,
+    public sellSize: number,
+    public mode: Models.QuotingMode,
+    public minTickIncrement: number
+  ) {}
+}
 
 const quoteChanged = (o: Models.Quote, n: Models.Quote, tick: number) : boolean => {
    if ((!o && n) || (o && !n)) return true;
@@ -72,8 +83,8 @@ export class QuotingEngine {
 
     private computeQuote(filteredMkt: Models.Market, fv: number) {
         const latestPosition = this._positionBroker();
+        if (latestPosition === null) return;
         const targetBasePosition = this._pgTargetBasePos();
-
         const params = this._qpRepo();
         const widthPing = (params.widthPercentage)
           ? params.widthPingPercentage * fv / 100
@@ -95,8 +106,7 @@ export class QuotingEngine {
           sellSize = Math.max(sellSize, totalBasePosition - targetBasePosition);
 
         const unrounded = this._registry.GenerateQuote(new QuoteInput(filteredMkt, fv, widthPing, buySize, sellSize, params.mode, this._minTick));
-
-        if (unrounded === null) return null;
+        if (unrounded === null) return;
         const _unroundedBidSz = unrounded.bidSz;
         const _unroundedAskSz = unrounded.askSz;
 
@@ -305,8 +315,7 @@ export class QuotingEngine {
         }
 
         const genQt = this.computeQuote(filteredMkt, fv);
-
-        if (genQt === null) {
+        if (genQt === null || typeof genQt == "undefined") {
             this.latestQuote = null;
             return;
         }

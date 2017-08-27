@@ -2,18 +2,17 @@
 #define K_OG_H_
 
 namespace K {
-  static uv_timer_t gwCancelAll_;
-  static json tradesMemory;
-  static map<string, void*> toCancel;
-  static map<string, json> allOrders;
-  static map<string, string> allOrdersIds;
+  uv_timer_t gwCancelAll_;
+  json tradesMemory;
+  map<string, void*> toCancel;
+  map<string, json> allOrders;
+  map<string, string> allOrdersIds;
   class OG {
     public:
       static void main(Local<Object> exports) {
         load();
         thread([&]() {
           if (uv_timer_init(uv_default_loop(), &gwCancelAll_)) { cout << FN::uiT() << "Errrror: GW gwCancelAll_ init timer failed." << endl; exit(1); }
-          gwCancelAll_.data = NULL;
           if (uv_timer_start(&gwCancelAll_, [](uv_timer_t *handle) {
             if (qpRepo["cancelOrdersAuto"].get<bool>())
               gW->cancelAll();
@@ -39,14 +38,12 @@ namespace K {
       static json updateOrderState(json k) {
         json o;
         if ((mORS)k["orderStatus"].get<int>() == mORS::New) o = k;
-        else {
-          if (!k["orderId"].is_null() and allOrders.find(k["orderId"].get<string>()) != allOrders.end())
-            o = allOrders[k["orderId"].get<string>()];
-          else if (!k["exchangeId"].is_null() and allOrdersIds.find(k["exchangeId"].get<string>()) != allOrdersIds.end()) {
-            o = allOrders[allOrdersIds[k["exchangeId"].get<string>()]];
-            k["orderId"] = o["orderId"].get<string>();
-          } else return o;
-        }
+        else if (!k["orderId"].is_null() and allOrders.find(k["orderId"].get<string>()) != allOrders.end())
+          o = allOrders[k["orderId"].get<string>()];
+        else if (!k["exchangeId"].is_null() and allOrdersIds.find(k["exchangeId"].get<string>()) != allOrdersIds.end()) {
+          o = allOrders[allOrdersIds[k["exchangeId"].get<string>()]];
+          k["orderId"] = o["orderId"].get<string>();
+        } else return o;
         for (json::iterator it = k.begin(); it != k.end(); ++it)
           if (!it.value().is_null()) o[it.key()] = it.value();
         if (o["time"].is_null()) o["time"] = FN::T();
@@ -80,19 +77,6 @@ namespace K {
       static json onSnapOrders(json z) {
         return ogO(false);
       };
-      static void _allOrders(const FunctionCallbackInfo<Value>& args) {
-        args.GetReturnValue().Set(v8ogO(args.GetIsolate(), true));
-      };
-      static void _cancelOpenOrders(const FunctionCallbackInfo<Value>& args) {
-        cancelOpenOrders();
-      };
-      static void cancelOpenOrders() {
-        if (gW->supportCancelAll)
-          return gW->cancelAll();
-        for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it)
-          if (mORS::New == (mORS)it->second["orderStatus"].get<int>() or mORS::Working == (mORS)it->second["orderStatus"].get<int>())
-            cancelOrder(it->first);
-      };
       static json onHandCancelOrder(json k) {
         cancelOrder(k["orderId"].get<string>());
         return {};
@@ -125,17 +109,6 @@ namespace K {
         );
         return {};
       };
-      static void _sendOrder(const FunctionCallbackInfo<Value>& args) {
-        sendOrder(
-          (mSide)args[0]->NumberValue(),
-          args[1]->NumberValue(),
-          args[2]->NumberValue(),
-          (mOrderType)args[3]->NumberValue(),
-          (mTimeInForce)args[4]->NumberValue(),
-          args[5]->BooleanValue(),
-          args[6]->BooleanValue()
-        );
-      };
       static void sendOrder(mSide oS, double oP, double oQ, mOrderType oLM, mTimeInForce oTIF, bool oIP, bool oPO) {
         json o = updateOrderState({
           {"orderId", gW->clientId()},
@@ -153,9 +126,6 @@ namespace K {
         });
         gW->send(o["orderId"].get<string>(), (mSide)o["side"].get<int>(), o["price"].get<double>(), o["quantity"].get<double>(), (mOrderType)o["type"].get<int>(), (mTimeInForce)o["timeInForce"].get<int>(), o["preferPostOnly"].get<bool>(), o["time"].get<unsigned long>());
       };
-      static void _cancelOrder(const FunctionCallbackInfo<Value>& args) {
-        cancelOrder(FN::S8v(args[0]->ToString()));
-      };
       static void cancelOrder(string k) {
         if (allOrders.find(k) == allOrders.end()) {
           updateOrderState(k, mORS::Cancelled);
@@ -168,9 +138,6 @@ namespace K {
         json o = updateOrderState(k, mORS::Working);
         gW->cancel(o["orderId"].get<string>(), o["exchangeId"].get<string>(), (mSide)o["side"].get<int>(), o["time"].get<unsigned long>());
       };
-      static void _allOrdersDelete(const FunctionCallbackInfo<Value>& args) {
-        allOrdersDelete(FN::S8v(args[0]->ToString()), "");
-      };
       static void allOrdersDelete(string oI, string oE) {
         map<string, json>::iterator it = allOrders.find(oI);
         if (it != allOrders.end()) allOrders.erase(it);
@@ -179,6 +146,13 @@ namespace K {
           if (it_ != allOrdersIds.end()) allOrdersIds.erase(it_);
         } else for (map<string, string>::iterator it_ = allOrdersIds.begin(); it_ != allOrdersIds.end();)
           if (it_->second == oI) it_ = allOrdersIds.erase(it_); else ++it_;
+      };
+      static void cancelOpenOrders() {
+        if (gW->supportCancelAll)
+          return gW->cancelAll();
+        for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it)
+          if (mORS::New == (mORS)it->second["orderStatus"].get<int>() or mORS::Working == (mORS)it->second["orderStatus"].get<int>())
+            cancelOrder(it->first);
       };
       static void cleanClosedOrders() {
         for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end();) {
@@ -340,7 +314,7 @@ namespace K {
       };
       static Local<Array> v8ogO(Isolate* isolate, bool all) {
         Local<Array> k = Array::New(isolate);
-        int i;
+        int i = 0;
         for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it) {
           if (!all and mORS::Working != (mORS)it->second["orderStatus"].get<int>()) continue;
           k->Set(i++, v8ogO_(it->second));
@@ -374,6 +348,29 @@ namespace K {
         if (!j["isPong"].is_null()) o->Set(FN::v8S("isPong"), Boolean::New(isolate, j["isPong"].get<bool>()));
         if (!j["preferPostOnly"].is_null()) o->Set(FN::v8S("preferPostOnly"), Boolean::New(isolate, j["preferPostOnly"].get<bool>()));
         return o;
+      };
+      static void _allOrders(const FunctionCallbackInfo<Value>& args) {
+        args.GetReturnValue().Set(v8ogO(args.GetIsolate(), true));
+      };
+      static void _cancelOpenOrders(const FunctionCallbackInfo<Value>& args) {
+        cancelOpenOrders();
+      };
+      static void _sendOrder(const FunctionCallbackInfo<Value>& args) {
+        sendOrder(
+          (mSide)args[0]->NumberValue(),
+          args[1]->NumberValue(),
+          args[2]->NumberValue(),
+          (mOrderType)args[3]->NumberValue(),
+          (mTimeInForce)args[4]->NumberValue(),
+          args[5]->BooleanValue(),
+          args[6]->BooleanValue()
+        );
+      };
+      static void _cancelOrder(const FunctionCallbackInfo<Value>& args) {
+        cancelOrder(FN::S8v(args[0]->ToString()));
+      };
+      static void _allOrdersDelete(const FunctionCallbackInfo<Value>& args) {
+        allOrdersDelete(FN::S8v(args[0]->ToString()), "");
       };
   };
 }
