@@ -179,7 +179,7 @@ export class QuotingEngine {
                 unrounded.askSz = Math.min(params.aprMultiplier*sellSize, totalBasePosition - targetBasePosition, latestPosition.baseAmount / 2);
             }
             if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
-                unrounded.askSz = totalBasePosition;
+                unrounded.askSz = Utils.roundDown(totalBasePosition,1e-5);
                 // DUMP IT ALL!
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ================================== ');
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ');
@@ -297,7 +297,7 @@ export class QuotingEngine {
             if (unrounded.askSz > totalBasePosition)
               unrounded.askSz = (!_unroundedBidSz || _unroundedBidSz > totalBasePosition)
                 ? totalBasePosition : _unroundedBidSz;
-            unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-8);
+            unrounded.askSz = Utils.roundDown(Math.max(this._minSize, totalBasePosition), 1e-8);
             unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
         }
 
@@ -310,7 +310,7 @@ export class QuotingEngine {
             unrounded.bidSz = Utils.roundDown(Math.max(this._minSize, unrounded.bidSz), 1e-8);
             unrounded.isBidPong = (safety.sellPong && unrounded.bidPx && unrounded.bidPx <= safety.sellPong - widthPong);
         }
-        unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-5);
+        //unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-5);
         console.info(new Date().toISOString().slice(11, -1), 'ARP', '========', unrounded.askSz , "\n");
         return unrounded;
     }
