@@ -26,14 +26,15 @@ double mgStdevTop = 0;
 double mgStdevTopMean = 0;
 double mgTargetPos = 0;
 vector<double> mgWSMA33;        // Logging SMA3 values
- vector<double> ArrayEwmaL;  // vector for EwmaL
- vector<double> ArrayEwmaS;  // vector for EwmaS
- vector<double> ArrayEwmaM; // vector for EwmaM
- vector<int> mgMATIME;
-  static double mgSMA3G; // global SMA3 current value
+vector<double> ArrayEwmaL;   // vector for EwmaL
+vector<double> ArrayEwmaS;   // vector for EwmaS
+vector<double> ArrayEwmaM;  // vector for EwmaM
+vector<int> mgMATIME;
+static double mgSMA3G;   // global SMA3 current value
 class MG {
 public:
 static void main(Local<Object> exports) {
+        LoadEWMA(100);
         load();
         EV::evOn("MarketTradeGateway", [](json k) {
                                 tradeUp(k);
@@ -166,9 +167,6 @@ static void ewmaUp() {
         calcEwma(&mgEwmaL, qpRepo["longEwmaPeriods"].get<int>());
         calcEwma(&mgEwmaM, qpRepo["mediumEwmaPeriods"].get<int>());
         calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>());
-        cout << "LONG: " << mgEwmaL << "\n";
-        cout << "Medium: " << mgEwmaM << "\n";
-        cout << "Short: " << mgEwmaS << "\n";
         //calcASP();
         //calcSafety();
         calcTargetPos();
@@ -425,11 +423,11 @@ static void calcSafety() {
 
                 if (     (
                                  (
-                                   (
-                                     mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
-                                   )
-                                   <
-                                      -1 * (qpRepo["safetyP"].get<double>()/100)
+                                         (
+                                                 mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
+                                 )
+                                 <
+                                 -1 * (qpRepo["safetyP"].get<double>()/100)
                                  )
                          &&   qpRepo["safetyactive"].get<bool>() == false        // make sure we are not already in a safety active state
                          &&   qpRepo["safetynet"].get<bool>() == true        // make sure safey checkbox is active on UI
@@ -554,11 +552,7 @@ static void calcSafety() {
 static void ProfitTest() {
 }
 
-static void LoadEWMA(int period) {
 
-
-
-}
 
 
 };
