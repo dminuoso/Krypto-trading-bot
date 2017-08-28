@@ -185,7 +185,6 @@ export class QuotingEngine {
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ');
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========WE ARE DUMPING EVERYTHING!===== ');
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ============================= ');
-                return unrounded;
 
             }
         }
@@ -300,6 +299,7 @@ export class QuotingEngine {
                 ? totalBasePosition : _unroundedBidSz;
             unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-8);
             unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
+              console.info(new Date().toISOString().slice(11, -1), 'ARP', ' should we be here?\n' ); 
         }
 
         if (unrounded.bidSz !== null) {
