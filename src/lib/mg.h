@@ -166,6 +166,9 @@ static void ewmaUp() {
         calcEwma(&mgEwmaL, qpRepo["longEwmaPeriods"].get<int>());
         calcEwma(&mgEwmaM, qpRepo["mediumEwmaPeriods"].get<int>());
         calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>());
+        cout << "LONG: " << mgEwmaL << "\n";
+        cout << "Medium: " << mgEwmaM << "\n";
+        cout << "Short: " << mgEwmaS << "\n";
         //calcASP();
         //calcSafety();
         calcTargetPos();
