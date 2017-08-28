@@ -178,7 +178,7 @@ export class QuotingEngine {
             if (!params.sellSizeMax) {
                 unrounded.askSz = Math.min(params.aprMultiplier*sellSize, totalBasePosition - targetBasePosition, latestPosition.baseAmount / 2);
             }
-            else if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
+            if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
                 unrounded.askSz = totalBasePosition;
                 // DUMP IT ALL!
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ================================== ');
