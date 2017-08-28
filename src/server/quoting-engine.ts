@@ -186,6 +186,7 @@ export class QuotingEngine {
 
             }
         }
+      }
 
         if (params.quotingStdevProtection !== Models.STDEV.Off && this._stdevP() !== null) {
             if (unrounded.askPx && (params.quotingStdevProtection === Models.STDEV.OnFV || params.quotingStdevProtection === Models.STDEV.OnTops || params.quotingStdevProtection === Models.STDEV.OnTop || sideAPR !== 'Sell'))
