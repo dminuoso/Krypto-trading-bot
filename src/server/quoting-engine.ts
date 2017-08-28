@@ -172,7 +172,18 @@ export class QuotingEngine {
             unrounded.bidSz = null;
             if (params.aggressivePositionRebalancing !== Models.APR.Off) {
               sideAPR = 'Sell';
-              if (!params.sellSizeMax) unrounded.askSz = Math.min(params.aprMultiplier*sellSize, totalBasePosition - targetBasePosition, latestPosition.baseAmount / 2);
+
+            if (!params.sellSizeMax) {
+                unrounded.askSz = Math.min(params.aprMultiplier*sellSize, totalBasePosition - targetBasePosition, latestPosition.baseAmount / 2);
+            }
+            else if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
+                unrounded.askSz = totalBasePosition;
+                // DUMP IT ALL!
+                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ================================== ');
+                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ')
+                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========WE ARE DUMPING EVERYTHING!===== ')
+                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ============================= ')
+
             }
         }
 
