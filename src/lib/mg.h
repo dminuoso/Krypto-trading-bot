@@ -459,7 +459,7 @@ static void calcSafety() {
                         cout << "time back at time index: " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
                         cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
                         cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
-                        cout << "time Difference: " << difftime((mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>())),qpRepo["safetimestart"].get<double>()) << "\n";
+                        cout << "time Difference: " << difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr)) << "\n";
 
                         if(
                                 (
