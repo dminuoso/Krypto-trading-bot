@@ -34,7 +34,7 @@ static double mgSMA3G;   // global SMA3 current value
 class MG {
 public:
 static void main(Local<Object> exports) {
-        LoadEWMA(100);
+        
         load();
         EV::evOn("MarketTradeGateway", [](json k) {
                                 tradeUp(k);
