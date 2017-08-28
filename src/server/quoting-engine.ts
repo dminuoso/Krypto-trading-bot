@@ -310,7 +310,7 @@ export class QuotingEngine {
             unrounded.bidSz = Utils.roundDown(Math.max(this._minSize, unrounded.bidSz), 1e-8);
             unrounded.isBidPong = (safety.sellPong && unrounded.bidPx && unrounded.bidPx <= safety.sellPong - widthPong);
         }
-
+        unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-8);
         console.info(new Date().toISOString().slice(11, -1), 'ARP', '========', unrounded.askSz , "\n");
         return unrounded;
     }
