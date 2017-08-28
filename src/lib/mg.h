@@ -471,7 +471,7 @@ static void calcSafety() {
                                                 difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr))
                                                 //  difftime(mgMATIME.back(),(mgMATIME.at(mgMATIME.size() - qpRepo["safetimestart"].get<int>())))
                                         )
-                                        >
+                                        <
                                         (
                                                 (qpRepo["safetyduration"].get<double>() * 60)
                                         )
@@ -499,9 +499,9 @@ static void calcSafety() {
                                 and
                                 (
                                         (
-                                                difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr)) 
+                                                difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr))
                                         )
-                                        >
+                                        <
                                         (
                                                 (qpRepo["safetyduration"].get<double>() * 60)
                                         )
