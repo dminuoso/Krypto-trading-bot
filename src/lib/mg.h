@@ -421,7 +421,12 @@ static void calcSafety() {
                 }
 
                 if (     (
-                                 ((mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100 ) <  -(qpRepo["safetyP"].get<double>()/100)
+                                 (
+                                   (
+                                     mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
+                                   )
+                                   <
+                                      -1 * (qpRepo["safetyP"].get<double>()/100)
                                  )
                          &&   qpRepo["safetyactive"].get<bool>() == false        // make sure we are not already in a safety active state
                          &&   qpRepo["safetynet"].get<bool>() == true        // make sure safey checkbox is active on UI
@@ -434,7 +439,7 @@ static void calcSafety() {
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -(qpRepo["safetyP"].get<double>()/100) << "\n";
+                        cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -1 * (qpRepo["safetyP"].get<double>()/100) << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
         }
@@ -546,6 +551,9 @@ static void calcSafety() {
 static void ProfitTest() {
 }
 
+static void LoadEWMA(period) {
+
+}
 
 
 };
