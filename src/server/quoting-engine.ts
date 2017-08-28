@@ -304,6 +304,7 @@ export class QuotingEngine {
             console.info(new Date().toISOString().slice(11, -1), 'ARP', "safety buyPing: " , safety.buyPing , "\n");
             console.info(new Date().toISOString().slice(11, -1), 'ARP', "widthPong: " ,  widthPong, "\n");
             console.info(new Date().toISOString().slice(11, -1), 'ARP', "askSize : " ,  unrounded.askSz, "\n");
+            console.info(new Date().toISOString().slice(11, -1), 'ARP', "is pong? : " ,  unrounded.isAskPong,  "\n");
         }
 
 
