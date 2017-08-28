@@ -307,7 +307,7 @@ export class QuotingEngine {
               console.info(new Date().toISOString().slice(11, -1), 'ARP', ' should we be here?\n' );
               if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
                   unrounded.askSz = Utils.roundDown(Math.max(totalBasePosition,unrounded.askSz), 1e-8);
-                  unrounded.isAskPong = (safety.buyPing);
+                  unrounded.isAskPong = (safety.buyPing && unrounded.askPx);
                   // DUMP IT ALL!
                   console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ================================== ');
                   console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ');
