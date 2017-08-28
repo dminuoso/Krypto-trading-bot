@@ -114,6 +114,7 @@ static void load() {
         qpRepo["safemode"] == (int)mSafeMode::unknown;
         qpRepo["safetyactive"] = false;
         qpRepo["asptriggered"] = false;
+        k["safetimestart"] = 0;
         clean();
 };
 static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
@@ -144,6 +145,7 @@ static json onHand(json k) {
                 k["safemode"] == (int)mSafeMode::unknown;
                 k["safetyactive"] = false;
                 k["asptriggered"] = false;
+                k["safetimestart"] = 0;
                 qpRepo = k;
                 clean();
                 DB::insert(uiTXT::QuotingParametersChange, k);
