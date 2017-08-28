@@ -410,7 +410,7 @@ static void calcSafety() {
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << (qpRepo["safetyP"].get<double>()/100) << "\n";
+                        cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << qpRepo["safetyP"].get<double>() << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
 
@@ -427,7 +427,7 @@ static void calcSafety() {
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -(qpRepo["safetyP"].get<double>()/100) << "\n";
+                        cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -(qpRepo["safetyP"].get<double>()) << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
         }
