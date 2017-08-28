@@ -553,6 +553,8 @@ static void ProfitTest() {
 
 static void LoadEWMA(int period) {
 
+
+
 }
 
 
