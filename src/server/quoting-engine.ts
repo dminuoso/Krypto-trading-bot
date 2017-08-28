@@ -178,10 +178,10 @@ export class QuotingEngine {
             if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
                 unrounded.askSz = Utils.roundDown(totalBasePosition,1e-5);
                 // DUMP IT ALL!
-                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ================================== ');
-                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ');
-                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========WE ARE DUMPING EVERYTHING!===== ');
-                console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ============================= ');
+              //  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ================================== ');
+              //  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ');
+              //  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========WE ARE DUMPING EVERYTHING!===== ');
+              //  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ============================= ');
             }
         }
       }
@@ -300,11 +300,11 @@ export class QuotingEngine {
 
           }
             unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
-            console.info(new Date().toISOString().slice(11, -1), 'ARP', "askPX: " , unrounded.askPx , "\n");
-            console.info(new Date().toISOString().slice(11, -1), 'ARP', "safety buyPing: " , safety.buyPing , "\n");
-            console.info(new Date().toISOString().slice(11, -1), 'ARP', "widthPong: " ,  widthPong, "\n");
-            console.info(new Date().toISOString().slice(11, -1), 'ARP', "askSize : " ,  unrounded.askSz, "\n");
-            console.info(new Date().toISOString().slice(11, -1), 'ARP', "is pong? : " ,  unrounded.isAskPong,  "\n"); 
+        //    console.info(new Date().toISOString().slice(11, -1), 'ARP', "askPX: " , unrounded.askPx , "\n");
+        //    console.info(new Date().toISOString().slice(11, -1), 'ARP', "safety buyPing: " , safety.buyPing , "\n");
+        //    console.info(new Date().toISOString().slice(11, -1), 'ARP', "widthPong: " ,  widthPong, "\n");
+        //    console.info(new Date().toISOString().slice(11, -1), 'ARP', "askSize : " ,  unrounded.askSz, "\n");
+        //    console.info(new Date().toISOString().slice(11, -1), 'ARP', "is pong? : " ,  unrounded.isAskPong,  "\n");
         }
 
 
@@ -317,7 +317,7 @@ export class QuotingEngine {
             unrounded.isBidPong = (safety.sellPong && unrounded.bidPx && unrounded.bidPx <= safety.sellPong - widthPong);
         }
         //unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-5);
-        console.info(new Date().toISOString().slice(11, -1), 'ARP', '========', unrounded.askSz , "\n");
+        //console.info(new Date().toISOString().slice(11, -1), 'ARP', '========', unrounded.askSz , "\n");
         return unrounded;
     }
 
