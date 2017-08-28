@@ -172,8 +172,9 @@ export class QuotingEngine {
             unrounded.bidSz = null;
             if (params.aggressivePositionRebalancing !== Models.APR.Off) {
               sideAPR = 'Sell';
-            console.info(new Date().toISOString().slice(11, -1), 'ARP', params.safemode , "\n");
-            console.info(new Date().toISOString().slice(11, -1), 'ARP', Models.mSafeMode[params.safemode] , "\n");
+            console.info(new Date().toISOString().slice(11, -1), 'ARP ', params.safemode , "\n");
+            console.info(new Date().toISOString().slice(11, -1), 'ARP ', Models.mSafeMode[params.safemode] , "\n");
+            console.info(new Date().toISOString().slice(11, -1), 'ARP ', params.safetyactive, "\n");
             if (!params.sellSizeMax) {
                 unrounded.askSz = Math.min(params.aprMultiplier*sellSize, totalBasePosition - targetBasePosition, latestPosition.baseAmount / 2);
             }
