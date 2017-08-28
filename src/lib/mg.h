@@ -330,7 +330,7 @@ static void calcASP() {
                 (
                         (
                                 (
-                                        mgFairValue > mgSMA3G
+                                        mgEwmaS > mgSMA3G
                                 )
                                 and
                                 (
@@ -402,7 +402,7 @@ static void calcSafety() {
                         )
                         &&  qpRepo["safetyactive"].get<bool>() == false       // make sure we are not already in a safety active state
                         &&  qpRepo["safetynet"].get<bool>() == true       // make sure safey checkbox is active on UI
-                        &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::buy || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+                        &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
                         )
                 {
                         //  printf("debug12\n");
@@ -422,7 +422,7 @@ static void calcSafety() {
                                  )
                          &&   qpRepo["safetyactive"].get<bool>() == false      // make sure we are not already in a safety active state
                          &&   qpRepo["safetynet"].get<bool>() == true      // make sure safey checkbox is active on UI
-                        &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+                        &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::buy || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
                          )
                 {
                         double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
