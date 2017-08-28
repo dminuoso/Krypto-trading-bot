@@ -369,6 +369,8 @@ static void calcSafety() {
         //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
         if (qpRepo["safetynet"].get<bool>() == false) {
                 qpRepo["safemode"]  = (int)mSafeMode::unknown;
+                qpRepo["safetyactive"] = false;
+
                 return;
         }
         mgMATIME.push_back(std::time(nullptr));
