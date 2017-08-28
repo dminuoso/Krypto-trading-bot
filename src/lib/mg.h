@@ -30,7 +30,7 @@ vector<double> ArrayEwmaL;   // vector for EwmaL
 vector<double> ArrayEwmaS;   // vector for EwmaS
 vector<double> ArrayEwmaM;  // vector for EwmaM
 vector<int> mgMATIME;
-static double mgSMA3G;   // global SMA3 current value
+double mgSMA3G;   // global SMA3 current value
 class MG {
 public:
 static void main(Local<Object> exports) {
@@ -277,12 +277,13 @@ static void calcEwma(double *k, int periods) {
 };
 static void calcTargetPos() {
         mgSMA3.push_back(mgFairValue);
-        mgSMA3G = mgSMA3;
+
         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
                 SMA3 += *it;
         SMA3 /= mgSMA3.size();
+        mgSMA3G = SMA3;
         double newTargetPosition = 0;
         if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
                 double newTrend = ((SMA3 * 100 / mgEwmaL) - 100);
