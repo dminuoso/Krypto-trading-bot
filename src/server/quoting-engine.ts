@@ -300,23 +300,8 @@ export class QuotingEngine {
             unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-8);
             unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
         }
-        if (unrounded.askSz !== null) {
-            if (unrounded.askSz >=  totalBasePosition)
-          //  unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-8);
-          //  unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
-              console.info(new Date().toISOString().slice(11, -1), 'ARP', ' should we be here?\n' );
-              if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
-                  unrounded.askSz = Utils.roundDown(Math.max(totalBasePosition,unrounded.askSz), 1e-8);
-                  unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
-                  // DUMP IT ALL!
-                  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ================================== ');
-                  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ');
-                  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========WE ARE DUMPING EVERYTHING!===== ');
-                  console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ============================= ');
-                  console.info(new Date().toISOString().slice(11, -1), 'ARP', unrounded.askSz);
 
-              }
-        }
+
 
         if (unrounded.bidSz !== null) {
             if (unrounded.bidSz > totalQuotePosition)
@@ -326,6 +311,7 @@ export class QuotingEngine {
             unrounded.isBidPong = (safety.sellPong && unrounded.bidPx && unrounded.bidPx <= safety.sellPong - widthPong);
         }
 
+        console.info(new Date().toISOString().slice(11, -1), 'ARP', '========', unrounded.askSz , "\n");
         return unrounded;
     }
 
