@@ -172,9 +172,6 @@ export class QuotingEngine {
             unrounded.bidSz = null;
             if (params.aggressivePositionRebalancing !== Models.APR.Off) {
               sideAPR = 'Sell';
-            console.info(new Date().toISOString().slice(11, -1), 'ARP ', params.safemode , "\n");
-            console.info(new Date().toISOString().slice(11, -1), 'ARP ', Models.mSafeMode[params.safemode] , "\n");
-            console.info(new Date().toISOString().slice(11, -1), 'ARP ', params.safetyactive, "\n");
             if (!params.sellSizeMax) {
                 unrounded.askSz = Math.min(params.aprMultiplier*sellSize, totalBasePosition - targetBasePosition, latestPosition.baseAmount / 2);
             }
@@ -185,7 +182,6 @@ export class QuotingEngine {
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========SAFE SELL ABANDON SHIP===== ');
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ========WE ARE DUMPING EVERYTHING!===== ');
                 console.info(new Date().toISOString().slice(11, -1), 'ARP', ' ============================= ');
-
             }
         }
       }
@@ -299,6 +295,9 @@ export class QuotingEngine {
                 ? totalBasePosition : _unroundedBidSz;
             unrounded.askSz = Utils.roundDown(Math.max(this._minSize, totalBasePosition), 1e-8);
             unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
+            console.info(new Date().toISOString().slice(11, -1), 'ARP', "askPX: " , unrounded.askPx , "\n");
+            console.info(new Date().toISOString().slice(11, -1), 'ARP', "safety buyPing: " , safety.buyPing , "\n");
+            console.info(new Date().toISOString().slice(11, -1), 'ARP', "widthPong: " ,  widthPong, "\n");
         }
 
 
