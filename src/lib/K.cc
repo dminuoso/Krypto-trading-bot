@@ -59,6 +59,7 @@ using namespace dec;
 #include "qp.h"
 #include "og.h"
 #include "mg.h"
+#include "mg-tater.h"
 #include "pg.h"
 #include "qe.h"
 #include "gw.h"

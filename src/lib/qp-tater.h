@@ -1,3 +1,4 @@
+namespace K {
 class MG : public MG {
 
 
@@ -230,3 +231,4 @@ static void ProfitTest() {
 
 
 };
+}
