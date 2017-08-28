@@ -294,7 +294,7 @@ export class QuotingEngine {
               unrounded.askSz = (!_unroundedBidSz || _unroundedBidSz > totalBasePosition)
                 ? totalBasePosition : _unroundedBidSz;
             if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
-            unrounded.askSz = Utils.roundDown(Math.max(this._minSize, totalBasePosition-.5), 1e-8);
+            unrounded.askSz = Utils.roundDown(Math.max(this._minSize, totalBasePosition-1), 1e-8);
           } else {
             unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-8);
 
