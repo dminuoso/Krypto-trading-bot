@@ -551,7 +551,7 @@ static void calcSafety() {
 static void ProfitTest() {
 }
 
-static void LoadEWMA(period) {
+static void LoadEWMA(int period) {
 
 }
 

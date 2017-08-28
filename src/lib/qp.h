@@ -114,7 +114,7 @@ static void load() {
         qpRepo["safemode"] == (int)mSafeMode::unknown;
         qpRepo["safetyactive"] = false;
         qpRepo["asptriggered"] = false;
-        k["safetimestart"] = 0;
+        qpRepo["safetimestart"] = 0;
         clean();
 };
 static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
