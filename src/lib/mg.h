@@ -387,7 +387,7 @@ static void calcSafety() {
                 cout << "SAFETY! Safe Mode unknown!! " << "\n";
         }
         cout << "SAFETY! " << qpRepo["safemode"].get<signed int>() << "\n";
-        if(mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
+        if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
                 cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
                 cout << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
@@ -445,7 +445,7 @@ static void calcSafety() {
 
         }
         // check for safety time is over
-        if(mgWSMA33.size() > qpRepo["safetytime"].get<int>() ) {
+        if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>() ) {
                 cout << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
 
                 if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)      // Check to make sure we ae currently in active safety state and safety box in UI is active
