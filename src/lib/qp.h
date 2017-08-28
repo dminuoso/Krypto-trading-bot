@@ -110,6 +110,10 @@ static void load() {
         if (qp.size())
                 for (json::iterator it = qp["/0"_json_pointer].begin(); it != qp["/0"_json_pointer].end(); ++it)
                         qpRepo[it.key()] = it.value();
+
+        qpRepo["safemode"] == (int)mSafeMode::unknown;
+        qpRepo["safetyactive"] = false;
+        qpRepo["asptriggered"] = false;
         clean();
 };
 static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
@@ -136,6 +140,10 @@ static json onHand(json k) {
             ) {
                 if ((mQuotingMode)k["mode"].get<int>() == mQuotingMode::Depth)
                         k["widthPercentage"] = false;
+
+                k["safemode"] == (int)mSafeMode::unknown;
+                k["safetyactive"] = false;
+                k["asptriggered"] = false;
                 qpRepo = k;
                 clean();
                 DB::insert(uiTXT::QuotingParametersChange, k);
