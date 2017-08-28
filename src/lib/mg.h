@@ -170,7 +170,7 @@ static void ewmaUp() {
         //calcSafety();
         calcTargetPos();
         calcASP();
-        //calcSafety();
+        calcSafety();
         EV::evUp("PositionBroker");
         UI::uiSend(uiTXT::EWMAChart, {
                                 {"stdevWidth", {
