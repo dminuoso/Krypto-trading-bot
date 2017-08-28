@@ -166,8 +166,8 @@ static void ewmaUp() {
         calcEwma(&mgEwmaL, qpRepo["longEwmaPeriods"].get<int>());
         calcEwma(&mgEwmaM, qpRepo["mediumEwmaPeriods"].get<int>());
         calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>());
-        calcASP();
-        calcSafety();
+        //calcASP();
+        //calcSafety();
         calcTargetPos();
         EV::evUp("PositionBroker");
         UI::uiSend(uiTXT::EWMAChart, {
