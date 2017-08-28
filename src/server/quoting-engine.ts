@@ -293,7 +293,12 @@ export class QuotingEngine {
             if (unrounded.askSz > totalBasePosition)
               unrounded.askSz = (!_unroundedBidSz || _unroundedBidSz > totalBasePosition)
                 ? totalBasePosition : _unroundedBidSz;
+            if (!params.sellSizeMax && params.safetyactive && params.safemode == Models.mSafeMode.sell ) {
             unrounded.askSz = Utils.roundDown(Math.max(this._minSize, totalBasePosition), 1e-8);
+          } else {
+            unrounded.askSz = Utils.roundDown(Math.max(this._minSize, unrounded.askSz), 1e-8);
+
+          }
             unrounded.isAskPong = (safety.buyPing && unrounded.askPx && unrounded.askPx >= safety.buyPing + widthPong);
             console.info(new Date().toISOString().slice(11, -1), 'ARP', "askPX: " , unrounded.askPx , "\n");
             console.info(new Date().toISOString().slice(11, -1), 'ARP', "safety buyPing: " , safety.buyPing , "\n");
