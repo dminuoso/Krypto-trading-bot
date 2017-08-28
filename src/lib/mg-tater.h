@@ -1,5 +1,5 @@
 namespace K {
-class MG : public MG {
+class MGtater : public MG {
 
 
 static void calcASP() {
