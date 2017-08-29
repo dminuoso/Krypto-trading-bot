@@ -287,7 +287,7 @@ namespace K {
           rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize, rawQuote["askSz"].get<double>()), 1e-8);
           rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
           if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
-            rawQuote["askSz"] = FN::roundDown(totalBasePosition * .3, 1e-8);
+            rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition.get<double>() * .3), 1e-8);
             rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
             cout << "SAFETY: Safety Sell Active & APR Adjusting askSZ to : " << rawQuote["askSz"] << " APR Active and Safety Sell Active\n";
           }
