@@ -53,6 +53,7 @@ All currency pairs are supported, otherwise please open a [new issue](https://gi
   - [Web UI](#web-ui)
   - [Databases](#databases)
   - [Charts](#charts)
+  - [Cloud Hosting](#cloud-hosting)
 - Development
   - [Test units and Build notes](#test-units-and-build-notes)
   - [Unreleased Changelog](#unreleased-changelog)
@@ -198,6 +199,10 @@ The metrics are not saved anywhere, is just UI data collected with a visibility 
  * Total amount available and held at both sides in BTC currency
  * Total amount available and held at both sides in Fiat currency
 
+### Cloud Hosting
+
+If you ask me, [<img height="20px" src="https://user-images.githubusercontent.com/1634027/29756933-3e64c62e-8ba8-11e7-916a-3b0ae1481a52.png">](https://www.dreamhost.com/r.cgi?475987/cloud/) is a very nice web hosting company (awesome support team, awesome servers). Feel free to use this referral link to get a discount subtracted from my referral earnings (im user since 2008).
+
 ### Test units and Build notes
 
 Feel free to run `make test` anytime.
@@ -312,7 +317,7 @@ What exchange you don't want to be deleted from the bot?
 
 ### like yesterday, since 0day and ∞
 
-[![bcn](https://user-images.githubusercontent.com/1634027/29495722-1d924018-85c5-11e7-8d61-d83f5716ae9e.jpg)](https://en.wikipedia.org/wiki/2017_Barcelona_attack#/media/File:Barcelona_La_Rambla_-_2011-04-23_05_-_JTCurses.jpg)
+![bcn](https://user-images.githubusercontent.com/1634027/29495722-1d924018-85c5-11e7-8d61-d83f5716ae9e.jpg)
 
 ### every new day we sing:
 

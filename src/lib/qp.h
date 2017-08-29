@@ -116,8 +116,9 @@ static void load() {
         qpRepo["asptriggered"] = false;
         qpRepo["safetimestart"] = 0;
         clean();
-};
-static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
+        cout << FN::uiT() << "DB loaded Quoting Parameters " << (qp.size() ? "OK" : "OR reading defaults instead") << "." << endl;
+      };
+      static void _qpRepo(const FunctionCallbackInfo<Value> &args) {
         Isolate* isolate = args.GetIsolate();
         HandleScope scope(isolate);
         Local<Object> o = Object::New(isolate);

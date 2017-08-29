@@ -4,7 +4,6 @@
 namespace K {
   json pgPos;
   json pgSafety;
-  uv_timer_t pgStats_;
   map<double, json> pgBuys;
   map<double, json> pgSells;
   map<int, json> pgWallet;
@@ -16,15 +15,6 @@ namespace K {
     public:
       static void main(Local<Object> exports) {
         load();
-        thread([&]() {
-          if (uv_timer_init(uv_default_loop(), &pgStats_)) { cout << FN::uiT() << "Errrror: GW pgStats_ init timer failed." << endl; exit(1); }
-          if (uv_timer_start(&pgStats_, [](uv_timer_t *handle) {
-            if (mgFairValue) {
-              MG::calc();
-              calc();
-            } else cout << FN::uiT() << "Unable to calculate stats, missing fair value." << endl;
-          }, 0, 1000)) { cout << FN::uiT() << "Errrror: GW pgStats_ start timer failed." << endl; exit(1); }
-        }).detach();
         EV::evOn("PositionGateway", [](json k) {
           posUp(k);
         });
@@ -48,33 +38,6 @@ namespace K {
         UI::uiSnap(uiTXT::Position, &onSnapPos);
         UI::uiSnap(uiTXT::TradeSafetyValue, &onSnapSafety);
         UI::uiSnap(uiTXT::TargetBasePosition, &onSnapTargetBasePos);
-        NODE_SET_METHOD(exports, "pgRepo", PG::_pgRepo);
-        NODE_SET_METHOD(exports, "pgSideAPR", PG::_pgSideAPR);
-        NODE_SET_METHOD(exports, "pgSafety", PG::_pgSafety);
-        NODE_SET_METHOD(exports, "pgTargetBasePos", PG::_pgTargetBasePos);
-      };
-    private:
-      static void load() {
-        json k = DB::load(uiTXT::TargetBasePosition);
-        if (k.size()) {
-          if (k["/0/tbp"_json_pointer].is_number())
-            pgTargetBasePos = k["/0/tbp"_json_pointer].get<double>();
-          if (k["/0/sideAPR"_json_pointer].is_string())
-            pgSideAPR = k["/0/sideAPR"_json_pointer].get<string>();
-        }
-        cout << FN::uiT() << "TBP = " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << " loaded from DB." << endl;
-      };
-      static json onSnapPos(json z) {
-        return { pgPos };
-      };
-      static json onSnapSafety(json z) {
-        return { pgSafety };
-      };
-      static json onSnapTargetBasePos(json z) {
-        return {{
-          {"tbp", pgTargetBasePos},
-          {"sideAPR", pgSideAPR}
-        }};
       };
       static void calc() {
         if (pgPos.is_null()) return;
@@ -88,6 +51,29 @@ namespace K {
           EV::evUp("Safety");
           UI::uiSend(uiTXT::TradeSafetyValue, safety, true);
         }
+      };
+    private:
+      static void load() {
+        json k = DB::load(uiTXT::TargetBasePosition);
+        if (k.size()) {
+          if (k["/0/tbp"_json_pointer].is_number())
+            pgTargetBasePos = k["/0/tbp"_json_pointer].get<double>();
+          if (k["/0/sideAPR"_json_pointer].is_string())
+            pgSideAPR = k["/0/sideAPR"_json_pointer].get<string>();
+        }
+        cout << FN::uiT() << "DB loaded TBP = " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << "." << endl;
+      };
+      static json onSnapPos(json z) {
+        return { pgPos };
+      };
+      static json onSnapSafety(json z) {
+        return { pgSafety };
+      };
+      static json onSnapTargetBasePos(json z) {
+        return {{
+          {"tbp", pgTargetBasePos},
+          {"sideAPR", pgSideAPR}
+        }};
       };
       static json calcSafety() {
         double buySize = qpRepo["percentageValues"].get<bool>()
@@ -295,22 +281,6 @@ namespace K {
         UI::uiSend(uiTXT::TargetBasePosition, k, true);
         DB::insert(uiTXT::TargetBasePosition, k);
         cout << FN::uiT() << "TBP " << (int)(pgTargetBasePos / pgPos["value"].get<double>() * 1e+2) << "% = " << setprecision(8) << fixed << pgTargetBasePos << " " << mCurrency[gw->base] << endl;
-      };
-      static void _pgTargetBasePos(const FunctionCallbackInfo<Value>& args) {
-        args.GetReturnValue().Set(Number::New(args.GetIsolate(), pgTargetBasePos));
-      };
-      static void _pgSideAPR(const FunctionCallbackInfo<Value>& args) {
-        pgSideAPR = FN::S8v(args[0]->ToString());
-      };
-      static void _pgRepo(const FunctionCallbackInfo<Value>& args) {
-        Isolate* isolate = args.GetIsolate();
-        JSON Json;
-        args.GetReturnValue().Set(Json.Parse(isolate->GetCurrentContext(), FN::v8S(isolate, pgPos.dump())).ToLocalChecked());
-      };
-      static void _pgSafety(const FunctionCallbackInfo<Value>& args) {
-        Isolate* isolate = args.GetIsolate();
-        JSON Json;
-        args.GetReturnValue().Set(Json.Parse(isolate->GetCurrentContext(), FN::v8S(isolate, pgSafety.dump())).ToLocalChecked());
       };
   };
 }
