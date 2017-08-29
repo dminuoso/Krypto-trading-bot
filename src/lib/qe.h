@@ -145,6 +145,14 @@ namespace K {
         double pDiv = qpRepo["percentageValues"].get<bool>()
           ? qpRepo["positionDivergencePercentage"].get<double>() * pgPos["value"].get<double>() / 100
           : qpRepo["positionDivergence"].get<double>();
+          if (qpRepo["asptriggered"].get<bool>) {
+            pDiv = 0;
+            cout << "PDIV: pDiv set to 0 via ASP Trigger\n";
+          } 
+          if (qpRepo["safetyactive"].get<bool>) {
+              pDiv = 0;
+              cout << "PDIV: pDiv set to 0 via Safety Trigger\n";
+            }
         if (superTradesMultipliers[1] > 1) {
           if (!qpRepo["buySizeMax"].get<bool>()) rawQuote["bidSz"] = fmin(superTradesMultipliers[1]*buySize, (pgPos["quoteAmount"].get<double>() / mgFairValue) / 2);
           if (!qpRepo["sellSizeMax"].get<bool>()) rawQuote["askSz"] = fmin(superTradesMultipliers[1]*sellSize, pgPos["baseAmount"].get<double>() / 2);
