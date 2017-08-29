@@ -178,7 +178,7 @@ namespace K {
             pgSideAPR = "Sell";
             if (!qpRepo["sellSizeMax"].get<bool>()) rawQuote["askSz"] = fmin(qpRepo["aprMultiplier"].get<int>()*sellSize, fmin(totalBasePosition - pgTargetBasePos, pgPos["baseAmount"].get<double>() / 2));
             if (!qpRepo["sellSizeMax"].get<bool>() && qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
-              rawQuote["askSz"] = fmin(totalBasePosition.get<double>()); // setting askSz in safety sell mode to dump stuff
+              rawQuote["askSz"] = fmin(totalBasePosition); // setting askSz in safety sell mode to dump stuff
               cout << "SAFETY: Safety Sell Active & APR Active Set to dump: " << rawQuote["askSz"] << "\n"; // comments because we like to say whats happening
             }
           }
@@ -287,7 +287,7 @@ namespace K {
           rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize, rawQuote["askSz"].get<double>()), 1e-8);
           rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
           if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
-            rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition.get<double>() * .3), 1e-8);
+            rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * .3), 1e-8);
             rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
             cout << "SAFETY: Safety Sell Active & APR Adjusting askSZ to : " << rawQuote["askSz"] << " APR Active and Safety Sell Active\n";
           }
