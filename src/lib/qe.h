@@ -148,7 +148,7 @@ namespace K {
           if (qpRepo["asptriggered"].get<bool>()) {
             pDiv = 0;
             cout << "PDIV: pDiv set to 0 via ASP Trigger\n";
-          } 
+          }
           if (qpRepo["safetyactive"].get<bool>()) {
               pDiv = 0;
               cout << "PDIV: pDiv set to 0 via Safety Trigger\n";
@@ -177,6 +177,10 @@ namespace K {
           if ((mAPR)qpRepo["aggressivePositionRebalancing"].get<int>() != mAPR::Off) {
             pgSideAPR = "Sell";
             if (!qpRepo["sellSizeMax"].get<bool>()) rawQuote["askSz"] = fmin(qpRepo["aprMultiplier"].get<int>()*sellSize, fmin(totalBasePosition - pgTargetBasePos, pgPos["baseAmount"].get<double>() / 2));
+            if (!qpRepo["sellSizeMax"].get<bool>() && qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
+              rawQuote["askSz"] = fmin(totalBasePosition); // setting askSz in safety sell mode to dump stuff
+              cout << "SAFETY: Safety Sell Active & APR Active Set to dump: " << rawQuote["askSz"] << "\n"; // comments because we like to say whats happening
+            }
           }
         }
         if ((mSTDEV)qpRepo["quotingStdevProtection"].get<int>() != mSTDEV::Off and mgStdevFV) {
@@ -282,6 +286,11 @@ namespace K {
               ? totalBasePosition : _rawBidSz;
           rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize, rawQuote["askSz"].get<double>()), 1e-8);
           rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
+          if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
+            rawQuote["askSz"] = FN::roundDown(totalBasePosition * .3, 1e-8);
+            rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
+            cout << "SAFETY: Safety Sell Active & APR Adjusting askSZ to : " << rawQuote["askSz"] << " APR Active and Safety Sell Active\n";
+          }
         } else rawQuote["isAskPong"] = false;
         if (rawQuote["bidSz"].get<double>()) {
           if (rawQuote["bidSz"].get<double>() > totalQuotePosition)
