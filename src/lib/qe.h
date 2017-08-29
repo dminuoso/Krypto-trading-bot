@@ -145,11 +145,11 @@ namespace K {
         double pDiv = qpRepo["percentageValues"].get<bool>()
           ? qpRepo["positionDivergencePercentage"].get<double>() * pgPos["value"].get<double>() / 100
           : qpRepo["positionDivergence"].get<double>();
-          if (qpRepo["asptriggered"].get<bool>) {
+          if (qpRepo["asptriggered"].get<bool>()) {
             pDiv = 0;
             cout << "PDIV: pDiv set to 0 via ASP Trigger\n";
           } 
-          if (qpRepo["safetyactive"].get<bool>) {
+          if (qpRepo["safetyactive"].get<bool>()) {
               pDiv = 0;
               cout << "PDIV: pDiv set to 0 via Safety Trigger\n";
             }
