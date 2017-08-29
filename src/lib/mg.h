@@ -52,47 +52,50 @@ static void main(Local<Object> exports) {
         UI::uiSnap(uiTXT::MarketTrade, &onSnapTrade);
         UI::uiSnap(uiTXT::FairValue, &onSnapFair);
         UI::uiSnap(uiTXT::EWMAChart, &onSnapEwma);
-        NODE_SET_METHOD(exports, "mgFilter", MG::_mgFilter);
-        NODE_SET_METHOD(exports, "mgFairV", MG::_mgFairV);
-        NODE_SET_METHOD(exports, "mgEwmaProtection", MG::_mgEwmaProtection);
-        NODE_SET_METHOD(exports, "mgStdevProtection", MG::_mgStdevProtection);
-};
-static void calc() {
+      };
+      static void calc() {
         if (++mgT == 60) {
                 mgT = 0;
                 ewmaPUp();
                 ewmaUp();
         }
         stdevPUp();
-};
-private:
-static void load() {
-        json k = DB::load(uiTXT::EWMAChart);
+      };
+      static bool empty() {
+        return (mGWmktFilter.is_null()
+          or mGWmktFilter["bids"].is_null()
+          or mGWmktFilter["asks"].is_null()
+        );
+      };
+    private:
+      static void load() {
+        json k = DB::load(uiTXT::MarketData);
         if (k.size()) {
-                if (k["/0/ewmaLong"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["longEwmaPeriods"].get<int>()>FN::T()))
-                        mgEwmaL = k["/0/ewmaLong"_json_pointer].get<double>();
-                if (k["/0/ewmaMedium"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["mediumEwmaPeriods"].get<int>()>FN::T()))
-                        mgEwmaM = k["/0/ewmaMedium"_json_pointer].get<double>();
-                if (k["/0/ewmaShort"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["shortEwmaPeriods"].get<int>()>FN::T()))
-                        mgEwmaS = k["/0/ewmaShort"_json_pointer].get<double>();
+          for (json::iterator it = k.begin(); it != k.end(); ++it) {
+            if ((*it)["time"].is_number() and (*it)["time"].get<unsigned long>()+qpRepo["quotingStdevProtectionPeriods"].get<int>()*1e+3<FN::T()) continue;
+            mgStatFV.push_back((*it)["fv"].get<double>());
+            mgStatBid.push_back((*it)["bid"].get<double>());
+            mgStatAsk.push_back((*it)["ask"].get<double>());
+            mgStatTop.push_back((*it)["bid"].get<double>());
+            mgStatTop.push_back((*it)["ask"].get<double>());
+          }
+          calcStdev();
         }
-        mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
-        mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
-        mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
-        k = DB::load(uiTXT::MarketData);
+        cout << FN::uiT() << "DB loaded " << mgStatFV.size() << " STDEV Periods." << endl;
+        k = DB::load(uiTXT::EWMAChart);
         if (k.size()) {
-                for (json::iterator it = k.begin(); it != k.end(); ++it) {
-                        if ((*it)["time"].is_number() and (*it)["time"].get<unsigned long>()+qpRepo["shortEwmaPeriods"].get<int>()<FN::T()) continue;
-                        mgStatFV.push_back((*it)["fv"].get<double>());
-                        mgStatBid.push_back((*it)["bid"].get<double>());
-                        mgStatAsk.push_back((*it)["ask"].get<double>());
-                        mgStatTop.push_back((*it)["bid"].get<double>());
-                        mgStatTop.push_back((*it)["ask"].get<double>());
-                }
-                calcStdev();
+          if (k["/0/ewmaLong"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["longEwmaPeriods"].get<int>()*6e+4>FN::T()))
+            mgEwmaL = k["/0/ewmaLong"_json_pointer].get<double>();
+          if (k["/0/ewmaMedium"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["mediumEwmaPeriods"].get<int>()*6e+4>FN::T()))
+            mgEwmaM = k["/0/ewmaMedium"_json_pointer].get<double>();
+          if (k["/0/ewmaShort"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["shortEwmaPeriods"].get<int>()*6e+4>FN::T()))
+            mgEwmaS = k["/0/ewmaShort"_json_pointer].get<double>();
         }
-};
-static json onSnapTrade(json z) {
+        cout << FN::uiT() << "DB loaded EWMA Long = " << mgEwmaL << "." << endl;
+        cout << FN::uiT() << "DB loaded EWMA Medium = " << mgEwmaM << "." << endl;
+        cout << FN::uiT() << "DB loaded EWMA Short = " << mgEwmaS << "." << endl;
+      };
+      static json onSnapTrade(json z) {
         json k;
         for (unsigned i=0; i<mGWmt_.size(); ++i)
                 k.push_back(tradeUp(mGWmt_[i]));
@@ -129,13 +132,14 @@ static void stdevPUp() {
         mgStatTop.push_back(mGWmktFilter["/asks/0/price"_json_pointer].get<double>());
         calcStdev();
         DB::insert(uiTXT::MarketData, {
-                                {"fv", mgFairValue},
-                                {"bid", mGWmktFilter["/bids/0/price"_json_pointer].get<double>()},
-                                {"ask", mGWmktFilter["/bids/0/price"_json_pointer].get<double>()},
-                                {"time", FN::T()},
-                        }, false, "NULL", FN::T() - 1000 * qpRepo["quotingStdevProtectionPeriods"].get<int>());
-};
-static void tradeUp(json k) {
+          {"fv", mgFairValue},
+          {"bid", mGWmktFilter["/bids/0/price"_json_pointer].get<double>()},
+          {"ask", mGWmktFilter["/bids/0/price"_json_pointer].get<double>()},
+          {"time", FN::T()},
+        }, false, "NULL", FN::T() - 1e+3 * qpRepo["quotingStdevProtectionPeriods"].get<int>());
+      };
+      static void tradeUp(json k) {
+
         mGWmt t(
                 gw->exchange,
                 gw->base,
@@ -203,14 +207,8 @@ static void ewmaUp() {
 static void ewmaPUp() {
         calcEwma(&mgEwmaP, qpRepo["quotingEwmaProtectionPeriods"].get<int>());
         EV::evUp("EWMAProtectionCalculator");
-};
-static bool empty() {
-        return (mGWmktFilter.is_null()
-                or mGWmktFilter["bids"].is_null()
-                or mGWmktFilter["asks"].is_null()
-                );
-};
-static void filter() {
+      };
+      static void filter() {
         mGWmktFilter = mGWmkt;
         if (empty()) return;
         for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it)
@@ -219,17 +217,16 @@ static void filter() {
                 fairV();
                 EV::evUp("FilteredMarket");
         }
-};
-static void filter(string k, json o) {
-        for (json::iterator it = mGWmktFilter[k].begin(); it != mGWmktFilter[k].end(); )
-                if (abs((*it)["price"].get<double>() - o["price"].get<double>()) < gw->minTick) {
-                        (*it)["size"] = (*it)["size"].get<double>() - o["quantity"].get<double>();
-                        if ((*it)["size"].get<double>() < gw->minTick) mGWmktFilter[k].erase(it);
-                        break;
-                } else ++it;
-};
-static void fairV() {
-        // if (mGWmktFilter.is_null() or mGWmktFilter["/bids/0"_json_pointer].is_null() or mGWmktFilter["/asks/0"_json_pointer].is_null()) return;
+      };
+      static void filter(string k, json o) {
+        for (json::iterator it = mGWmktFilter[k].begin(); it != mGWmktFilter[k].end();)
+          if (abs((*it)["price"].get<double>() - o["price"].get<double>()) < gw->minTick) {
+            (*it)["size"] = (*it)["size"].get<double>() - o["quantity"].get<double>();
+            if ((*it)["size"].get<double>() < gw->minTick) mGWmktFilter[k].erase(it);
+            break;
+          } else ++it;
+      };
+      static void fairV() {
         if (empty()) return;
         double mgFairValue_ = mgFairValue;
         mgFairValue = FN::roundNearest(
@@ -297,309 +294,279 @@ static void calcTargetPos() {
         if (newTargetPosition > 1) newTargetPosition = 1;
         else if (newTargetPosition < -1) newTargetPosition = -1;
         mgTargetPos = newTargetPosition;
-};
-static void _mgEwmaProtection(const FunctionCallbackInfo<Value>& args) {
-        args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgEwmaP));
-};
-static void _mgStdevProtection(const FunctionCallbackInfo<Value>& args) {
-        Isolate* isolate = args.GetIsolate();
-        HandleScope scope(isolate);
-        Local<Object> o = Object::New(isolate);
-        o->Set(FN::v8S("fv"), Number::New(isolate, mgStdevFV));
-        o->Set(FN::v8S("fvMean"), Number::New(isolate, mgStdevFVMean));
-        o->Set(FN::v8S("tops"), Number::New(isolate, mgStdevTop));
-        o->Set(FN::v8S("topsMean"), Number::New(isolate, mgStdevTopMean));
-        o->Set(FN::v8S("bid"), Number::New(isolate, mgStdevBid));
-        o->Set(FN::v8S("bidMean"), Number::New(isolate, mgStdevBidMean));
-        o->Set(FN::v8S("ask"), Number::New(isolate, mgStdevAsk));
-        o->Set(FN::v8S("askMean"), Number::New(isolate, mgStdevAskMean));
-        args.GetReturnValue().Set(o);
-};
-static void _mgFilter(const FunctionCallbackInfo<Value>& args) {
-        Isolate* isolate = args.GetIsolate();
-        JSON Json;
-        args.GetReturnValue().Set(Json.Parse(isolate->GetCurrentContext(), FN::v8S(isolate, mGWmktFilter.dump())).ToLocalChecked());
-};
-static void _mgFairV(const FunctionCallbackInfo<Value>& args) {
-        args.GetReturnValue().Set(Number::New(args.GetIsolate(), mgFairValue));
-};
+      };
+  };
+
+  static void calcASP() {
+          qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100);
+          cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
+          cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
+          cout <<  "ASP Evaluation: fairV: " << mgFairValue << "\n";
+          cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
+          cout << "Current Short: " << mgEwmaS << "\n";
+          cout << "Current Long: " << mgEwmaL << "\n";
+          if (
+                  (
+                          (
+                                  (
+                                          mgEwmaS < mgSMA3G
+                                  )
+                                  and
+                                  (
+                                          (
+                                                  qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>()
+                                          )
+                                  )
+                          )
+                          ||
+                          (
+                                  (
+                                          qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()
+                                  )
+                          )
+                  )
+                  && qpRepo["aspactive"].get<bool>() == true
+                  ) {
+                  //  cout << "ASP high?: " << qpRepo["aspvalue"].get<double>() " >= " << qpRepo["asp_high"].get<double>() << " or asp low?: " << qpRepo["aspvalue"].get<double>() << "<= " << qpRepo["asp_low"].get<double>()) << "\n";
+                  if ( qpRepo["asptriggered"].get<bool>() == false)
+                  {
+                          qpRepo["asptriggered"] = true;
+                          cout << "ASP has been activated! pDiv should be set to Zero!\n";
+                  }
+                  cout << "ASP Active! pDiv should be set to Zero!\n";
+          } else {
+                  if(qpRepo["aspactive"].get<bool>() == true && qpRepo["asptriggered"].get<bool>() == true)
+                  {
+                          qpRepo["asptriggered"] = false;
+                          cout << "ASP Deactivated" << "\n";
+                  }
+          }
 
 
-static void calcASP() {
-        qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100);
-        cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
-        cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
-        cout <<  "ASP Evaluation: fairV: " << mgFairValue << "\n";
-        cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
-        cout << "Current Short: " << mgEwmaS << "\n";
-        cout << "Current Long: " << mgEwmaL << "\n";
-        if (
-                (
-                        (
-                                (
-                                        mgEwmaS > mgSMA3G
-                                )
-                                and
-                                (
-                                        (
-                                                qpRepo["aspvalue"].get<double>() >= qpRepo["asp_high"].get<double>()
-                                        )
-                                )
-                        )
-                        ||
-                        (
-                                (
-                                        qpRepo["aspvalue"].get<double>() <= qpRepo["asp_low"].get<double>()
-                                )
-                        )
-                )
-                && qpRepo["aspactive"].get<bool>() == true
-                ) {
-                //  cout << "ASP high?: " << qpRepo["aspvalue"].get<double>() " >= " << qpRepo["asp_high"].get<double>() << " or asp low?: " << qpRepo["aspvalue"].get<double>() << "<= " << qpRepo["asp_low"].get<double>()) << "\n";
-                if ( qpRepo["asptriggered"].get<bool>() == false)
-                {
-                        qpRepo["asptriggered"] = true;
-                        cout << "ASP has been activated! pDiv should be set to Zero!\n";
-                }
-                cout << "ASP Active! pDiv should be set to Zero!\n";
-        } else {
-                if(qpRepo["aspactive"].get<bool>() == true && qpRepo["asptriggered"].get<bool>() == true)
-                {
-                        qpRepo["asptriggered"] = false;
-                        cout << "ASP Deactivated" << "\n";
-                }
-        }
+  }
+  static void calcSafety() {
+          //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
+          if (qpRepo["safetynet"].get<bool>() == false) {
+                  qpRepo["safemode"]  = (int)mSafeMode::unknown;
+                  qpRepo["safetyactive"] = false;
 
+                  return;
+          }
+          mgMATIME.push_back(std::time(nullptr));
+          if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
+          // lets make a SMA logging average
+          mgWSMA33.push_back(mgSMA3.back());
+          if (mgWSMA33.size()>100) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
+          // Safety time Active Start Checking
+          cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
+          cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
+          if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
+                  cout << "SAFETY! Safe Mode Selling! " << "\n";
+          }
+          if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy) {
+                  cout << "SAFETY! Safe Mode Buying! " << "\n";
+          }
+          if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown) {
+                  cout << "SAFETY! Safe Mode unknown!! " << "\n";
+          }
+          cout << "SAFETY! " << qpRepo["safemode"].get<signed int>() << "\n";
+          if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
+                  cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
+                  cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                  cout << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                  cout << "index now - dec Difference: " << difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr)) << "\n";
+                  if (
+                          (
+                                  (
+                                          (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
+                                  ) >  (qpRepo["safetyP"].get<double>()/100)
+                          )
+                          &&  qpRepo["safetyactive"].get<bool>() == false         // make sure we are not already in a safety active state
+                          &&  qpRepo["safetynet"].get<bool>() == true         // make sure safey checkbox is active on UI
+                          &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+                          )
+                  {
+                          //  printf("debug12\n");
+                          // activate Safety, Safety buySize
+                          double SafeBuyValuation =   (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
+                          qpRepo["safemode"] = (int)mSafeMode::buy;
+                          cout << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::buy << "\n";
+                          qpRepo["safetyactive"] = true;
+                          qpRepo["safetimestart"] = std::time(nullptr);
+                          qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
+                          cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << (qpRepo["safetyP"].get<double>()/100) << "\n";
+                          cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
+                  }
 
-}
-static void calcSafety() {
-        //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
-        if (qpRepo["safetynet"].get<bool>() == false) {
-                qpRepo["safemode"]  = (int)mSafeMode::unknown;
-                qpRepo["safetyactive"] = false;
+                  if (     (
+                                   (
+                                           (
+                                                   mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
+                                   )
+                                   <
+                                   -1 * (qpRepo["safetyP"].get<double>()/100)
+                                   )
+                           &&   qpRepo["safetyactive"].get<bool>() == false        // make sure we are not already in a safety active state
+                           &&   qpRepo["safetynet"].get<bool>() == true        // make sure safey checkbox is active on UI
+                           &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::buy || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+                           )
+                  {
+                          double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
+                          qpRepo["safemode"] = (int)mSafeMode::sell;
+                          cout << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::sell << "\n";
+                          qpRepo["safetyactive"] = true;
+                          qpRepo["safetimestart"] = std::time(nullptr);
+                          qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
+                          cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -1 * (qpRepo["safetyP"].get<double>()/100) << "\n";
+                          cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
+                  }
+          }
+          if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
+          {
+                  if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
+                          cout << "SAFETY! Safe Mode Selling! " << "\n";
+                  }
+                  if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy) {
+                          cout << "SAFETY! Safe Mode Buying! " << "\n";
+                  }
+                  if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown) {
+                          cout << "SAFETY! Safe Mode unknown!! " << "\n";
+                  }
+                  cout << "SAFETY! " << " pDiv should now be set to ZERO.\n";
+                  cout << "SAFETY! " << qpRepo["safemode"].get<int>() << "\n";
 
-                return;
-        }
-        mgMATIME.push_back(std::time(nullptr));
-        if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
-        // lets make a SMA logging average
-        mgWSMA33.push_back(mgSMA3.back());
-        if (mgWSMA33.size()>100) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
-        // Safety time Active Start Checking
-        cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
-        cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
-        if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
-                cout << "SAFETY! Safe Mode Selling! " << "\n";
-        }
-        if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy) {
-                cout << "SAFETY! Safe Mode Buying! " << "\n";
-        }
-        if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown) {
-                cout << "SAFETY! Safe Mode unknown!! " << "\n";
-        }
-        cout << "SAFETY! " << qpRepo["safemode"].get<signed int>() << "\n";
-        if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
-                cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
-                cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                cout << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                cout << "index now - dec Difference: " << difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr)) << "\n";
-                if (
-                        (
-                                (
-                                        (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
-                                ) >  (qpRepo["safetyP"].get<double>()/100)
-                        )
-                        &&  qpRepo["safetyactive"].get<bool>() == false         // make sure we are not already in a safety active state
-                        &&  qpRepo["safetynet"].get<bool>() == true         // make sure safey checkbox is active on UI
-                        &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
-                        )
-                {
-                        //  printf("debug12\n");
-                        // activate Safety, Safety buySize
-                        double SafeBuyValuation =   (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
-                        qpRepo["safemode"] = (int)mSafeMode::buy;
-                        cout << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::buy << "\n";
-                        qpRepo["safetyactive"] = true;
-                        qpRepo["safetimestart"] = std::time(nullptr);
-                        qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << (qpRepo["safetyP"].get<double>()/100) << "\n";
-                        cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
-                }
+          }
+          // check for safety time is over
+          if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>() ) {
+                  cout << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
 
-                if (     (
-                                 (
-                                         (
-                                                 mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
-                                 )
-                                 <
-                                 -1 * (qpRepo["safetyP"].get<double>()/100)
-                                 )
-                         &&   qpRepo["safetyactive"].get<bool>() == false        // make sure we are not already in a safety active state
-                         &&   qpRepo["safetynet"].get<bool>() == true        // make sure safey checkbox is active on UI
-                         &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::buy || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
-                         )
-                {
-                        double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) - 100);
-                        qpRepo["safemode"] = (int)mSafeMode::sell;
-                        cout << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::sell << "\n";
-                        qpRepo["safetyactive"] = true;
-                        qpRepo["safetimestart"] = std::time(nullptr);
-                        qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -1 * (qpRepo["safetyP"].get<double>()/100) << "\n";
-                        cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
-                }
-        }
-        if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
-        {
-                if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
-                        cout << "SAFETY! Safe Mode Selling! " << "\n";
-                }
-                if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy) {
-                        cout << "SAFETY! Safe Mode Buying! " << "\n";
-                }
-                if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown) {
-                        cout << "SAFETY! Safe Mode unknown!! " << "\n";
-                }
-                cout << "SAFETY! " << " pDiv should now be set to ZERO.\n";
-                cout << "SAFETY! " << qpRepo["safemode"].get<int>() << "\n";
+                  if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)        // Check to make sure we ae currently in active safety state and safety box in UI is active
+                  {
 
-        }
-        // check for safety time is over
-        if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>() ) {
-                cout << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
+                          cout << "is Timer Over?:" << "\n";
+                          cout << "Current Value: " << mgWSMA33.back() << "\n";
+                          cout << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                          cout << "time back at time index: " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                          cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
+                          cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
+                          cout << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
 
-                if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)        // Check to make sure we ae currently in active safety state and safety box in UI is active
-                {
+                          if(
+                                  (
+                                          mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
+                                  )
+                                  and
+                                  (
+                                          (
+                                                  difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
+                                                  //  difftime(mgMATIME.back(),(mgMATIME.at(mgMATIME.size() - qpRepo["safetimestart"].get<int>())))
+                                          )
+                                          <
+                                          (
+                                                  (qpRepo["safetyduration"].get<double>() * 60)
+                                          )
+                                  )
+                                  and
+                                  (
+                                          (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy
+                                  )
+                                  )
+                          {
+                                  cout << "Breaking Safey BUY Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))  << "\n";
+                                  cout << "Breaking Safey BUY Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was less than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                                  qpRepo["safemode"] = (int)mSafeMode::unknown;
+                                  qpRepo["safetyactive"] = false;
+                                  cout << "exiting safety mode buy\n";
 
-                        cout << "is Timer Over?:" << "\n";
-                        cout << "Current Value: " << mgWSMA33.back() << "\n";
-                        cout << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                        cout << "time back at time index: " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                        cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
-                        cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
-                        cout << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
+                          }
+                          //  printf("debugzz\n");
+                          //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
+                          //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
+                          if(
+                                  (
+                                          mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
+                                  )
+                                  and
+                                  (
+                                          (
+                                                  difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
+                                          )
+                                          <
+                                          (
+                                                  (qpRepo["safetyduration"].get<double>() * 60)
+                                          )
+                                  )
+                                  and
+                                  (
+                                          (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell
+                                  )
+                                  )
+                          {
+                                  cout << "Breaking Safey SELL Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
+                                  cout << "Breaking Safey SELL Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was Greater than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                                  qpRepo["safemode"] = (int)mSafeMode::unknown;
+                                  qpRepo["safetyactive"] = false;
+                                  cout << "Exiting safety mode sell\n";
+                          }
+                  }
+          }
+          // Set newTargetPosition
 
-                        if(
-                                (
-                                        mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
-                                )
-                                and
-                                (
-                                        (
-                                                difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
-                                                //  difftime(mgMATIME.back(),(mgMATIME.at(mgMATIME.size() - qpRepo["safetimestart"].get<int>())))
-                                        )
-                                        <
-                                        (
-                                                (qpRepo["safetyduration"].get<double>() * 60)
-                                        )
-                                )
-                                and
-                                (
-                                        (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy
-                                )
-                                )
-                        {
-                                cout << "Breaking Safey BUY Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))  << "\n";
-                                cout << "Breaking Safey BUY Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was less than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                                qpRepo["safemode"] = (int)mSafeMode::unknown;
-                                qpRepo["safetyactive"] = false;
-                                cout << "exiting safety mode buy\n";
-
-                        }
-                        //  printf("debugzz\n");
-                        //  double spacer = mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<double>()).get<double>();
-                        //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
-                        if(
-                                (
-                                        mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
-                                )
-                                and
-                                (
-                                        (
-                                                difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
-                                        )
-                                        <
-                                        (
-                                                (qpRepo["safetyduration"].get<double>() * 60)
-                                        )
-                                )
-                                and
-                                (
-                                        (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell
-                                )
-                                )
-                        {
-                                cout << "Breaking Safey SELL Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60000) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
-                                cout << "Breaking Safey SELL Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was Greater than " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                                qpRepo["safemode"] = (int)mSafeMode::unknown;
-                                qpRepo["safetyactive"] = false;
-                                cout << "Exiting safety mode sell\n";
-                        }
-                }
-        }
-        // Set newTargetPosition
-
-        if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
-        {
-                mgTargetPos = 1;
-                cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety buy Action\n";
-        } else if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell )
-        {
-                mgTargetPos = -1;
-                cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
-        }
+          if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
+          {
+                  mgTargetPos = 1;
+                  cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety buy Action\n";
+          } else if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell )
+          {
+                  mgTargetPos = -1;
+                  cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
+          }
 
 
 
 
-}
+  }
 
-static double LoadEWMA(int periods) {
-        string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
-        int CurrentTime = std::time(nullptr);
-        int BackTraceStart = CurrentTime - (periods * 60000);
-        std::vector<double> EWMAArray;
-        double myEWMA = 0;
-        double previous = 0;
-        bool first = true;
-        json EWMA = FN::wJet(string(baseurl.append("&after=").append(std::to_string(BackTraceStart) ).append("&before=").append(std::to_string(CurrentTime))));
-        for (auto it = EWMA["result"]["60"].begin(); it != EWMA["result"]["60"].end(); ++it)
-        {
+  static double LoadEWMA(int periods) {
+          string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
+          int CurrentTime = std::time(nullptr);
+          int BackTraceStart = CurrentTime - (periods * 60000);
+          std::vector<double> EWMAArray;
+          double myEWMA = 0;
+          double previous = 0;
+          bool first = true;
+          json EWMA = FN::wJet(string(baseurl.append("&after=").append(std::to_string(BackTraceStart) ).append("&before=").append(std::to_string(CurrentTime))));
+          for (auto it = EWMA["result"]["60"].begin(); it != EWMA["result"]["60"].end(); ++it)
+          {
 
-                json EMAArray = it.value();
-                //cout << "time: " << EMAArray[0] << " Value : " << EMAArray[4] << "\n";
-
-
-                myEWMA = MycalcEwma(EMAArray[4].get<double>(), previous,periods);
-                previous = myEWMA;
+                  json EMAArray = it.value();
+                  //cout << "time: " << EMAArray[0] << " Value : " << EMAArray[4] << "\n";
 
 
-        }
-        cout << "period: " << periods << " EWMA is: " << myEWMA << "\n";
-        return myEWMA;
-
-}
-
-static  double  MycalcEwma(double k, double previous, int periods) {
-//        cout << " pre-K: " << k << "\n";
-//        cout << " previous : " << previous << "\n";
-
-        if (k) {
-                double alpha = (double)2 / (periods + 1);
-                //cout << "Alpha: " << alpha << "\n";
-                k = alpha * previous + (1 - alpha) * k;
-                //cout << " post K: " << k << "\n";
-        } else k = previous;
-
-        return k;
-};
+                  myEWMA = MycalcEwma(EMAArray[4].get<double>(), previous,periods);
+                  previous = myEWMA;
 
 
+          }
+          cout << "period: " << periods << " EWMA is: " << myEWMA << "\n";
+          return myEWMA;
 
+  }
 
+  static  double  MycalcEwma(double k, double previous, int periods) {
+  //        cout << " pre-K: " << k << "\n";
+  //        cout << " previous : " << previous << "\n";
 
-};
+          if (k) {
+                  double alpha = (double)2 / (periods + 1);
+                  //cout << "Alpha: " << alpha << "\n";
+                  k = alpha * previous + (1 - alpha) * k;
+                  //cout << " post K: " << k << "\n";
+          } else k = previous;
+
+          return k;
+  };
+
 }
 
 #endif
