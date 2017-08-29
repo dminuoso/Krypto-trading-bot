@@ -76,6 +76,9 @@ static void load() {
                 if (k["/0/ewmaShort"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["shortEwmaPeriods"].get<int>()>FN::T()))
                         mgEwmaS = k["/0/ewmaShort"_json_pointer].get<double>();
         }
+        mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
+        mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
+        mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
         k = DB::load(uiTXT::MarketData);
         if (k.size()) {
                 for (json::iterator it = k.begin(); it != k.end(); ++it) {
@@ -551,8 +554,47 @@ static void calcSafety() {
 
 
 }
-static void ProfitTest() {
+
+static double LoadEWMA(int periods) {
+        string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
+        int CurrentTime = std::time(nullptr);
+        int BackTraceStart = CurrentTime - (periods * 60000);
+        std::vector<double> EWMAArray;
+        double myEWMA = 0;
+        double previous = 0;
+        bool first = true;
+        json EWMA = FN::wJet(string(baseurl.append("&after=").append(std::to_string(BackTraceStart) ).append("&before=").append(std::to_string(CurrentTime))));
+        for (auto it = EWMA["result"]["60"].begin(); it != EWMA["result"]["60"].end(); ++it)
+        {
+
+                json EMAArray = it.value();
+                cout << "time: " << EMAArray[0] << " Value : " << EMAArray[4] << "\n";
+
+
+                myEWMA = MycalcEwma(EMAArray[4].get<double>(), previous,periods);
+                previous = myEWMA;
+
+
+        }
+        cout << "period: " << periods << " EWMA is: " << myEWMA << "\n";
+        return myEWMA;
+
 }
+
+static  double  MycalcEwma(double k, double previous, int periods) {
+//        cout << " pre-K: " << k << "\n";
+//        cout << " previous : " << previous << "\n";
+
+        if (k) {
+                double alpha = (double)2 / (periods + 1);
+                //cout << "Alpha: " << alpha << "\n";
+                k = alpha * previous + (1 - alpha) * k;
+                //cout << " post K: " << k << "\n";
+        } else k = previous;
+
+        return k;
+};
+
 
 
 
