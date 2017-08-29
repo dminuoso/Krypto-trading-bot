@@ -178,7 +178,7 @@ namespace K {
             pgSideAPR = "Sell";
             if (!qpRepo["sellSizeMax"].get<bool>()) rawQuote["askSz"] = fmin(qpRepo["aprMultiplier"].get<int>()*sellSize, fmin(totalBasePosition - pgTargetBasePos, pgPos["baseAmount"].get<double>() / 2));
             if (!qpRepo["sellSizeMax"].get<bool>() && qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
-              rawQuote["askSz"] = fmin(totalBasePosition); // setting askSz in safety sell mode to dump stuff
+              rawQuote["askSz"] = fmin(totalBasePosition.get<double>()); // setting askSz in safety sell mode to dump stuff
               cout << "SAFETY: Safety Sell Active & APR Active Set to dump: " << rawQuote["askSz"] << "\n"; // comments because we like to say whats happening
             }
           }
