@@ -382,7 +382,7 @@ static void calcSafety() {
         mgWSMA33.push_back(mgSMA3G);
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
-        cout << "SAFETY! " << (mSafeMode)qpRepo["safemode"].get<signed int>() << "\n";
+        cout << "SAFETY! " << qpRepo["safemode"].get<signed int>(mSafeMode) << "\n";
         cout << "Safety SMA3 Array size: " << mgWSMA33.size() << "\n";
         if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
 
