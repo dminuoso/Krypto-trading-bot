@@ -409,7 +409,7 @@ static void calcSafety() {
                                 )
                         )
                         &&  !qpRepo["safetyactive"].get<bool>()           // make sure we are not already in a safety active state
-                        &&  qpRepo["safetynet"].get<bool>() == true           // make sure safey checkbox is active on UI
+                        &&  qpRepo["safetynet"].get<bool>()           // make sure safey checkbox is active on UI
 
                         )
                 {
@@ -432,8 +432,8 @@ static void calcSafety() {
                                  <
                                  -1 * (qpRepo["safetyP"].get<double>()/100)
                                  )
-                         &&   qpRepo["safetyactive"].get<bool>() == false          // make sure we are not already in a safety active state
-                         &&   qpRepo["safetynet"].get<bool>() == true          // make sure safey checkbox is active on UI
+                         &&   !qpRepo["safetyactive"].get<bool>()          // make sure we are not already in a safety active state
+                         &&   qpRepo["safetynet"].get<bool>()          // make sure safey checkbox is active on UI
 
                          )
                 {
