@@ -207,14 +207,17 @@ static void ewmaUp() {
         } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
         if(qpRepo["take_profit_active"].get<bool>() && ( qpRepo["ewmaProfit"].get<int>() != qpRepo["OldewmaProfit"].get<int>() ) ) {
                 mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
-        } else { calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>()); }
-        if(qpRepo["take_profit_active"].get<bool>() && !qpRepo["take_profit_active_old"].get<bool>() ) {
+                qpRepo["OldewmaProfit"] = qpRepo["ewmaProfit"].get<int>();
+        } else if(qpRepo["take_profit_active"].get<bool>() && !qpRepo["take_profit_active_old"].get<bool>() ) {
                 qpRepo["take_profit_active_old"] = true;
                 mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
-        } else { calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>()); }
-        if(!qpRepo["take_profit_active"].get<bool>() && qpRepo["take_profit_active_old"].get<bool>() ) {
+        } else if(!qpRepo["take_profit_active"].get<bool>() && qpRepo["take_profit_active_old"].get<bool>() ) {
                 qpRepo["take_profit_active_old"] = false;
-        } else { calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>()); }
+        } else if(qpRepo["take_profit_active"].get<bool>() ) {
+                cout << "normally setting ewmaProfit!\n";
+                calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>());
+        }
+
 
 
         //calcASP();
