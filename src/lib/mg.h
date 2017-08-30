@@ -201,7 +201,7 @@ static void ewmaUp() {
           mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
           qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
-        
+
         //calcASP();
         //calcSafety();
         calcTargetPos();
@@ -388,16 +388,8 @@ static void calcSafety() {
         // Safety time Active Start Checking
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
-        if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
-                cout << "SAFETY! Safe Mode Selling! " << "\n";
-        }
-        if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy) {
-                cout << "SAFETY! Safe Mode Buying! " << "\n";
-        }
-        if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown) {
-                cout << "SAFETY! Safe Mode unknown!! " << "\n";
-        }
         cout << "SAFETY! " << qpRepo["safemode"].get<signed int>() << "\n";
+
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
                 cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
@@ -407,7 +399,11 @@ static void calcSafety() {
                         (
                                 (
                                         (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) ) - 100
-                                ) >  (qpRepo["safetyP"].get<double>()/100)
+                                )
+                                >
+                                (
+                                        qpRepo["safetyP"].get<double>()/100
+                                )
                         )
                         &&  qpRepo["safetyactive"].get<bool>() == false           // make sure we are not already in a safety active state
                         &&  qpRepo["safetynet"].get<bool>() == true           // make sure safey checkbox is active on UI
@@ -422,7 +418,7 @@ static void calcSafety() {
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << (qpRepo["safetyP"].get<double>()/100) << "\n";
+                        cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << qpRepo["safetyP"].get<double>()/100 << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
 
