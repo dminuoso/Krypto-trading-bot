@@ -382,7 +382,8 @@ static void calcSafety() {
         mgWSMA33.push_back(mgSMA3G);
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
-        cout << "SAFETY! " << qpRepo["safemode"].get<signed int>() << "\n";
+        cout << "SAFETY! " << (mSafeMode)qpRepo["safemode"].get<signed int>() << "\n";
+        cout << "Safety SMA3 Array size: " << mgWSMA33.size() << "\n";
         if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
 
         if (qpRepo["safetynet"].get<bool>() == false) {
@@ -391,7 +392,7 @@ static void calcSafety() {
                 return;
         }
 
-        
+
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
                 cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
