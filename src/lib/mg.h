@@ -477,23 +477,23 @@ static void calcSafety() {
                         cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
                         cout << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
                         cout << "Duration: " << (qpRepo["safetimeOver"].get<int>() * 60) << "\n";
-
-                        if(
-
-
-
-                                difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
-
-                                >=
-
-                                (qpRepo["safetimeOver"].get<int>() * 60)
-
+                        // exit sell mode
+                        if(     (mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) )
+                                && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell
                                 ){
-                                cout << "Breaking Safey  Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))  << "\n";
-                                cout << "Breaking Safey  Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was less than " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
+                                cout << "SAFETY: Breaking Safety Mode\n";
                                 qpRepo["safemode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
-                                cout << "exiting safety mode buy\n";
+                                cout << "SAFETY: Exit Sell Mode\n";
+
+                        }
+                        if(     (mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) )
+                                && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy
+                                ){
+                                cout << "SAFETY: Breaking Safety Mode\n";
+                                qpRepo["safemode"] = (int)mSafeMode::unknown;
+                                qpRepo["safetyactive"] = false;
+                                cout << "SAFETY: Exit Buy Mode\n";
 
                         }
                         //  printf("debugzz\n");
