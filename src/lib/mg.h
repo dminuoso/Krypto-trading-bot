@@ -536,7 +536,7 @@ static double LoadEWMA(int periods) {
       cout << "Starting EWMA\n";
         string baseurl = "http://34.227.139.87/MarketPublish/";
         string pair =  CF::cfString("TradedPair");
-        pair.erase(std::remove(pair.begin(), pair.end(), '\\'), pair.end());
+        pair.erase(std::remove(pair.begin(), pair.end(), '/'), pair.end());
         cout << "pair: " << pair << "\n";
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
