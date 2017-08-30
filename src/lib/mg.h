@@ -405,7 +405,7 @@ static void calcSafety() {
                 if (     (
                                  (
                                          (
-                                                 mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()/2) ) - 100
+                                                 mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()/2)) ) - 100
                                  )
                                  <
                                  -1 * (qpRepo["safetyP"].get<double>()/100)
@@ -457,7 +457,7 @@ static void calcSafety() {
 
                         if(
                                 (
-                                        mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>())
+                                        mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()/2))
                                 )
                                 and
                                 (
