@@ -219,6 +219,9 @@ static void ewmaUp() {
         } else if(qpRepo["take_profit_active"].get<bool>() ) {
                 cout << "normally setting ewmaProfit!\n";
                 calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>());
+        } else {
+                cout << "ewma last resort?\n";
+                calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>());
         }
 
 
