@@ -536,7 +536,7 @@ static double LoadEWMA(int periods) {
       cout << "Starting EWMA\n";
         string baseurl = "http://34.227.139.87/MarketPublish/";
         string pair =  CF::cfString("TradedPair");
-        pair.erase(std::remove(pair.begin(), pair.end(), '\\'), str.end());
+        pair.erase(std::remove(pair.begin(), pair.end(), '\\'), pair.end());
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
         int BackTraceStart = CurrentTime - (periods * 60000);
