@@ -170,6 +170,9 @@ class DisplayOrder {
                                     <th>Safety Minutes</th>
                                     <th>Safetime timeover (in minutes)</th>
                                     <th>Safety Sell Base Percentage</th>
+                                    <th>Take Profit</th>
+                                    <th>Take Profit Value</th>
+                                    <th>Profit EWMA Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -202,8 +205,20 @@ class DisplayOrder {
                                    onClick="this.select()"
                                    [(ngModel)]="pair.quotingParameters.display.SafetySellTotalPercent">
                             </td>
-                            </tr>
-                        </tbody>SafetySellTotalPercent
+                            <td style="width:25px;border-bottom: 3px solid #8BE296;">
+                                <input type="checkbox"
+                                   [(ngModel)]="pair.quotingParameters.display.take_profit_active">
+                            </td>
+                            <td style="width:25px;border-bottom: 3px solid #8BE296;">
+                                <input type="checkbox"
+                                   [(ngModel)]="pair.quotingParameters.display.take_profic_percent">
+                            </td>
+                            <td style="width:25px;border-bottom: 3px solid #8BE296;">
+                                <input type="checkbox"
+                                   [(ngModel)]="pair.quotingParameters.display.ewmaProfit">
+                            </td>
+                            </tr>ewmaProfit
+                        </tbody>
                     </table>
                                 <table class="table table-responsive table-bordered" style="margin-bottom:0px;">
                                     <thead>

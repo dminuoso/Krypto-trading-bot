@@ -30,6 +30,7 @@ vector<double> mgWSMA33;        // Logging SMA3 values
 vector<double> ArrayEwmaL;   // vector for EwmaL
 vector<double> ArrayEwmaS;   // vector for EwmaS
 vector<double> ArrayEwmaM;  // vector for EwmaM
+double mgEwmaProfit = 0;
 vector<int> mgMATIME;
 double mgSMA3G;   // global SMA3 current value
 class MG {
