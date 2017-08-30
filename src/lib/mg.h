@@ -535,8 +535,9 @@ static double LoadEWMA(int periods) {
       //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
       cout << "Starting EWMA\n";
         string baseurl = "http://34.227.139.87/MarketPublish/";
-        string pair = "ltcusd";
-        string exchange = "bitfinex";
+        string pair =  CF::cfString("TradedPair");
+        pair.erase(std::remove(pair.begin(), pair.end(), '\\'), str.end());
+        string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
         int BackTraceStart = CurrentTime - (periods * 60000);
         std::vector<double> EWMAArray;
