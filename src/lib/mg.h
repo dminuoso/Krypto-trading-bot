@@ -181,27 +181,27 @@ static json tradeUp(mGWmt t) {
 };
 static void ewmaUp() {
         /*
-        mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
-        mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
-        mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
-        qpRepo["_old_longEwmaPeriods"] = qpRepo["longEwmaPeriods"].get<int>(); // setting on start EWMA periods to _old_ place holders incase change during bot active
-        qpRepo["_old_mediumEwmaPeriods"] = qpRepo["mediumEwmaPeriods"].get<int>();
-        qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
-        */
+           mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
+           mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
+           mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
+           qpRepo["_old_longEwmaPeriods"] = qpRepo["longEwmaPeriods"].get<int>(); // setting on start EWMA periods to _old_ place holders incase change during bot active
+           qpRepo["_old_mediumEwmaPeriods"] = qpRepo["mediumEwmaPeriods"].get<int>();
+           qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
+         */
         if(qpRepo["longEwmaPeriods"].get<int>() != qpRepo["_old_longEwmaPeriods"].get<int>() )
         {
-          mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
-          qpRepo["_old_longEwmaPeriods"] = qpRepo["longEwmaPeriods"].get<int>();
+                mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
+                qpRepo["_old_longEwmaPeriods"] = qpRepo["longEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaL, qpRepo["longEwmaPeriods"].get<int>()); }
         if(qpRepo["mediumEwmaPeriods"].get<int>() != qpRepo["_old_mediumEwmaPeriods"].get<int>() )
         {
-          mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
-          qpRepo["_old_mediumEwmaPeriods"] = qpRepo["mediumEwmaPeriods"].get<int>();
+                mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
+                qpRepo["_old_mediumEwmaPeriods"] = qpRepo["mediumEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaM, qpRepo["mediumEwmaPeriods"].get<int>()); }
         if(qpRepo["shortEwmaPeriods"].get<int>() != qpRepo["_old_shortEwmaPeriods"].get<int>() )
         {
-          mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
-          qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
+                mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
+                qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
 
         //calcASP();
@@ -481,13 +481,11 @@ static void calcSafety() {
 
 
 
-                                                difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
+                                difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
 
                                 >=
 
-                                                (qpRepo["safetyduration"].get<double>() * 60)
-
-
+                                (qpRepo["safetyduration"].get<double>() * 60)
 
 
 
@@ -505,16 +503,19 @@ static void calcSafety() {
                         //if( (mGWSMA33.back() > mGWSMA33.at(mGWSMA33.size() - qpRepo["safetytime"].get<int>()) ) && (qpRepo["safetyduration"].get<unsigned long int>() >= (qpRepo["safetimeOver"].get<unsigned long int>() * 60000)))
                         if(
 
-                                (
 
-                                                difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
+
+                                difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))
 
                                 >=
 
-                                                (qpRepo["safetyduration"].get<double>() * 60)
+                                (qpRepo["safetyduration"].get<double>() * 60)
+
+
+
+
 
                                 )
-
                         {
                                 cout << "Breaking Safey SELL Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
                                 cout << "Breaking Safey SELL Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was Greater than " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
@@ -542,8 +543,8 @@ static void calcSafety() {
 }
 
 static double LoadEWMA(int periods) {
-      //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
-      cout << "Starting EWMA\n";
+        //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
+        cout << "Starting EWMA\n";
         string baseurl = "http://34.227.139.87/MarketPublish/";
         string pair =  CF::cfString("TradedPair");
         pair.erase(std::remove(pair.begin(), pair.end(), '/'), pair.end());
