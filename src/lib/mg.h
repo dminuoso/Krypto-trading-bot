@@ -103,6 +103,7 @@ static void load() {
         cout << FN::uiT() << "DB loaded EWMA Long = " << mgEwmaL << "." << endl;
         cout << FN::uiT() << "DB loaded EWMA Medium = " << mgEwmaM << "." << endl;
         cout << FN::uiT() << "DB loaded EWMA Short = " << mgEwmaS << "." << endl;
+        if(qpRepo["take_profit_active"].get<bool>) { mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>()); }
         qpRepo["safemode"]  = (int)mSafeMode::unknown;
 };
 static json onSnapTrade(json z) {
@@ -204,6 +205,9 @@ static void ewmaUp() {
                 mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
                 qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
+        if(qpRepo["take_profit_active"].get<bool> && ( qpRepo["ewmaProfit"].get<int>() != qpRepo["OldewmaProfit"].get<int>() ) ) { 
+                mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
+        } else { calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>()); }
 
         //calcASP();
         //calcSafety();
