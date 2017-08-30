@@ -536,7 +536,7 @@ static double LoadEWMA(int periods) {
       cout << "Starting EWMA\n";
         string baseurl = "http://34.227.139.87/MarketPublish/";
         string pair =  CF::cfString("TradedPair");
-        pair.erase(std::remove(pair.begin(), pair.end(), '\\'), pair.end());
+        string newpair = pair.erase(std::remove(pair.begin(), pair.end(), '\\'), pair.end());
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
         int BackTraceStart = CurrentTime - (periods * 60000);
@@ -544,7 +544,7 @@ static double LoadEWMA(int periods) {
         double myEWMA = 0;
         double previous = 0;
         bool first = true;
-        string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
+        string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(newpair));
         cout << "Full URL: " << fullURL << "\n";
         json EWMA = FN::wJet(fullURL);
         //cout << EWMA << "\n";
