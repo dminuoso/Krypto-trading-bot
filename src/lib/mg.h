@@ -380,11 +380,12 @@ static void calcSafety() {
         if (mgMATIME.size()>1000) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
         mgWSMA33.push_back(mgSMA3G);
+        if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
         cout << "SAFETY! " << qpRepo["safemode"].get<unsigned int>()  << "\n";
         cout << "Safety SMA3 Array size: " << mgWSMA33.size() << "\n";
-        if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
+
 
         if (qpRepo["safetynet"].get<bool>() == false) {
                 qpRepo["safemode"]  = (int)mSafeMode::unknown;
@@ -409,8 +410,8 @@ static void calcSafety() {
                                 )
                         )
                         &&  !qpRepo["safetyactive"].get<bool>()           // make sure we are not already in a safety active state
-                        &&  qpRepo["safetynet"].get<bool>() == true           // make sure safey checkbox is active on UI
-                        &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+                        &&   qpRepo["safetynet"].get<bool>()          // make sure safey checkbox is active on UI
+
                         )
                 {
                         //  printf("debug12\n");
@@ -433,9 +434,9 @@ static void calcSafety() {
                                  <
                                  -1 * (qpRepo["safetyP"].get<double>()/100)
                                  )
-                         &&   qpRepo["safetyactive"].get<bool>() == false          // make sure we are not already in a safety active state
-                         &&   qpRepo["safetynet"].get<bool>() == true          // make sure safey checkbox is active on UI
-                         &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::buy || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+                         &&   !qpRepo["safetyactive"].get<bool>()         // make sure we are not already in a safety active state
+                         &&   qpRepo["safetynet"].get<bool>()          // make sure safey checkbox is active on UI
+
                          )
                 {
                         double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) - 100);
