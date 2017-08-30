@@ -109,6 +109,9 @@ namespace K {
         double widthPing = qpRepo["widthPercentage"].get<bool>()
           ? qpRepo["widthPingPercentage"].get<double>() * mgFairValue / 100
           : qpRepo["widthPing"].get<double>();
+            if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
+                widthPing = .01;
+            }
         double widthPong = qpRepo["widthPercentage"].get<bool>()
           ? qpRepo["widthPongPercentage"].get<double>() * mgFairValue / 100
           : qpRepo["widthPong"].get<double>();
@@ -284,7 +287,7 @@ namespace K {
           rawQuote["askPx"] = FN::roundSide(rawQuote["askPx"].get<double>(), gw->minTick, mSide::Ask);
           rawQuote["askPx"] = fmax(rawQuote["bidPx"].get<double>() + gw->minTick, rawQuote["askPx"].get<double>());
         }
-        cout << "SAFETY:: " << rawQuote["askSz"] << "px" rawQuote["askPx"]  << " DEBUGGING SOMETHING\n";
+        cout << "SAFETY:: " << rawQuote["askSz"] << "px" << rawQuote["askPx"] << "width? " << rawQuote["w"] << " DEBUGGING SOMETHING\n";
         if (rawQuote["askSz"].get<double>()) {
           if (rawQuote["askSz"].get<double>() > totalBasePosition)
             rawQuote["askSz"] = (!_rawBidSz or _rawBidSz > totalBasePosition)
