@@ -553,7 +553,7 @@ static double LoadEWMA(int periods) {
                 //cout << "time: " << EMAArray[0] << " Value : " << EMAArray[4] << "\n";
 
 
-                myEWMA = MycalcEwma(EMAArray[1].get<double>(), previous,periods);
+                myEWMA = MycalcEwma(EMAArray[2].get<double>(), previous,periods);
                 previous = myEWMA;
 
 
