@@ -534,7 +534,7 @@ static void calcSafety() {
 static double LoadEWMA(int periods) {
       //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
       cout << "Starting EWMA\n";
-        string baseurl = "http://34.227.139.87/MarketPublish";
+        string baseurl = "http://34.227.139.87/MarketPublish/";
         string pair = "ltcusd";
         string exchange = "bitfinex";
         int CurrentTime = std::time(nullptr);
@@ -546,12 +546,12 @@ static double LoadEWMA(int periods) {
         string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
         cout << "Full URL: " << fullURL << "\n";
         json EWMA = FN::wJet(fullURL);
-        cout << EWMA << "\n";
-        for (auto it = EWMA["result"].begin(); it != EWMA["result"].end(); ++it)
+        //cout << EWMA << "\n";
+        for (auto it = EWMA["result"][std::to_string(periods)].begin(); it != EWMA["result"][std::to_string(periods)].end(); ++it)
         {
 
                 json EMAArray = it.value();
-                cout << "time: " << EMAArray[0] << " Value : " << EMAArray[1] << "\n";
+                //cout << "time: " << EMAArray[0] << " Value : " << EMAArray[1] << "\n";
 
 
                 myEWMA = MycalcEwma(EMAArray[1].get<double>(), previous,periods);
