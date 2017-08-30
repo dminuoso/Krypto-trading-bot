@@ -550,10 +550,10 @@ static double LoadEWMA(int periods) {
         {
 
                 json EMAArray = it.value();
-                //cout << "time: " << EMAArray[0] << " Value : " << EMAArray[4] << "\n";
+                cout << "time: " << EMAArray[0] << " Value : " << EMAArray[1] << "\n";
 
 
-                myEWMA = MycalcEwma(EMAArray[2].get<double>(), previous,periods);
+                myEWMA = MycalcEwma(EMAArray[1].get<double>(), previous,periods);
                 previous = myEWMA;
 
 
