@@ -245,8 +245,8 @@ namespace K {
                 }
               }
         }
-        cout << "pg Safety Sell " << pgSafety["sell"].get<double>() << " tradesPerMinute " << qpRepo["tradesPerMinute"].get<double>() << " superTradesMultipliers " << superTradesMultipliers[0] << "\n";
-        cout << "pg safety sell: " << (pgSafety["sell"].get<double>() > (qpRepo["tradesPerMinute"].get<double>() * superTradesMultipliers[0])) << "\n";
+  //      cout << "pg Safety Sell " << pgSafety["sell"].get<double>() << " tradesPerMinute " << qpRepo["tradesPerMinute"].get<double>() << " superTradesMultipliers " << superTradesMultipliers[0] << "\n";
+      //  cout << "pg safety sell: " << (pgSafety["sell"].get<double>() > (qpRepo["tradesPerMinute"].get<double>() * superTradesMultipliers[0])) << "\n";
         if (pgSafety["sell"].get<double>() > (qpRepo["tradesPerMinute"].get<double>() * superTradesMultipliers[0])) {
           qeAskStatus = mQuoteStatus::MaxTradesSeconds;
           rawQuote["askPx"] = 0;
@@ -262,8 +262,8 @@ namespace K {
           rawQuote["askPx"] = 0;
           rawQuote["askSz"] = 0;
         }
-        cout << "pg Safety Buy " << pgSafety["buy"].get<double>() << " tradesPerMinute " << qpRepo["tradesPerMinute"].get<double>() << " superTradesMultipliers " << superTradesMultipliers[0] << "\n";
-        cout << "pg safety buy: " << (pgSafety["buy"].get<double>() > (qpRepo["tradesPerMinute"].get<double>() * superTradesMultipliers[0])) << "\n";
+      //  cout << "pg Safety Buy " << pgSafety["buy"].get<double>() << " tradesPerMinute " << qpRepo["tradesPerMinute"].get<double>() << " superTradesMultipliers " << superTradesMultipliers[0] << "\n";
+      //  cout << "pg safety buy: " << (pgSafety["buy"].get<double>() > (qpRepo["tradesPerMinute"].get<double>() * superTradesMultipliers[0])) << "\n";
         if (pgSafety["buy"].get<double>() > (qpRepo["tradesPerMinute"].get<double>() * superTradesMultipliers[0])) {
           qeBidStatus = mQuoteStatus::MaxTradesSeconds;
           rawQuote["bidPx"] = 0;
@@ -287,7 +287,7 @@ namespace K {
           rawQuote["askPx"] = FN::roundSide(rawQuote["askPx"].get<double>(), gw->minTick, mSide::Ask);
           rawQuote["askPx"] = fmax(rawQuote["bidPx"].get<double>() + gw->minTick, rawQuote["askPx"].get<double>());
         }
-        cout << "SAFETY:: " << rawQuote["askSz"] << "px" << rawQuote["askPx"] << "width? " << rawQuote["w"] << " DEBUGGING SOMETHING\n";
+      //  cout << "SAFETY:: " << rawQuote["askSz"] << "px" << rawQuote["askPx"] << "width? " << rawQuote["w"] << " DEBUGGING SOMETHING\n";
         if (rawQuote["askSz"].get<double>()) {
           if (rawQuote["askSz"].get<double>() > totalBasePosition)
             rawQuote["askSz"] = (!_rawBidSz or _rawBidSz > totalBasePosition)
