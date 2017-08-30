@@ -393,8 +393,8 @@ static void calcSafety() {
 
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
                 cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
-                cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                cout << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
+                cout << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
                 cout << "index now - dec Difference: " << difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr)) << "\n";
                 if (
                         (
