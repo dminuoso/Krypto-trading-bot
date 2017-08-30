@@ -382,7 +382,7 @@ static void calcSafety() {
         mgWSMA33.push_back(mgSMA3G);
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
-        
+
         cout << "Safety SMA3 Array size: " << mgWSMA33.size() << "\n";
         if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
 
@@ -410,7 +410,7 @@ static void calcSafety() {
                         )
                         &&  !qpRepo["safetyactive"].get<bool>()           // make sure we are not already in a safety active state
                         &&  qpRepo["safetynet"].get<bool>() == true           // make sure safey checkbox is active on UI
-                        &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+
                         )
                 {
                         //  printf("debug12\n");
@@ -427,15 +427,14 @@ static void calcSafety() {
 
                 if (     (
                                  (
-                                         (
-                                                 mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) ) - 100
+                                         (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) ) - 100
                                  )
                                  <
                                  -1 * (qpRepo["safetyP"].get<double>()/100)
                                  )
                          &&   qpRepo["safetyactive"].get<bool>() == false          // make sure we are not already in a safety active state
                          &&   qpRepo["safetynet"].get<bool>() == true          // make sure safey checkbox is active on UI
-                         &&  (qpRepo["safemode"].get<int>() == (int)mSafeMode::buy || qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown)
+
                          )
                 {
                         double SafeSellValuation = (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) - 100);
