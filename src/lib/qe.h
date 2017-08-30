@@ -284,6 +284,7 @@ namespace K {
           rawQuote["askPx"] = FN::roundSide(rawQuote["askPx"].get<double>(), gw->minTick, mSide::Ask);
           rawQuote["askPx"] = fmax(rawQuote["bidPx"].get<double>() + gw->minTick, rawQuote["askPx"].get<double>());
         }
+        cout << "SAFETY:: " << rawQuote["askSz"] << "px" rawQuote["askPx"]  << " DEBUGGING SOMETHING\n";
         if (rawQuote["askSz"].get<double>()) {
           if (rawQuote["askSz"].get<double>() > totalBasePosition)
             rawQuote["askSz"] = (!_rawBidSz or _rawBidSz > totalBasePosition)
@@ -293,7 +294,7 @@ namespace K {
           if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["aggressivePositionRebalancing"].get<int>() == mSafeMode::sell ) {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * .3)), 1e-8);
             rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
-            cout << "SAFETY: Safety Sell Active & APR Adjusting askSZ to : " << rawQuote["askSz"] << " APR Active and Safety Sell Active\n";
+            cout << "SAFETY: Safety Sell Active & APR Adjusting askSZ to : " << rawQuote["askSz"] << "px" rawQuote["askPx"]  << " APR Active and Safety Sell Active\n";
           }
         } else rawQuote["isAskPong"] = false;
         if (rawQuote["bidSz"].get<double>()) {
