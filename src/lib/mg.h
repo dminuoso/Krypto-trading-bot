@@ -95,6 +95,9 @@ static void load() {
         mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
         mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
         mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
+        qpRepo["_old_longEwmaPeriods"] = qpRepo["longEwmaPeriods"].get<int>(); // setting on start EWMA periods to _old_ place holders incase change during bot active
+        qpRepo["_old_mediumEwmaPeriods"] = qpRepo["mediumEwmaPeriods"].get<int>();
+        qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
         cout << FN::uiT() << "DB loaded EWMA Long = " << mgEwmaL << "." << endl;
         cout << FN::uiT() << "DB loaded EWMA Medium = " << mgEwmaM << "." << endl;
         cout << FN::uiT() << "DB loaded EWMA Short = " << mgEwmaS << "." << endl;
@@ -175,9 +178,30 @@ static json tradeUp(mGWmt t) {
         return o;
 };
 static void ewmaUp() {
-        calcEwma(&mgEwmaL, qpRepo["longEwmaPeriods"].get<int>());
-        calcEwma(&mgEwmaM, qpRepo["mediumEwmaPeriods"].get<int>());
-        calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>());
+        /*
+        mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
+        mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
+        mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
+        qpRepo["_old_longEwmaPeriods"] = qpRepo["longEwmaPeriods"].get<int>(); // setting on start EWMA periods to _old_ place holders incase change during bot active
+        qpRepo["_old_mediumEwmaPeriods"] = qpRepo["mediumEwmaPeriods"].get<int>();
+        qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
+        */
+        if(qpRepo["longEwmaPeriods"].get<int>() != qpRepo["_old_longEwmaPeriods"].get<int>() )
+        {
+          mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
+          qpRepo["_old_longEwmaPeriods"] = qpRepo["longEwmaPeriods"].get<int>();
+        } else { calcEwma(&mgEwmaL, qpRepo["longEwmaPeriods"].get<int>()); }
+        if(qpRepo["mediumEwmaPeriods"].get<int>() != qpRepo["_old_mediumEwmaPeriods"].get<int>() )
+        {
+          mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
+          qpRepo["_old_mediumEwmaPeriods"] = qpRepo["mediumEwmaPeriods"].get<int>();
+        } else { calcEwma(&mgEwmaM, qpRepo["mediumEwmaPeriods"].get<int>()); }
+        if(qpRepo["shortEwmaPeriods"].get<int>() != qpRepo["_old_shortEwmaPeriods"].get<int>() )
+        {
+          mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
+          qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
+        } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
+        
         //calcASP();
         //calcSafety();
         calcTargetPos();

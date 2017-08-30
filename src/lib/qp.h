@@ -76,7 +76,10 @@ json defQP {
         {  "safetimestart",                 0                                      },
         {  "safetyduration",                0                                      },
         {  "pDivHolder",                    0                                      },
-        {  "asptriggered",                  false                                  }
+        {  "asptriggered",                  false                                  },
+        {  "_old_longEwmaPeriods",          200                                    },
+        {  "_old_mediumEwmaPeriods",        100                                    },
+        {  "_old_shortEwmaPeriods",         50                                     },
 };
 vector<string> boolQP = {
         "widthPercentage", "bestWidth", "sellSizeMax", "buySizeMax", "percentageValues",
