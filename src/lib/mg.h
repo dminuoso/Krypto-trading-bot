@@ -205,7 +205,7 @@ static void ewmaUp() {
                 mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
                 qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
-        if(qpRepo["take_profit_active"].get<bool> && ( qpRepo["ewmaProfit"].get<int>() != qpRepo["OldewmaProfit"].get<int>() ) ) { 
+        if(qpRepo["take_profit_active"].get<bool>() && ( qpRepo["ewmaProfit"].get<int>() != qpRepo["OldewmaProfit"].get<int>() ) ) { 
                 mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
         } else { calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>()); }
 
