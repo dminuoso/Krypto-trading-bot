@@ -12,6 +12,7 @@ double mgEwmaM = 0;
 double mgEwmaS = 0;
 double mgEwmaP = 0;
 vector<double> mgSMA3;
+vector<double> mgSMA3_temp; // warm-up SMA3 data!
 vector<double> mgStatFV;
 vector<double> mgStatBid;
 vector<double> mgStatAsk;
@@ -381,10 +382,10 @@ static void calcSafety() {
                 return;
         }
         mgMATIME.push_back(std::time(nullptr));
-        if (mgMATIME.size()>100) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
+        if (mgMATIME.size()>1000) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
-        mgWSMA33.push_back(mgSMA3.back());
-        if (mgWSMA33.size()>100) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
+        mgWSMA33.push_back(mgSMA3G);
+        if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
         // Safety time Active Start Checking
         cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
