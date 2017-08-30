@@ -206,12 +206,15 @@ static void ewmaUp() {
                 qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
         if(qpRepo["take_profit_active"].get<bool>() && ( qpRepo["ewmaProfit"].get<int>() != qpRepo["OldewmaProfit"].get<int>() ) ) {
+                cout << "ewma7\n";
                 mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
                 qpRepo["OldewmaProfit"] = qpRepo["ewmaProfit"].get<int>();
         } else if(qpRepo["take_profit_active"].get<bool>() && !qpRepo["take_profit_active_old"].get<bool>() ) {
+                cout << "ewma5\n";
                 qpRepo["take_profit_active_old"] = true;
                 mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
         } else if(!qpRepo["take_profit_active"].get<bool>() && qpRepo["take_profit_active_old"].get<bool>() ) {
+                cout << "ewma4\n";
                 qpRepo["take_profit_active_old"] = false;
         } else if(qpRepo["take_profit_active"].get<bool>() ) {
                 cout << "normally setting ewmaProfit!\n";
