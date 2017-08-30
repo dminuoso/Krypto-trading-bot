@@ -466,7 +466,7 @@ static void calcSafety() {
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>() ) {
                 cout << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
 
-                if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)          // Check to make sure we ae currently in active safety state and safety box in UI is active
+                if(qpRepo["safetyactive"].get<bool>() and qpRepo["safetynet"].get<bool>())          // Check to make sure we ae currently in active safety state and safety box in UI is active
                 {
 
                         cout << "is Timer Over?:" << "\n";
@@ -476,7 +476,7 @@ static void calcSafety() {
                         cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
                         cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
                         cout << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
-                        cout << "Duration: " << (qpRepo["safetyduration"].get<double>() * 60) << "\n";
+                        cout << "Duration: " << (qpRepo["safetimeOver"].get<int>() * 60) << "\n";
 
                         if(
 
@@ -486,7 +486,7 @@ static void calcSafety() {
 
                                 >=
 
-                                (qpRepo["safetyduration"].get<double>() * 60)
+                                (qpRepo["safetimeOver"].get<int>() * 60)
 
                                 ){
                                 cout << "Breaking Safey  Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>()))  << "\n";
