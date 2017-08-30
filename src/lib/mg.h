@@ -545,7 +545,7 @@ static double LoadEWMA(int periods) {
         double myEWMA = 0;
         double previous = 0;
         bool first = true;
-        string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(newpair));
+        string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
         cout << "Full URL: " << fullURL << "\n";
         json EWMA = FN::wJet(fullURL);
         //cout << EWMA << "\n";
