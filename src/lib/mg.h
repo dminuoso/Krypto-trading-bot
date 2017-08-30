@@ -401,13 +401,13 @@ static void calcSafety() {
                 cout << "index now - dec Difference: " << difftime((qpRepo["safetimestart"].get<double>()),std::time(nullptr)) << "\n";
                 if (
                         (
-                                (
-                                        (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) ) - 100
-                                )
+
+                                        ((mgWSMA33.back() * 100) /  (mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) ) - 100)
+
                                 >
-                                (
+
                                         qpRepo["safetyP"].get<double>()/100
-                                )
+
                         )
                         &&  !qpRepo["safetyactive"].get<bool>()           // make sure we are not already in a safety active state
                         &&   qpRepo["safetynet"].get<bool>()          // make sure safey checkbox is active on UI
@@ -428,11 +428,12 @@ static void calcSafety() {
 
                 if (     (
                                  (
-                                         (
-                                                 mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) ) - 100
-                                 )
+
+                                                 ((mgWSMA33.back() * 100) /  (mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1) ) ) - 100)
+
+
                                  <
-                                 -1 * (qpRepo["safetyP"].get<double>()/100)
+                                    -1 * (qpRepo["safetyP"].get<double>()/100)
                                  )
                          &&   !qpRepo["safetyactive"].get<bool>()         // make sure we are not already in a safety active state
                          &&   qpRepo["safetynet"].get<bool>()          // make sure safey checkbox is active on UI
