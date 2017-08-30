@@ -91,6 +91,7 @@ static void load() {
                 if (k["/0/ewmaShort"_json_pointer].is_number() and (!k["/0/time"_json_pointer].is_number() or k["/0/time"_json_pointer].get<unsigned long>()+qpRepo["shortEwmaPeriods"].get<int>()*6e+4>FN::T()))
                         mgEwmaS = k["/0/ewmaShort"_json_pointer].get<double>();
         }
+        cout << "Loading new EWMA\n";
         mgEwmaL = LoadEWMA(qpRepo["longEwmaPeriods"].get<int>());
         mgEwmaM = LoadEWMA(qpRepo["mediumEwmaPeriods"].get<int>());
         mgEwmaS = LoadEWMA(qpRepo["shortEwmaPeriods"].get<int>());
@@ -532,6 +533,7 @@ static void calcSafety() {
 
 static double LoadEWMA(int periods) {
       //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
+      cout << "Starting EWMA\n";
         string baseurl = "http://34.227.139.87/MarketPublish";
         string pair = "ltcusd";
         string exchange = "bitfinex";
@@ -541,7 +543,9 @@ static double LoadEWMA(int periods) {
         double myEWMA = 0;
         double previous = 0;
         bool first = true;
-        json EWMA = FN::wJet(string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(pair)));
+        string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
+        cout << "Full URL: " << fullURL << "\n";
+        json EWMA = FN::wJet();
         for (auto it = EWMA["result"][periods].begin(); it != EWMA["result"][periods].end(); ++it)
         {
 
