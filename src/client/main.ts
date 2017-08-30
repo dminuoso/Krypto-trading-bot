@@ -209,12 +209,12 @@ class DisplayOrder {
                                 <input type="checkbox"
                                    [(ngModel)]="pair.quotingParameters.display.take_profit_active">
                             </td>
-                            <td style="width:25px;border-bottom: 3px solid #8BE296;">
-                                <input type="checkbox"
+                            <td style="width:78px;border-bottom: 3px solid #8BE296;">
+                                <input type="number" step="1" min="1"
                                    [(ngModel)]="pair.quotingParameters.display.take_profic_percent">
                             </td>
-                            <td style="width:25px;border-bottom: 3px solid #8BE296;">
-                                <input type="checkbox"
+                            <td style="width:78px;border-bottom: 3px solid #8BE296;">
+                                <input type="number" step="1" min="1"
                                    [(ngModel)]="pair.quotingParameters.display.ewmaProfit">
                             </td>
                             </tr>ewmaProfit
