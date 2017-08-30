@@ -169,6 +169,7 @@ class DisplayOrder {
                                     <th>Safety Percentage</th>
                                     <th>Safety Minutes</th>
                                     <th>Safetime timeover (in minutes)</th>
+                                    <th>Safety Sell Base Percentage</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -195,8 +196,14 @@ class DisplayOrder {
                                    onClick="this.select()"
                                    [(ngModel)]="pair.quotingParameters.display.safetimeOver">
                             </td>
+                            <td style="width:78px;border-bottom: 3px solid #DDE28B;">
+                                <input class="form-control input-sm"
+                                   type="number" step="1" min="1"
+                                   onClick="this.select()"
+                                   [(ngModel)]="pair.quotingParameters.display.SafetySellTotalPercent">
+                            </td>
                             </tr>
-                        </tbody>
+                        </tbody>SafetySellTotalPercent
                     </table>
                                 <table class="table table-responsive table-bordered" style="margin-bottom:0px;">
                                     <thead>

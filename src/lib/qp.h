@@ -71,6 +71,7 @@ json defQP {
         {  "safetytime",                     5                                     },// safetime in minutes.
         {  "safetimeOver",                   5                                     },// safetime in minutes.
         {  "safetyP",                        20                                    },
+        {  "SafetySellTotalPercent",         50                                    },
         {  "safemode",                      (int)mSafeMode::unknown                },
         {  "safetimestart",                 0                                      },
         {  "safetyduration",                0                                      },
