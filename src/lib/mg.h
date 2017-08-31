@@ -348,7 +348,7 @@ static void calcTargetPos() {
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
                 }
                 if(mgEwmaProfit < SMA3) {
-                        new TargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>() - qpRepo["take_profic_percent"].get<double>());
+                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>() - qpRepo["take_profic_percent"].get<double>());
                 }
 
 
