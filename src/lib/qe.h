@@ -398,7 +398,7 @@ namespace K {
           rawQuote["bidSz"] = FN::roundDown(fmax(gw->minSize, rawQuote["bidSz"].get<double>()), 1e-8);
           rawQuote["isBidPong"] = (pgSafety["sellPong"].get<double>() and rawQuote["bidPx"].get<double>() and rawQuote["bidPx"].get<double>() <= pgSafety["sellPong"].get<double>() - widthPong);
         } else rawQuote["isBidPong"] = false;
-        cout << "raw qoute: " << rawQoute << "\n";
+      
         return rawQuote;
       };
       static json quote(double widthPing, double buySize, double sellSize) {
