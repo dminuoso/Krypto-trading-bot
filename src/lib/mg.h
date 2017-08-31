@@ -625,8 +625,9 @@ static double LoadEWMA(int periods) {
         //cout << EWMA << "\n";
         for (auto it = EWMA["result"][std::to_string(doublePeriods)].begin(); it != EWMA["result"][std::to_string(doublePeriods)].end(); ++it)
         {
-                cout << "time: " << EMAArray[1].get<int>() << " Value : " << EMAArray[1].get<double>() << "\n";
+
                 json EMAArray = it.value();
+                cout << "time: " << EMAArray[0].get<int>() << " Value : " << EMAArray[1].get<double>() << "\n";
                 myEWMA = MycalcEwma(EMAArray[1].get<double>(), previous,periods);
                 previous = myEWMA;
 
