@@ -347,16 +347,20 @@ static void calcTargetPos() {
                         */
                 cout << FN::uiT()  << "mgEwmaProfit: " << mgEwmaProfit << " SMA3: " << SMA3 << "\n";
                 double takeProfit = (((qpRepo["take_profic_percent"].get<double>()/100) * 2) / 100) - 1;
-                if(mgEwmaProfit > SMA3) {
-                        newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-                         cout << FN::uiT()  << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
-                         qpRepo["takeProfitNow"] = false;
-                }
                 if(mgEwmaProfit < SMA3) {
                          newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
                          cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                          cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
                          qpRepo["takeProfitNow"] = true;
+                }
+                if(mgEwmaProfit > SMA3) {
+                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
+                         cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
+                         qpRepo["takeProfitNow"] = true;
+                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+                          cout << FN::uiT()  << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                          qpRepo["takeProfitNow"] = false;
                 }
 
 
@@ -608,12 +612,13 @@ static double LoadEWMA(int periods) {
         cout << FN::uiT()  << "pair: " << pair << "\n";
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
+        int doublePeriods = periods * 2;
         int BackTraceStart = CurrentTime - (periods * 60000);
         std::vector<double> EWMAArray;
         double myEWMA = 0;
         double previous = 0;
         bool first = true;
-        string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
+        string fullURL = string(baseurl.append("?periods=").append(std::to_string(doublePeriods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
         cout << FN::uiT()  << "Full URL: " << fullURL << "\n";
         json EWMA = FN::wJet(fullURL);
         cout << FN::uiT()  << "made it past the curl\n";
@@ -622,9 +627,6 @@ static double LoadEWMA(int periods) {
         {
 
                 json EMAArray = it.value();
-                //cout << "time: " << EMAArray[0] << " Value : " << EMAArray[1] << "\n";
-
-
                 myEWMA = MycalcEwma(EMAArray[1].get<double>(), previous,periods);
                 previous = myEWMA;
 
@@ -634,6 +636,7 @@ static double LoadEWMA(int periods) {
         return myEWMA;
 
 }
+
 
 static double  MycalcEwma(double k, double previous, int periods) {
         //        cout << " pre-K: " << k << "\n";
