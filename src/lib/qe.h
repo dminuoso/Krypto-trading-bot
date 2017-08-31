@@ -375,7 +375,7 @@ namespace K {
               ? totalBasePosition : _rawBidSz;
           rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize, rawQuote["askSz"].get<double>()), 1e-8);
           rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
-          if(qpRepo["takeProfitNow"].get<bool())
+          if(qpRepo["takeProfitNow"].get<bool>())
           {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["take_profic_percent"].get<double>() / 100)  )), 1e-8);
 
@@ -383,7 +383,7 @@ namespace K {
             cout << "sending a small take profit order\n";
 
           }
-          if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell && !qpRepo["takeProfitNow"].get<bool() ) {
+          if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell && !qpRepo["takeProfitNow"].get<bool>() ) {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
             rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
             rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .05;
