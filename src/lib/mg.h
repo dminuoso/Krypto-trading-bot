@@ -636,7 +636,7 @@ static double LoadEWMA(int periods) {
         {
                 if(first)
                 {
-                        previos = *it;
+                        previous = *it;
                         first = false;
                 } else {
                 myEWMA = MycalcEwma(*it, previous,periods);
