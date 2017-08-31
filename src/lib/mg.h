@@ -612,7 +612,7 @@ static double LoadEWMA(int periods) {
         cout << FN::uiT()  << "pair: " << pair << "\n";
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
-        int doublePeriods = periods * 2;
+        int doublePeriods = periods * 6;
         int BackTraceStart = CurrentTime - (periods * 60000);
         std::vector<double> EWMAArray;
         double myEWMA = 0;
