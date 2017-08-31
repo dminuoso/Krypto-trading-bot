@@ -612,9 +612,10 @@ static double LoadEWMA(int periods) {
         cout << FN::uiT()  << "pair: " << pair << "\n";
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
-        int doublePeriods = periods * 6;
+        int doublePeriods = periods + 1;
         int BackTraceStart = CurrentTime - (periods * 60000);
         std::vector<double> EWMAArray;
+        vector<double> EMAStorage;
         double myEWMA = 0;
         double previous = 0;
         bool first = true;
@@ -626,12 +627,21 @@ static double LoadEWMA(int periods) {
         for (auto it = EWMA["result"][std::to_string(doublePeriods)].begin(); it != EWMA["result"][std::to_string(doublePeriods)].end(); ++it)
         {
 
+
                 json EMAArray = it.value();
-                cout << "time: " << EMAArray[0].get<int>() << " Value : " << EMAArray[1].get<double>() << "\n";
-                myEWMA = MycalcEwma(EMAArray[1].get<double>(), previous,periods);
+                EMAStorage.push_back(EMAArray[1].get<double>());
+        }
+        std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
+        for(auto it = EMAStorage.begin(); it != EMAStorage.end(); ++it)
+        {
+                if(first)
+                {
+                        previos = *it;
+                        first = false;
+                } else {
+                myEWMA = MycalcEwma(*it, previous,periods);
                 previous = myEWMA;
-
-
+                }
         }
         cout << FN::uiT()  << "period: " << periods << " EWMA is: " << myEWMA << "\n";
         return myEWMA;
