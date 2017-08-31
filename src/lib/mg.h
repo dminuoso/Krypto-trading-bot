@@ -482,7 +482,7 @@ static void calcSafety() {
                         cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << qpRepo["safetyP"].get<double>()/100 << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
-
+/*
                 if (     (
                                  (
                                          (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) ) - 100
@@ -504,6 +504,7 @@ static void calcSafety() {
                         cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -1 * (qpRepo["safetyP"].get<double>()/100) << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
+                */
         }
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {

@@ -232,7 +232,7 @@ namespace K {
             pDiv = 0;
             cout << "PDIV: pDiv set to 0 via ASP Trigger\n";
           }
-          if (qpRepo["safetyactive"].get<bool>()) {
+          if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy ) {
               pDiv = 0;
               cout << "PDIV: pDiv set to 0 via Safety Trigger\n";
             }
@@ -398,7 +398,7 @@ namespace K {
           rawQuote["bidSz"] = FN::roundDown(fmax(gw->minSize, rawQuote["bidSz"].get<double>()), 1e-8);
           rawQuote["isBidPong"] = (pgSafety["sellPong"].get<double>() and rawQuote["bidPx"].get<double>() and rawQuote["bidPx"].get<double>() <= pgSafety["sellPong"].get<double>() - widthPong);
         } else rawQuote["isBidPong"] = false;
-      
+
         return rawQuote;
       };
       static json quote(double widthPing, double buySize, double sellSize) {
