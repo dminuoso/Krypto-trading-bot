@@ -640,6 +640,7 @@ static double LoadEWMA(int periods) {
                         first = false;
                 } else {
                 myEWMA = MycalcEwma(*it, previous,periods);
+                cout << "Close Value is: " << *it << "\n";
                 previous = myEWMA;
                 }
         }
