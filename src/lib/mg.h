@@ -367,6 +367,8 @@ static void calcTargetPos() {
                 if (newTargetPosition > 1) newTargetPosition = 1;
                 else if (newTargetPosition < -1) newTargetPosition = -1;
         }
+        if (newTargetPosition > 1) newTargetPosition = 1;
+        else if (newTargetPosition < -1) newTargetPosition = -1;
 
         mgTargetPos = newTargetPosition;
 };
