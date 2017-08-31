@@ -381,7 +381,7 @@ static void calcASP() {
         cout << "Current Short: " << mgEwmaS << "\n";
         cout << "Current Long: " << mgEwmaL << "\n";
         if(qpRepo["take_profit_active"].get<bool>()) {
-                if(mgEwmaProfit < SMA3)
+                if(mgEwmaProfit < mgSMA3G)
                 {
                         qpRepo["asptriggered"] = false;
                         cout << "Disabling ASP for TP\n";
