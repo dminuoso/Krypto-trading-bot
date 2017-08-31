@@ -86,7 +86,7 @@ namespace K {
         });
         if(qpRepo["safetyactive"].get<bool>())
         {
-          cout << "SAFETY: PRINT ORDER: " << o << "\n";
+          cout << FN::uiT() <<  "SAFETY: PRINT ORDER: " << o << "\n";
         }
         gW->send(o["orderId"].get<string>(), (mSide)o["side"].get<int>(), o["price"].get<double>(), o["quantity"].get<double>(), (mOrderType)o["type"].get<int>(), (mTimeInForce)o["timeInForce"].get<int>(), o["preferPostOnly"].get<bool>(), o["time"].get<unsigned long>());
       };

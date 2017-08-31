@@ -230,11 +230,11 @@ namespace K {
           : qpRepo["positionDivergence"].get<double>();
           if (qpRepo["asptriggered"].get<bool>()) {
             pDiv = 0;
-            cout << "PDIV: pDiv set to 0 via ASP Trigger\n";
+            cout << FN::uiT()  << "PDIV: pDiv set to 0 via ASP Trigger\n";
           }
           if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy ) {
               pDiv = 0;
-              cout << "PDIV: pDiv set to 0 via Safety Trigger\n";
+              cout << FN::uiT()  << "PDIV: pDiv set to 0 via Safety Trigger\n";
             }
         if (superTradesMultipliers[1] > 1) {
           if (!qpRepo["buySizeMax"].get<bool>()) rawQuote["bidSz"] = fmin(superTradesMultipliers[1]*buySize, (pgPos["quoteAmount"].get<double>() / mgFairValue) / 2);
@@ -262,7 +262,7 @@ namespace K {
             if (!qpRepo["sellSizeMax"].get<bool>()) rawQuote["askSz"] = fmin(qpRepo["aprMultiplier"].get<int>()*sellSize, fmin(totalBasePosition - pgTargetBasePos, pgPos["baseAmount"].get<double>() / 2));
             if (!qpRepo["sellSizeMax"].get<bool>() && qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell ) {
               rawQuote["askSz"] = totalBasePosition - 1; // setting askSz in safety sell mode to dump stuff
-              cout << "SAFETY: Safety Sell Active & APR Active Set to dump: " << rawQuote["askSz"] << "\n"; // comments because we like to say whats happening
+              cout << FN::uiT()  << "SAFETY: Safety Sell Active & APR Active Set to dump: " << rawQuote["askSz"] << "\n"; // comments because we like to say whats happening
             }
           }
         }
@@ -380,7 +380,7 @@ namespace K {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["take_profic_percent"].get<double>() / 100)  )), 1e-8);
 
           //  rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
-            cout << "sending a small take profit order\n";
+            cout << FN::uiT()  << "sending a small take profit order: " << rawQuote["askSz"] << "\n";
 
           }
           /*

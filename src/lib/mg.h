@@ -207,21 +207,21 @@ static void ewmaUp() {
                 qpRepo["_old_shortEwmaPeriods"] = qpRepo["shortEwmaPeriods"].get<int>();
         } else { calcEwma(&mgEwmaS, qpRepo["shortEwmaPeriods"].get<int>()); }
         if(qpRepo["take_profit_active"].get<bool>() && ( qpRepo["ewmaProfit"].get<int>() != qpRepo["OldewmaProfit"].get<int>() ) ) {
-                cout << "ewma7\n";
+                cout << FN::uiT()  << "ewma7\n";
                 mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
                 qpRepo["OldewmaProfit"] = qpRepo["ewmaProfit"].get<int>();
         } else if(qpRepo["take_profit_active"].get<bool>() && !qpRepo["take_profit_active_old"].get<bool>() ) {
-                cout << "ewma5\n";
+                cout << FN::uiT()  << "ewma5\n";
                 qpRepo["take_profit_active_old"] = true;
                 mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>());
         } else if(!qpRepo["take_profit_active"].get<bool>() && qpRepo["take_profit_active_old"].get<bool>() ) {
-                cout << "ewma4\n";
+                cout << FN::uiT()  << "ewma4\n";
                 qpRepo["take_profit_active_old"] = false;
         } else if(qpRepo["take_profit_active"].get<bool>() ) {
                 cout << "normally setting ewmaProfit!\n";
                 calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>());
         } else {
-                cout << "ewma last resort?\n";
+                cout << FN::uiT()  << "ewma last resort?\n";
                 calcEwma(&mgEwmaProfit, qpRepo["ewmaProfit"].get<int>());
         }
 
@@ -345,17 +345,17 @@ static void calcTargetPos() {
                         If ewma take profit < SMA3
                         new TargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"] - Take_profit_calc.
                         */
-                cout << "mgEwmaProfit: " << mgEwmaProfit << " SMA3: " << SMA3 << "\n";
+                cout << FN::uiT()  << "mgEwmaProfit: " << mgEwmaProfit << " SMA3: " << SMA3 << "\n";
                 double takeProfit = (((qpRepo["take_profic_percent"].get<double>()/100) * 2) / 100) - 1;
                 if(mgEwmaProfit > SMA3) {
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-                         cout << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                         cout << FN::uiT()  << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                          qpRepo["takeProfitNow"] = false;
                 }
                 if(mgEwmaProfit < SMA3) {
                          newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
-                         cout << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
-                         cout << "EWMA Profit Take Profit: " << takeProfit << "\n";
+                         cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
                          qpRepo["takeProfitNow"] = true;
                 }
 
@@ -379,12 +379,11 @@ static void calcTargetPos() {
 
 static void calcASP() {
         qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100);
-        cout <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
-        cout <<  "ASP Evaluation result: " << qpRepo["aspvalue"].get<double>() << "\n";
-        cout <<  "ASP Evaluation: fairV: " << mgFairValue << "\n";
-        cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
-        cout << "Current Short: " << mgEwmaS << "\n";
-        cout << "Current Long: " << mgEwmaL << "\n";
+        cout << FN::uiT()  <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
+        cout << FN::uiT() <<  "ASP Evaluation: fairV: " << mgFairValue << "\n";
+        cout << FN::uiT() <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
+        cout << FN::uiT() << "Current Short: " << mgEwmaS << "\n";
+        cout << FN::uiT() << "Current Long: " << mgEwmaL << "\n";
         if(qpRepo["take_profit_active"].get<bool>()) {
                 if(mgEwmaProfit < mgSMA3G)
                 {
@@ -419,14 +418,14 @@ static void calcASP() {
                 if ( qpRepo["asptriggered"].get<bool>() == false)
                 {
                         qpRepo["asptriggered"] = true;
-                        cout << "ASP has been activated! pDiv should be set to Zero!\n";
+                        cout << FN::uiT() << "ASP has been activated! pDiv should be set to Zero!\n";
                 }
-                cout << "ASP Active! pDiv should be set to Zero!\n";
+                cout << FN::uiT() << "ASP Active! pDiv should be set to Zero!\n";
         } else {
                 if(qpRepo["aspactive"].get<bool>() == true && qpRepo["asptriggered"].get<bool>() == true)
                 {
                         qpRepo["asptriggered"] = false;
-                        cout << "ASP Deactivated" << "\n";
+                        cout << FN::uiT() << "ASP Deactivated" << "\n";
                 }
         }
 
@@ -438,10 +437,10 @@ static void calcSafety() {
         if (mgMATIME.size()>1000) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
         mgWSMA33.push_back(mgSMA3G);
-        cout << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
-        cout << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
+        cout << FN::uiT() << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
+        cout << FN::uiT() << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
 
-        cout << "Safety SMA3 Array size: " << mgWSMA33.size() << "\n";
+        cout << FN::uiT() << "Safety SMA3 Array size: " << mgWSMA33.size() << "\n";
         if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
 
         if (qpRepo["safetynet"].get<bool>() == false) {
@@ -452,9 +451,9 @@ static void calcSafety() {
 
 
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
-                cout << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
-                cout << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
-                cout << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
+                cout << FN::uiT() << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
+                cout << FN::uiT() << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
+                cout << FN::uiT() << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
 
                 if (
                         (
@@ -475,12 +474,12 @@ static void calcSafety() {
                         // activate Safety, Safety buySize
                         double SafeBuyValuation =   (mgWSMA33.back() * 100 /  mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) - 100);
                         qpRepo["safemode"] = (int)mSafeMode::buy;
-                        cout << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::buy << "\n";
+                        cout << FN::uiT() << "Setting SafeMode: "<< qpRepo["safemode"].get<int>() << " ENUM Value: " << (int)mSafeMode::buy << "\n";
                         qpRepo["safetyactive"] = true;
                         qpRepo["safetimestart"] = std::time(nullptr);
                         qpRepo["safetyduration"] = qpRepo["safetimestart"].get<int>() + (qpRepo["safetimeOver"].get<int>() * 60000);
-                        cout << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << qpRepo["safetyP"].get<double>()/100 << "\n";
-                        cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
+                        cout << FN::uiT() << "Activating Safety BUY Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() << "] Value is: " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << " Equals: " << SafeBuyValuation << " which is More than safety Percent: " << qpRepo["safetyP"].get<double>()/100 << "\n";
+
                 }
 /*
                 if (     (
@@ -509,50 +508,50 @@ static void calcSafety() {
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
                 if (qpRepo["safemode"].get<int>() == (int)mSafeMode::sell) {
-                        cout << "SAFETY! Safe Mode Selling! " << "\n";
+                        cout << FN::uiT() << "SAFETY! Safe Mode Selling! " << "\n";
                 }
                 if(qpRepo["safemode"].get<int>() == (int)mSafeMode::buy) {
-                        cout << "SAFETY! Safe Mode Buying! " << "\n";
+                        cout << FN::uiT() << "SAFETY! Safe Mode Buying! " << "\n";
                 }
                 if(qpRepo["safemode"].get<int>() == (int)mSafeMode::unknown) {
-                        cout << "SAFETY! Safe Mode unknown!! " << "\n";
+                        cout << FN::uiT() << "SAFETY! Safe Mode unknown!! " << "\n";
                 }
-                cout << "SAFETY! " << " pDiv should now be set to ZERO.\n";
-                cout << "SAFETY! " << qpRepo["safemode"].get<int>() << "\n";
+                cout << FN::uiT() << "SAFETY! " << " pDiv should now be set to ZERO.\n";
+                cout << FN::uiT() << "SAFETY! " << qpRepo["safemode"].get<int>() << "\n";
 
         }
         // check for safety time is over
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>() ) {
-                cout << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
+                cout << FN::uiT() << "Entering Safety Check EXIT, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
 
                 if(qpRepo["safetyactive"].get<bool>() and qpRepo["safetynet"].get<bool>())          // Check to make sure we ae currently in active safety state and safety box in UI is active
                 {
 
-                        cout << "is Timer Over?:" << "\n";
-                        cout << "Current Value: " << mgWSMA33.back() << "\n";
-                        cout << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                        cout << "time back at time index: " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
-                        cout << "Current SMA3 time: " << mgMATIME.back() << "\n";
-                        cout << "time counter: " <<   qpRepo["safetimestart"] << "\n";
-                        cout << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
-                        cout << "Duration: " << (qpRepo["safetimeOver"].get<int>() * 60) << "\n";
+                        cout << FN::uiT() << "is Timer Over?:" << "\n";
+                        cout << FN::uiT() << "Current Value: " << mgWSMA33.back() << "\n";
+                        cout << FN::uiT() << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
+                        cout << FN::uiT() << "time back at time index: " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
+                        cout << FN::uiT() << "Current SMA3 time: " << mgMATIME.back() << "\n";
+                        cout << FN::uiT() << "time counter: " <<   qpRepo["safetimestart"] << "\n";
+                        cout << FN::uiT() << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
+                        cout << FN::uiT() << "Duration: " << (qpRepo["safetimeOver"].get<int>() * 60) << "\n";
                         // exit sell mode
                         if(     (mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) )
                                 && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell
                                 ) {
-                                cout << "SAFETY: Breaking Safety Mode\n";
+                                cout<< FN::uiT()  << "SAFETY: Breaking Safety Mode\n";
                                 qpRepo["safemode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
-                                cout << "SAFETY: Exit Sell Mode\n";
+                                cout << FN::uiT() << "SAFETY: Exit Sell Mode\n";
 
                         }
                         if(     (mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) )
                                 && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy
                                 ) {
-                                cout << "SAFETY: Breaking Safety Mode\n";
+                                cout << FN::uiT() << "SAFETY: Breaking Safety Mode\n";
                                 qpRepo["safemode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
-                                cout << "SAFETY: Exit Buy Mode\n";
+                                cout << FN::uiT() <<  "SAFETY: Exit Buy Mode\n";
 
                         }
                         //  printf("debugzz\n");
@@ -602,11 +601,11 @@ static void calcSafety() {
 
 static double LoadEWMA(int periods) {
         //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
-        cout << "Starting EWMA\n";
+        cout << FN::uiT()  << "Starting EWMA\n";
         string baseurl = "http://34.227.139.87/MarketPublish/";
         string pair =  CF::cfString("TradedPair");
         pair.erase(std::remove(pair.begin(), pair.end(), '/'), pair.end());
-        cout << "pair: " << pair << "\n";
+        cout << FN::uiT()  << "pair: " << pair << "\n";
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
         int BackTraceStart = CurrentTime - (periods * 60000);
@@ -615,9 +614,9 @@ static double LoadEWMA(int periods) {
         double previous = 0;
         bool first = true;
         string fullURL = string(baseurl.append("?periods=").append(std::to_string(periods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
-        cout << "Full URL: " << fullURL << "\n";
+        cout << FN::uiT()  << "Full URL: " << fullURL << "\n";
         json EWMA = FN::wJet(fullURL);
-        cout << "made it past the curl\n";
+        cout << FN::uiT()  << "made it past the curl\n";
         //cout << EWMA << "\n";
         for (auto it = EWMA["result"][std::to_string(periods)].begin(); it != EWMA["result"][std::to_string(periods)].end(); ++it)
         {
@@ -631,7 +630,7 @@ static double LoadEWMA(int periods) {
 
 
         }
-        cout << "period: " << periods << " EWMA is: " << myEWMA << "\n";
+        cout << FN::uiT()  << "period: " << periods << " EWMA is: " << myEWMA << "\n";
         return myEWMA;
 
 }
