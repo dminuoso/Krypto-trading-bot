@@ -623,7 +623,7 @@ static double LoadEWMA(int periods) {
         json EWMA = FN::wJet(fullURL);
         cout << FN::uiT()  << "made it past the curl\n";
         //cout << EWMA << "\n";
-        for (auto it = EWMA["result"][std::to_string(periods)].begin(); it != EWMA["result"][std::to_string(periods)].end(); ++it)
+        for (auto it = EWMA["result"][std::to_string(doublePeriods)].begin(); it != EWMA["result"][std::to_string(doublePeriods)].end(); ++it)
         {
 
                 json EMAArray = it.value();
