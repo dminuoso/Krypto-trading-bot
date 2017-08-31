@@ -636,10 +636,10 @@ static double LoadEWMA(int periods) {
         {
                 if(first)
                 {
-                        previous = *it;
+                        previous = it;
                         first = false;
                 } else {
-                myEWMA = MycalcEwma(*it, previous,periods);
+                myEWMA = MycalcEwma(it, previous,periods);
                 //cout << "Close Value is: " << *it << "\n";
                 previous = myEWMA;
                 }
