@@ -367,6 +367,14 @@ static void calcTargetPos() {
                 if (newTargetPosition > 1) newTargetPosition = 1;
                 else if (newTargetPosition < -1) newTargetPosition = -1;
         }
+        if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
+                double newTrend = ((SMA3 * 100 / mgEwmaL) - 100);
+                double newEwmacrossing = ((mgEwmaS * 100 / mgEwmaM) - 100);
+                newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+        } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS)
+                newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+        if (newTargetPosition > 1) newTargetPosition = 1;
+        else if (newTargetPosition < -1) newTargetPosition = -1;
         mgTargetPos = newTargetPosition;
 };
 
