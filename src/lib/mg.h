@@ -105,6 +105,7 @@ static void load() {
         cout << FN::uiT() << "DB loaded EWMA Short = " << mgEwmaS << "." << endl;
         if(qpRepo["take_profit_active"].get<bool>()) { mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>()); }
         qpRepo["safemode"]  = (int)mSafeMode::unknown;
+        qpRepo["takeProfitNow"] = false;
 };
 static json onSnapTrade(json z) {
         json k;
@@ -349,11 +350,13 @@ static void calcTargetPos() {
                 if(mgEwmaProfit > SMA3) {
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
                          cout << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                         qpRepo["takeProfitNow"] = false;
                 }
                 if(mgEwmaProfit < SMA3) {
                          newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
                          cout << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                          cout << "EWMA Profit Take Profit: " << takeProfit << "\n";
+                         qpRepo["takeProfitNow"] = true;
                 }
 
 

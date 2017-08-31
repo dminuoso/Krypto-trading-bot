@@ -86,6 +86,7 @@ json defQP {
         {  "take_profic_percent",           50                                     },
         {  "ewmaProfit",                    250                                    },
         {  "OldewmaProfit",                    250                                    },
+        {  "takeProfitNow",                    false                                    },
 };
 vector<string> boolQP = {
         "widthPercentage", "bestWidth", "sellSizeMax", "buySizeMax", "percentageValues",
