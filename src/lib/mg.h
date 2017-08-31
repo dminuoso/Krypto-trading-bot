@@ -345,7 +345,7 @@ static void calcTargetPos() {
                         new TargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"] - Take_profit_calc.
                         */
                 cout << "mgEwmaProfit: " << mgEwmaProfit << " SMA3: " << SMA3 << "\n";
-                double takeProfit = ((qpRepo["take_profic_percent"].get<double>()/100) * 2 / 100) - 1;
+                double takeProfit = (((qpRepo["take_profic_percent"].get<double>()/100) * 2) / 100) - 1;
                 if(mgEwmaProfit > SMA3) {
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
                          cout << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << "Target: " << newTargetPosition <<  "\n";
@@ -367,14 +367,7 @@ static void calcTargetPos() {
                 if (newTargetPosition > 1) newTargetPosition = 1;
                 else if (newTargetPosition < -1) newTargetPosition = -1;
         }
-        if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
-                double newTrend = ((SMA3 * 100 / mgEwmaL) - 100);
-                double newEwmacrossing = ((mgEwmaS * 100 / mgEwmaM) - 100);
-                newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS)
-                newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        if (newTargetPosition > 1) newTargetPosition = 1;
-        else if (newTargetPosition < -1) newTargetPosition = -1;
+
         mgTargetPos = newTargetPosition;
 };
 
@@ -387,6 +380,14 @@ static void calcASP() {
         cout <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
         cout << "Current Short: " << mgEwmaS << "\n";
         cout << "Current Long: " << mgEwmaL << "\n";
+        if(qpRepo["take_profit_active"].get<bool>()) {
+                if(mgEwmaProfit < SMA3)
+                {
+                        qpRepo["asptriggered"] = false;
+                        cout << "Disabling ASP for TP\n";
+                        return;
+                }
+        }
         if (
                 (
                         (
