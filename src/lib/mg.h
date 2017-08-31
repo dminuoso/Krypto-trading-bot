@@ -337,7 +337,7 @@ static void calcTargetPos() {
         SMA3 /= mgSMA3.size();
         mgSMA3G = SMA3;
         double newTargetPosition = 0;
-        if(qpRepo["take_profit_active"].get<bool()) {
+        if(qpRepo["take_profit_active"].get<bool>()) {
                 /*If ewma take profit > SMA3
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"]
                         else
