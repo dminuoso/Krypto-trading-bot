@@ -45,9 +45,9 @@ static void main(Local<Object> exports) {
                                 levelUp(o);
                         });
         EV::evOn("GatewayMarketConnect", [](json k) {
-          if ((mConnectivity)k["/0"_json_pointer].get<int>() == mConnectivity::Disconnected)
-            levelUp({});
-        });
+                                if ((mConnectivity)k["/0"_json_pointer].get<int>() == mConnectivity::Disconnected)
+                                        levelUp({});
+                        });
         EV::evOn("QuotingParameters", [](json k) {
                                 fairV();
                         });
@@ -337,14 +337,31 @@ static void calcTargetPos() {
         SMA3 /= mgSMA3.size();
         mgSMA3G = SMA3;
         double newTargetPosition = 0;
-        if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
-                double newTrend = ((SMA3 * 100 / mgEwmaL) - 100);
-                double newEwmacrossing = ((mgEwmaS * 100 / mgEwmaM) - 100);
-                newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS)
-                newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-        if (newTargetPosition > 1) newTargetPosition = 1;
-        else if (newTargetPosition < -1) newTargetPosition = -1;
+        if(qpRepo["take_profit_active"].get<bool()) {
+                /*If ewma take profit > SMA3
+                        newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"]
+                        else
+                        If ewma take profit < SMA3
+                        new TargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"] - Take_profit_calc.
+                        */
+                if(mgEwmaProfit > SMA3) {
+                        newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>()
+                }
+                if(mgEwmaProfit < SMA3) {
+                        new TargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>() - qpRepo["take_profic_percent"].get<double>();
+                }
+
+
+        } else {
+                if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LMS) {
+                        double newTrend = ((SMA3 * 100 / mgEwmaL) - 100);
+                        double newEwmacrossing = ((mgEwmaS * 100 / mgEwmaM) - 100);
+                        newTargetPosition = ((newTrend + newEwmacrossing) / 2) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+                } else if ((mAutoPositionMode)qpRepo["autoPositionMode"].get<int>() == mAutoPositionMode::EWMA_LS)
+                        newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+                if (newTargetPosition > 1) newTargetPosition = 1;
+                else if (newTargetPosition < -1) newTargetPosition = -1;
+        }
         mgTargetPos = newTargetPosition;
 };
 
@@ -502,7 +519,7 @@ static void calcSafety() {
                         // exit sell mode
                         if(     (mgWSMA33.back() > mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) )
                                 && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell
-                                ){
+                                ) {
                                 cout << "SAFETY: Breaking Safety Mode\n";
                                 qpRepo["safemode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
@@ -511,7 +528,7 @@ static void calcSafety() {
                         }
                         if(     (mgWSMA33.back() < mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) )
                                 && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy
-                                ){
+                                ) {
                                 cout << "SAFETY: Breaking Safety Mode\n";
                                 qpRepo["safemode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
@@ -536,14 +553,14 @@ static void calcSafety() {
 
 
                                 )
-                        {
+                           {
                                 cout << "Breaking Safey SELL Mode Time over:" << (qpRepo["safetimeOver"].get<int>() * 60) << " was greater than " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
                                 cout << "Breaking Safey SELL Mode: Latest SMA3 Value: " << mgWSMA33.back() << " was Greater than " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
                                 qpRepo["safemode"] = (int)mSafeMode::unknown;
                                 qpRepo["safetyactive"] = false;
                                 cout << "Exiting safety mode sell\n";
-                        }
-                        */
+                           }
+                         */
                 }
         }
         // Set newTargetPosition

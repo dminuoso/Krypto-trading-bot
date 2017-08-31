@@ -261,7 +261,7 @@ namespace K {
             pgSideAPR = "Sell";
             if (!qpRepo["sellSizeMax"].get<bool>()) rawQuote["askSz"] = fmin(qpRepo["aprMultiplier"].get<int>()*sellSize, fmin(totalBasePosition - pgTargetBasePos, pgPos["baseAmount"].get<double>() / 2));
             if (!qpRepo["sellSizeMax"].get<bool>() && qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell ) {
-              rawQuote["askSz"] = totalBasePosition; // setting askSz in safety sell mode to dump stuff
+              rawQuote["askSz"] = totalBasePosition - 1; // setting askSz in safety sell mode to dump stuff
               cout << "SAFETY: Safety Sell Active & APR Active Set to dump: " << rawQuote["askSz"] << "\n"; // comments because we like to say whats happening
             }
           }
@@ -379,7 +379,7 @@ namespace K {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
             rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
             rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .05;
-            cout << "SAFETY: askpx??: " <<  mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .05 << "\n";
+            cout << "SAFETY: askpx??: " <<  mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01 << "\n";
             cout << "SAFETY: Safety Sell Active & APR Adjusting askSZ to : " << rawQuote["askSz"] << "px" << rawQuote["askPx"]  << " APR Active and Safety Sell Active\n";
           }
         } else rawQuote["isAskPong"] = false;
