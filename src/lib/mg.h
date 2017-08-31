@@ -344,6 +344,7 @@ static void calcTargetPos() {
                         If ewma take profit < SMA3
                         new TargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"] - Take_profit_calc.
                         */
+                cout << "mgEwmaProfit: " << mgEwmaProfit << " SMA3: " << SMA3 << "\n";
                 double takeProfit = ((qpRepo["take_profic_percent"].get<double>()/100) * 2 / 100) - 1;
                 if(mgEwmaProfit > SMA3) {
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
