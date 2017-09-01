@@ -324,7 +324,7 @@ static void calcTargetPos() {
         double SMA3 = 0;
         if(mgSMA3.size() == 0)
         {
-                <vector> double preLoadSMA = LoadSMA(9);
+                vector <double> preLoadSMA = LoadSMA(9);
 
                 for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
                 {
