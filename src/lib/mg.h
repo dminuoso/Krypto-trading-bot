@@ -624,6 +624,7 @@ static double LoadEWMA(int periods) {
                 json EMAArray = it.value();
 
                 EMAStorage.push_back(EMAArray["FairValue"].get<double>());
+                cout << "FV: " << EMAArray["FairValue"].get<double>() << "\n";
         }
         std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
         for(auto it = EMAStorage.begin(); it != EMAStorage.end(); ++it)
