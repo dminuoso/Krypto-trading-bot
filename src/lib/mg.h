@@ -597,7 +597,8 @@ static void calcSafety() {
 static double LoadEWMA(int periods) {
         //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
         cout << FN::uiT()  << "Starting EWMA\n";
-        string baseurl = "http://34.227.139.87/MarketPublish/";
+        //string baseurl = "http://34.227.139.87/MarketPublish/";
+        string baseurl = "http://34.227.139.87/MarketPublish/fairV.php";
         string pair =  CF::cfString("TradedPair");
         pair.erase(std::remove(pair.begin(), pair.end(), '/'), pair.end());
         cout << FN::uiT()  << "pair: " << pair << "\n";
