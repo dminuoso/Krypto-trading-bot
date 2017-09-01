@@ -324,6 +324,7 @@ static void calcTargetPos() {
         double SMA3 = 0;
         if(mgSMA3.size() == 0)
         {
+                cout << FN::uiT()  << " Warming up SMA3" << "\n";
                 vector <double> preLoadSMA = LoadSMA(9);
 
                 for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
@@ -335,6 +336,7 @@ static void calcTargetPos() {
                                 SMA3 += *it;
                         SMA3 /= mgSMA3.size();
                         mgSMA3G = SMA3;
+                        mgWSMA33.push_back(mgSMA3G);
                 }
 
         } else {
@@ -346,6 +348,7 @@ static void calcTargetPos() {
                         SMA3 += *it;
                 SMA3 /= mgSMA3.size();
                 mgSMA3G = SMA3;
+                mgWSMA33.push_back(mgSMA3G);
         }
         double newTargetPosition = 0;
         if(qpRepo["take_profit_active"].get<bool>() ) {
@@ -449,7 +452,7 @@ static void calcSafety() {
         mgMATIME.push_back(std::time(nullptr));
         if (mgMATIME.size()>1000) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
-        mgWSMA33.push_back(mgSMA3G);
+
         cout << FN::uiT() << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
         cout << FN::uiT() << "Safety Enabled:" << qpRepo["safetynet"].get<bool>() << "\n";
 
