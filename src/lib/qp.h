@@ -143,11 +143,8 @@ static json onHand(json k) {
         ) {
           if ((mQuotingMode)k["mode"].get<int>() == mQuotingMode::Depth)
             k["widthPercentage"] = false;
+
             
-            k["safemode"] == (int)mSafeMode::unknown;
-            k["safetyactive"] = false;
-            k["asptriggered"] = false;
-            k["safetimestart"] = 0;
           qpRepo = k;
           clean();
           DB::insert(uiTXT::QuotingParametersChange, k);

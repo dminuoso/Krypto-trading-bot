@@ -321,16 +321,34 @@ static void calcEwma(double *k, int periods) {
         } else *k = mgFairValue;
 };
 static void calcTargetPos() {
-        mgSMA3.push_back(mgFairValue);
-
-        if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
         double SMA3 = 0;
-        for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
-                SMA3 += *it;
-        SMA3 /= mgSMA3.size();
-        mgSMA3G = SMA3;
+        if(mgSMA3.size() == 0)
+        {
+                <vector> double preLoadSMA = LoadSMA(9);
+
+                for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
+                {
+                        mgSMA3.push_back(*ia);
+                        (mgSMA3.size()>3)mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
+
+                        for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
+                                SMA3 += *it;
+                        SMA3 /= mgSMA3.size();
+                        mgSMA3G = SMA3;
+                }
+
+        } else {
+                mgSMA3.push_back(mgFairValue);
+
+                if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
+
+                for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
+                        SMA3 += *it;
+                SMA3 /= mgSMA3.size();
+                mgSMA3G = SMA3;
+        }
         double newTargetPosition = 0;
-        if(qpRepo["take_profit_active"].get<bool>()) {
+        if(qpRepo["take_profit_active"].get<bool>() ) {
                 /*If ewma take profit > SMA3
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"]
                         else
@@ -341,6 +359,7 @@ static void calcTargetPos() {
                 double takeProfit = (((qpRepo["take_profic_percent"].get<double>()/100) * 2) / 100) - 1;
                 if(mgEwmaProfit > SMA3) {
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+
                         cout << FN::uiT()  << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
                         qpRepo["takeProfitNow"] = true;
@@ -350,7 +369,7 @@ static void calcTargetPos() {
                         cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
                         qpRepo["takeProfitNow"] = true;
-                        
+
                 }
 
 
@@ -633,9 +652,41 @@ static double LoadEWMA(int periods) {
         }
         cout << FN::uiT()  << "period: " << periods << " EWMA is: " << myEWMA << "\n";
         return myEWMA;
-
 }
 
+static <vector>double LoadSMA(int periods) {
+        //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
+        cout << FN::uiT()  << "Starting Load SMA\n";
+        //string baseurl = "http://34.227.139.87/MarketPublish/";
+        string baseurl = "http://34.227.139.87/MarketPublish/fairV.php";
+        string pair =  CF::cfString("TradedPair");
+        pair.erase(std::remove(pair.begin(), pair.end(), '/'), pair.end());
+        cout << FN::uiT()  << "pair: " << pair << "\n";
+        string exchange =  CF::cfString("EXCHANGE");
+        int CurrentTime = std::time(nullptr);
+        int doublePeriods = periods;
+        int BackTraceStart = CurrentTime - (periods * 60000);
+        std::vector<double> EWMAArray;
+        vector<double> EMAStorage;
+        double myEWMA = 0;
+        double previous = 0;
+        bool first = true;
+        string fullURL = string(baseurl.append("?periods=").append(std::to_string(doublePeriods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
+        cout << FN::uiT()  << "Full URL: " << fullURL << "\n";
+        json EWMA = FN::wJet(fullURL);
+        //cout << EWMA << "\n";
+        for (auto it = EWMA["result"][std::to_string(doublePeriods)].begin(); it != EWMA["result"][std::to_string(doublePeriods)].end(); ++it)
+        {
+
+                json EMAArray = it.value();
+
+                EMAStorage.push_back(EMAArray["FairValue"].get<double>());
+
+        }
+        std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
+
+        return myEWMA;
+}
 
 
 };
