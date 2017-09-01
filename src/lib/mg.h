@@ -609,7 +609,7 @@ static double LoadEWMA(int periods) {
         int BackTraceStart = CurrentTime - (periods * 60000);
         std::vector<double> EWMAArray;
         vector<double> EMAStorage;
-        &myEWMA = 0;
+        myEWMA = 0;
         double previous = 0;
         bool first = true;
         string fullURL = string(baseurl.append("?periods=").append(std::to_string(doublePeriods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
@@ -630,7 +630,7 @@ static double LoadEWMA(int periods) {
         {
                 if(first)
                 {
-                         &myEWMA = *it;
+                         myEWMA = *it;
                         first = false;
                 } else {
               //  myEWMA = MycalcEwma(*it, previous,periods);
