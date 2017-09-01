@@ -30,6 +30,7 @@ namespace K {
   vector<double> ArrayEwmaS;   // vector for EwmaS
   vector<double> ArrayEwmaM;  // vector for EwmaM
   double mgEwmaProfit = 0;
+  double myEWMA = 0;
   vector<int> mgMATIME;
   double mgSMA3G;   // global SMA3 current value
   class MG {
@@ -608,7 +609,7 @@ static double LoadEWMA(int periods) {
         int BackTraceStart = CurrentTime - (periods * 60000);
         std::vector<double> EWMAArray;
         vector<double> EMAStorage;
-        double myEWMA = 0;
+        &myEWMA = 0;
         double previous = 0;
         bool first = true;
         string fullURL = string(baseurl.append("?periods=").append(std::to_string(doublePeriods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
@@ -621,41 +622,29 @@ static double LoadEWMA(int periods) {
 
 
                 json EMAArray = it.value();
-                cout << EMAArray << "\n";
-                EMAStorage.push_back(EMAArray[1].get<double>());
+
+                EMAStorage.push_back(EMAArray["FairValue"].get<double>());
         }
         std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
         for(auto it = EMAStorage.begin(); it != EMAStorage.end(); ++it)
         {
                 if(first)
                 {
-                        previous = *it;
+                         &myEWMA = *it;
                         first = false;
                 } else {
-                myEWMA = MycalcEwma(*it, previous,periods);
+              //  myEWMA = MycalcEwma(*it, previous,periods);
+               calcEwma(&myEWMA, periods);
                 //cout << "Close Value is: " << *it << "\n";
-                previous = myEWMA;
                 }
         }
-        cout << FN::uiT()  << "period: " << periods << " EWMA is: " << myEWMA << "\n";
-        return myEWMA;
+        cout << FN::uiT()  << "period: " << periods << " EWMA is: " << &myEWMA << "\n";
+        return &myEWMA;
 
 }
 
 
-static double  MycalcEwma(double k, double previous, int periods) {
-        //        cout << " pre-K: " << k << "\n";
-        //        cout << " previous : " << previous << "\n";
 
-        if (k) {
-                double alpha = (double)2 / (periods + 1);
-                //cout << "Alpha: " << alpha << "\n";
-                k = alpha * previous + (1 - alpha) * k;
-                //cout << " post K: " << k << "\n";
-        } else k = previous;
-
-        return k;
-};
 };
 }
 
