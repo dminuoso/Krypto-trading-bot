@@ -2,79 +2,79 @@
 #define K_MG_H_
 
 namespace K {
-  int mgT = 0;
-  vector<mGWmt> mGWmt_;
-  json mGWmktFilter;
-  double mgFairValue = 0;
-  double mgEwmaL = 0;
-  double mgEwmaM = 0;
-  double mgEwmaS = 0;
-  double mgEwmaP = 0;
-  vector<double> mgSMA3;
-  vector<double> mgStatFV;
-  vector<double> mgStatBid;
-  vector<double> mgStatAsk;
-  vector<double> mgStatTop;
-  double mgStdevFV = 0;
-  double mgStdevFVMean = 0;
-  double mgStdevBid = 0;
-  double mgStdevBidMean = 0;
-  double mgStdevAsk = 0;
-  double mgStdevAskMean = 0;
-  double mgStdevTop = 0;
-  double mgStdevTopMean = 0;
-  double mgTargetPos = 0;
-  vector<double> mgSMA3_temp; // warm-up SMA3 data!
-  vector<double> mgWSMA33;        // Logging SMA3 values
-  vector<double> ArrayEwmaL;   // vector for EwmaL
-  vector<double> ArrayEwmaS;   // vector for EwmaS
-  vector<double> ArrayEwmaM;  // vector for EwmaM
-  double mgEwmaProfit = 0;
-  vector<int> mgMATIME;
-  double mgSMA3G;   // global SMA3 current value
-  class MG {
-    public:
-      static void main() {
+int mgT = 0;
+vector<mGWmt> mGWmt_;
+json mGWmktFilter;
+double mgFairValue = 0;
+double mgEwmaL = 0;
+double mgEwmaM = 0;
+double mgEwmaS = 0;
+double mgEwmaP = 0;
+vector<double> mgSMA3;
+vector<double> mgStatFV;
+vector<double> mgStatBid;
+vector<double> mgStatAsk;
+vector<double> mgStatTop;
+double mgStdevFV = 0;
+double mgStdevFVMean = 0;
+double mgStdevBid = 0;
+double mgStdevBidMean = 0;
+double mgStdevAsk = 0;
+double mgStdevAskMean = 0;
+double mgStdevTop = 0;
+double mgStdevTopMean = 0;
+double mgTargetPos = 0;
+vector<double> mgSMA3_temp;   // warm-up SMA3 data!
+vector<double> mgWSMA33;          // Logging SMA3 values
+vector<double> ArrayEwmaL;     // vector for EwmaL
+vector<double> ArrayEwmaS;     // vector for EwmaS
+vector<double> ArrayEwmaM;    // vector for EwmaM
+double mgEwmaProfit = 0;
+vector<int> mgMATIME;
+double mgSMA3G;     // global SMA3 current value
+class MG {
+public:
+static void main() {
         load();
         EV::on(mEvent::MarketTradeGateway, [](json k) {
-          tradeUp(k);
-        });
+                                tradeUp(k);
+                        });
         EV::on(mEvent::MarketDataGateway, [](json o) {
-          levelUp(o);
-        });
+                                levelUp(o);
+                        });
         UI::uiSnap(uiTXT::MarketTrade, &onSnapTrade);
         UI::uiSnap(uiTXT::FairValue, &onSnapFair);
         UI::uiSnap(uiTXT::EWMAChart, &onSnapEwma);
-      };
-      static bool empty() {
+};
+static bool empty() {
         return (mGWmktFilter.is_null()
-          or mGWmktFilter["bids"].is_null()
-          or mGWmktFilter["asks"].is_null()
-        );
-      };
-      static void calcStats() {
+                or mGWmktFilter["bids"].is_null()
+                or mGWmktFilter["asks"].is_null()
+                );
+};
+static void calcStats() {
         if (++mgT == 60) {
                 mgT = 0;
                 ewmaPUp();
                 ewmaUp();
         }
         stdevPUp();
-      };
-      static void calcFairValue() {
+};
+static void calcFairValue() {
         if (empty()) return;
         double mgFairValue_ = mgFairValue;
         mgFairValue = FN::roundNearest(
-          mFairValueModel::BBO == (mFairValueModel)qpRepo["fvModel"].get<int>()
-            ? (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>()) / 2
-            : (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() * mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>() * mGWmktFilter["/bids/0/size"_json_pointer].get<double>()) / (mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/size"_json_pointer].get<double>()),
-          gw->minTick
-        );
+                mFairValueModel::BBO == (mFairValueModel)qpRepo["fvModel"].get<int>()
+                ? (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>()) / 2
+                : (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() * mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>() * mGWmktFilter["/bids/0/size"_json_pointer].get<double>()) / (mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/size"_json_pointer].get<double>()),
+                gw->minTick
+                );
         if (!mgFairValue or (mgFairValue_ and abs(mgFairValue - mgFairValue_) < gw->minTick)) return;
         EV::up(mEvent::PositionGateway);
         UI::uiSend(uiTXT::FairValue, {{"price", mgFairValue}}, true);
-      };
-    private:
-      static void load() {
+};
+private:
+static void load() {
         json k = DB::load(uiTXT::MarketData);
         if (k.size()) {
                 for (json::iterator it = k.begin(); it != k.end(); ++it) {
@@ -169,8 +169,8 @@ static void tradeUp(json k) {
         if (mGWmt_.size()>69) mGWmt_.erase(mGWmt_.begin());
         EV::up(mEvent::MarketTrade);
         UI::uiSend(uiTXT::MarketTrade, tradeUp(t));
-      };
-      static void levelUp(json k) {
+};
+static void levelUp(json k) {
         filter(k);
         UI::uiSend(uiTXT::MarketData, k, true);
 };
@@ -263,27 +263,27 @@ static void ewmaUp() {
 static void ewmaPUp() {
         calcEwma(&mgEwmaP, qpRepo["quotingEwmaProtectionPeriods"].get<int>());
         EV::up(mEvent::EWMAProtectionCalculator);
-      };
-      static void filter(json k) {
+};
+static void filter(json k) {
         mGWmktFilter = (k.is_null() or k["bids"].is_null() or k["asks"].is_null())
-          ? json{{"bids", {}},{"asks", {}}} : k;
+                       ? json{{"bids", {}},{"asks", {}}} : k;
         if (empty()) return;
         for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it)
                 filter(mSide::Bid == (mSide)it->second["side"].get<int>() ? "bids" : "asks", it->second);
         if (!empty()) {
-          calcFairValue();
-          EV::up(mEvent::FilteredMarket);
+                calcFairValue();
+                EV::up(mEvent::FilteredMarket);
         }
-      };
-      static void filter(string k, json o) {
-        for (json::iterator it = mGWmktFilter[k].begin(); it != mGWmktFilter[k].end();)
-          if (abs((*it)["price"].get<double>() - o["price"].get<double>()) < gw->minTick) {
-            (*it)["size"] = (*it)["size"].get<double>() - o["quantity"].get<double>();
-            if ((*it)["size"].get<double>() < gw->minTick) mGWmktFilter[k].erase(it);
-            break;
-          } else ++it;
-      };
-      static void cleanStdev() {
+};
+static void filter(string k, json o) {
+        for (json::iterator it = mGWmktFilter[k].begin(); it != mGWmktFilter[k].end(); )
+                if (abs((*it)["price"].get<double>() - o["price"].get<double>()) < gw->minTick) {
+                        (*it)["size"] = (*it)["size"].get<double>() - o["quantity"].get<double>();
+                        if ((*it)["size"].get<double>() < gw->minTick) mGWmktFilter[k].erase(it);
+                        break;
+                } else ++it;
+};
+static void cleanStdev() {
         size_t periods = (size_t)qpRepo["quotingStdevProtectionPeriods"].get<int>();
         if (mgStatFV.size()>periods) mgStatFV.erase(mgStatFV.begin(), mgStatFV.end()-periods);
         if (mgStatBid.size()>periods) mgStatBid.erase(mgStatBid.begin(), mgStatBid.end()-periods);
@@ -335,23 +335,23 @@ static void calcTargetPos() {
                         else
                         If ewma take profit < SMA3
                         new TargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"] - Take_profit_calc.
-                        */
+                 */
                 cout << FN::uiT()  << "mgEwmaProfit: " << mgEwmaProfit << " SMA3: " << SMA3 << "\n";
                 double takeProfit = (((qpRepo["take_profic_percent"].get<double>()/100) * 2) / 100) - 1;
                 if(mgEwmaProfit < SMA3) {
-                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
-                         cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
-                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
-                         qpRepo["takeProfitNow"] = true;
+                        newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
+                        cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                        cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
+                        qpRepo["takeProfitNow"] = true;
                 }
                 if(mgEwmaProfit > SMA3) {
-                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
-                         cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
-                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
-                         qpRepo["takeProfitNow"] = true;
-                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
-                          cout << FN::uiT()  << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
-                          qpRepo["takeProfitNow"] = false;
+                        newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
+                        cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                        cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
+                        qpRepo["takeProfitNow"] = true;
+                        newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"].get<double>());
+                        cout << FN::uiT()  << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
+                        qpRepo["takeProfitNow"] = false;
                 }
 
 
@@ -498,7 +498,7 @@ static void calcSafety() {
                         cout << "Activating Safety SELL Mode First SMA3: " << mgWSMA33.back() << " SMA3[index -" <<  qpRepo["safetytime"].get<int>() <<"] Value is: " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << " Equals: " << SafeSellValuation << " which is less than safety Percent: " << -1 * (qpRepo["safetyP"].get<double>()/100) << "\n";
                         cout << "Safety Duration period is: " << qpRepo["safetyduration"].get<unsigned long int>() << "started at: " << qpRepo["safetimestart"].get<unsigned long int>() << " \n";
                 }
-                */
+ */
         }
         if(qpRepo["safetyactive"].get<bool>() == true and qpRepo["safetynet"].get<bool>() == true)
         {
@@ -614,23 +614,21 @@ static double LoadEWMA(int periods) {
         string fullURL = string(baseurl.append("?periods=").append(std::to_string(doublePeriods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
         cout << FN::uiT()  << "Full URL: " << fullURL << "\n";
         json EWMA = FN::wJet(fullURL);
-        cout << FN::uiT()  << "made it past the curl\n";
         //cout << EWMA << "\n";
         for (auto it = EWMA["result"][std::to_string(doublePeriods)].begin(); it != EWMA["result"][std::to_string(doublePeriods)].end(); ++it)
         {
 
-
                 json EMAArray = it.value();
 
                 EMAStorage.push_back(EMAArray["FairValue"].get<double>());
-                cout << "FV: " << EMAArray["FairValue"].get<double>() << "\n";
+
         }
         std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
         for(auto it = EMAStorage.begin(); it != EMAStorage.end(); ++it)
         {
-              myEWMA = *it;
-              //  myEWMA = MycalcEwma(*it, previous,periods);
-               calcEwma(&myEWMA, periods);
+                myEWMA = *it;
+                //  myEWMA = MycalcEwma(*it, previous,periods);
+                calcEwma(&myEWMA, periods);
                 //cout << "Close Value is: " << *it << "\n";
 
         }
