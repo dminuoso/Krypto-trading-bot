@@ -1,7 +1,7 @@
 import {NgZone, Component, Inject, Input, OnInit} from '@angular/core';
 import Highcharts = require('highcharts');
 
-import Models = require('../share/models');
+import Models = require('./models');
 import {SubscriberFactory} from './shared_directives';
 
 @Component({
@@ -541,6 +541,7 @@ export class StatsComponent implements OnInit {
   }
 
   private updatePosition = (o: Models.PositionReport) => {
+    if (o === null) return;
     let time = new Date().getTime();
     if (!(<any>Highcharts).customBaseCurrency) (<any>Highcharts).customBaseCurrency = Models.Currency[o.pair.base];
     if (!(<any>Highcharts).customQuoteCurrency) (<any>Highcharts).customQuoteCurrency = Models.Currency[o.pair.quote];

@@ -130,7 +130,6 @@ packages:
 	sudo chown `id -u` /data/db
 	$(MAKE) dist
 	$(MAKE) gdax -s
-	@$(MAKE) stunnel -s
 
 install:
 	@$(MAKE) packages
@@ -152,7 +151,6 @@ reinstall: .git src
 	@$(MAKE) test -s
 	@git checkout .
 	./node_modules/.bin/forever restartall
-	@$(MAKE) stunnel -s
 	@echo && echo ..done! Please refresh the GUI if is currently opened in your browser.
 
 list:
@@ -179,10 +177,9 @@ stop:
 start:
 	@test -d app || $(MAKE) install
 	./node_modules/.bin/forever start --minUptime 1 --spinSleepTime 21000 --uid $(KCONFIG) -a -l $(LOGFILE) K.js
-	@$(MAKE) stunnel -s
 
 stunnel: dist/K-stunnel.conf
-	test -z "${SKIP_STUNNEL}`ps axu | grep stunnel | grep -v grep`" && stunnel dist/K-stunnel.conf &
+	test -z "`ps axu | grep stunnel | grep -v grep`" && stunnel dist/K-stunnel.conf &
 
 gdax:
 	openssl s_client -showcerts -connect fix.gdax.com:4198 < /dev/null | openssl x509 -outform PEM > fix.gdax.com.pem
@@ -190,24 +187,26 @@ gdax:
 	sudo mkdir -p /usr/local/etc/stunnel/
 	sudo mv fix.gdax.com.pem /usr/local/etc/stunnel/
 
-server: node_modules/.bin/tsc src/server src/share app
+server: node_modules/.bin/tsc src/server app
 	@echo Building server files..
-	./node_modules/.bin/tsc --alwaysStrict -t ES6 -m commonjs --outDir app src/server/*.ts src/share/*.ts
+	./node_modules/.bin/tsc --alwaysStrict -t ES6 -m commonjs --outDir app/server src/server/*.ts
 	@echo DONE
 
-client: node_modules/.bin/tsc src/client src/share app
+client: node_modules/.bin/tsc src/client app
 	@echo Building client dynamic files..
-	./node_modules/.bin/tsc --alwaysStrict --experimentalDecorators -t ES6 -m commonjs --outDir app/pub/js src/client/*.ts src/share/*.ts
+	./node_modules/.bin/tsc --alwaysStrict --experimentalDecorators -t ES6 -m commonjs --outDir app/pub/js src/client/*.ts
 	@echo DONE
 
 pub: src/pub app/pub
 	@echo Building client static files..
 	cp -R src/pub/* app/pub/
+	mkdir -p app/pub/js/client
 	@echo DONE
 
-bundle: node_modules/.bin/browserify node_modules/.bin/uglifyjs app/pub/js/client/main.js
+bundle: node_modules/.bin/browserify node_modules/.bin/uglifyjs app/pub/js/main.js
 	@echo Building client bundle file..
-	./node_modules/.bin/browserify -t [ babelify --presets [ babili es2016 ] ] app/pub/js/client/main.js app/pub/js/lib/*.js | ./node_modules/.bin/uglifyjs | gzip > app/pub/js/client/bundle.min.js
+	./node_modules/.bin/browserify -t [ babelify --presets [ babili es2016 ] ] app/pub/js/main.js app/pub/js/lib/*.js | ./node_modules/.bin/uglifyjs | gzip > app/pub/js/client/bundle.min.js
+	rm app/pub/js/*.js
 	@echo DONE
 
 diff: .git

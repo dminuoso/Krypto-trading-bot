@@ -12,7 +12,7 @@ namespace K {
   static string cFname;
   class CF {
     public:
-      static void internal(Local<Object> exports) {
+      static void internal() {
         if (access("package.json", F_OK) != -1) {
           ifstream file_("package.json");
           pkRepo = json::parse(string((istreambuf_iterator<char>(file_)), istreambuf_iterator<char>()));
@@ -116,6 +116,8 @@ namespace K {
     private:
       static void cfExchange(mExchange e) {
         if (e == mExchange::Coinbase) {
+          system("test -n \"`/bin/pidof stunnel`\" && kill -9 `/bin/pidof stunnel`");
+          system("stunnel dist/K-stunnel.conf");
           json k = FN::wJet(string(gw->http).append("/products/").append(gw->symbol));
           if (k.find("quote_increment") != k.end()) {
             gw->minTick = stod(k["quote_increment"].get<string>());

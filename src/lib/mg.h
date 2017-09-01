@@ -2,75 +2,79 @@
 #define K_MG_H_
 
 namespace K {
-int mgT = 0;
-vector<mGWmt> mGWmt_;
-json mGWmkt;
-json mGWmktFilter;
-double mgFairValue = 0;
-double mgEwmaL = 0;
-double mgEwmaM = 0;
-double mgEwmaS = 0;
-double mgEwmaP = 0;
-vector<double> mgSMA3;
-vector<double> mgSMA3_temp; // warm-up SMA3 data!
-vector<double> mgStatFV;
-vector<double> mgStatBid;
-vector<double> mgStatAsk;
-vector<double> mgStatTop;
-double mgStdevFV = 0;
-double mgStdevFVMean = 0;
-double mgStdevBid = 0;
-double mgStdevBidMean = 0;
-double mgStdevAsk = 0;
-double mgStdevAskMean = 0;
-double mgStdevTop = 0;
-double mgStdevTopMean = 0;
-double mgTargetPos = 0;
-vector<double> mgWSMA33;        // Logging SMA3 values
-vector<double> ArrayEwmaL;   // vector for EwmaL
-vector<double> ArrayEwmaS;   // vector for EwmaS
-vector<double> ArrayEwmaM;  // vector for EwmaM
-double mgEwmaProfit = 0;
-vector<int> mgMATIME;
-double mgSMA3G;   // global SMA3 current value
-class MG {
-public:
-static void main(Local<Object> exports) {
-
+  int mgT = 0;
+  vector<mGWmt> mGWmt_;
+  json mGWmktFilter;
+  double mgFairValue = 0;
+  double mgEwmaL = 0;
+  double mgEwmaM = 0;
+  double mgEwmaS = 0;
+  double mgEwmaP = 0;
+  vector<double> mgSMA3;
+  vector<double> mgStatFV;
+  vector<double> mgStatBid;
+  vector<double> mgStatAsk;
+  vector<double> mgStatTop;
+  double mgStdevFV = 0;
+  double mgStdevFVMean = 0;
+  double mgStdevBid = 0;
+  double mgStdevBidMean = 0;
+  double mgStdevAsk = 0;
+  double mgStdevAskMean = 0;
+  double mgStdevTop = 0;
+  double mgStdevTopMean = 0;
+  double mgTargetPos = 0;
+  vector<double> mgSMA3_temp; // warm-up SMA3 data!
+  vector<double> mgWSMA33;        // Logging SMA3 values
+  vector<double> ArrayEwmaL;   // vector for EwmaL
+  vector<double> ArrayEwmaS;   // vector for EwmaS
+  vector<double> ArrayEwmaM;  // vector for EwmaM
+  double mgEwmaProfit = 0;
+  vector<int> mgMATIME;
+  double mgSMA3G;   // global SMA3 current value
+  class MG {
+    public:
+      static void main() {
         load();
-        EV::evOn("MarketTradeGateway", [](json k) {
-                                tradeUp(k);
-                        });
-        EV::evOn("MarketDataGateway", [](json o) {
-                                levelUp(o);
-                        });
-        EV::evOn("GatewayMarketConnect", [](json k) {
-                                if ((mConnectivity)k["/0"_json_pointer].get<int>() == mConnectivity::Disconnected)
-                                        levelUp({});
-                        });
-        EV::evOn("QuotingParameters", [](json k) {
-                                fairV();
-                        });
+        EV::on(mEvent::MarketTradeGateway, [](json k) {
+          tradeUp(k);
+        });
+        EV::on(mEvent::MarketDataGateway, [](json o) {
+          levelUp(o);
+        });
         UI::uiSnap(uiTXT::MarketTrade, &onSnapTrade);
         UI::uiSnap(uiTXT::FairValue, &onSnapFair);
         UI::uiSnap(uiTXT::EWMAChart, &onSnapEwma);
-};
-static void calc() {
+      };
+      static bool empty() {
+        return (mGWmktFilter.is_null()
+          or mGWmktFilter["bids"].is_null()
+          or mGWmktFilter["asks"].is_null()
+        );
+      };
+      static void calcStats() {
         if (++mgT == 60) {
                 mgT = 0;
                 ewmaPUp();
                 ewmaUp();
         }
         stdevPUp();
-};
-static bool empty() {
-        return (mGWmktFilter.is_null()
-                or mGWmktFilter["bids"].is_null()
-                or mGWmktFilter["asks"].is_null()
-                );
-};
-private:
-static void load() {
+      };
+      static void calcFairValue() {
+        if (empty()) return;
+        double mgFairValue_ = mgFairValue;
+        mgFairValue = FN::roundNearest(
+          mFairValueModel::BBO == (mFairValueModel)qpRepo["fvModel"].get<int>()
+            ? (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>()) / 2
+            : (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() * mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>() * mGWmktFilter["/bids/0/size"_json_pointer].get<double>()) / (mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/size"_json_pointer].get<double>()),
+          gw->minTick
+        );
+        if (!mgFairValue or (mgFairValue_ and abs(mgFairValue - mgFairValue_) < gw->minTick)) return;
+        EV::up(mEvent::PositionGateway);
+        UI::uiSend(uiTXT::FairValue, {{"price", mgFairValue}}, true);
+      };
+    private:
+      static void load() {
         json k = DB::load(uiTXT::MarketData);
         if (k.size()) {
                 for (json::iterator it = k.begin(); it != k.end(); ++it) {
@@ -163,12 +167,11 @@ static void tradeUp(json k) {
                 );
         mGWmt_.push_back(t);
         if (mGWmt_.size()>69) mGWmt_.erase(mGWmt_.begin());
-        EV::evUp("MarketTrade");
+        EV::up(mEvent::MarketTrade);
         UI::uiSend(uiTXT::MarketTrade, tradeUp(t));
-};
-static void levelUp(json k) {
-        mGWmkt = k;
-        filter();
+      };
+      static void levelUp(json k) {
+        filter(k);
         UI::uiSend(uiTXT::MarketData, k, true);
 };
 static json tradeUp(mGWmt t) {
@@ -232,7 +235,7 @@ static void ewmaUp() {
         calcTargetPos();
         calcASP();
         calcSafety();
-        EV::evUp("PositionBroker");
+        EV::up(mEvent::PositionBroker);
         UI::uiSend(uiTXT::EWMAChart, {
                                 {"stdevWidth", {
                                          {"fv", mgStdevFV},
@@ -259,40 +262,28 @@ static void ewmaUp() {
 };
 static void ewmaPUp() {
         calcEwma(&mgEwmaP, qpRepo["quotingEwmaProtectionPeriods"].get<int>());
-        EV::evUp("EWMAProtectionCalculator");
-};
-static void filter() {
-        mGWmktFilter = mGWmkt;
+        EV::up(mEvent::EWMAProtectionCalculator);
+      };
+      static void filter(json k) {
+        mGWmktFilter = (k.is_null() or k["bids"].is_null() or k["asks"].is_null())
+          ? json{{"bids", {}},{"asks", {}}} : k;
         if (empty()) return;
         for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it)
                 filter(mSide::Bid == (mSide)it->second["side"].get<int>() ? "bids" : "asks", it->second);
         if (!empty()) {
-                fairV();
-                EV::evUp("FilteredMarket");
+          calcFairValue();
+          EV::up(mEvent::FilteredMarket);
         }
-};
-static void filter(string k, json o) {
-        for (json::iterator it = mGWmktFilter[k].begin(); it != mGWmktFilter[k].end(); )
-                if (abs((*it)["price"].get<double>() - o["price"].get<double>()) < gw->minTick) {
-                        (*it)["size"] = (*it)["size"].get<double>() - o["quantity"].get<double>();
-                        if ((*it)["size"].get<double>() < gw->minTick) mGWmktFilter[k].erase(it);
-                        break;
-                } else ++it;
-};
-static void fairV() {
-        if (empty()) return;
-        double mgFairValue_ = mgFairValue;
-        mgFairValue = FN::roundNearest(
-                mFairValueModel::BBO == (mFairValueModel)qpRepo["fvModel"].get<int>()
-                ? (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>()) / 2
-                : (mGWmktFilter["/asks/0/price"_json_pointer].get<double>() * mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/price"_json_pointer].get<double>() * mGWmktFilter["/bids/0/size"_json_pointer].get<double>()) / (mGWmktFilter["/asks/0/size"_json_pointer].get<double>() + mGWmktFilter["/bids/0/size"_json_pointer].get<double>()),
-                gw->minTick
-                );
-        if (!mgFairValue or (mgFairValue_ and abs(mgFairValue - mgFairValue_) < gw->minTick)) return;
-        EV::evUp("FairValue");
-        UI::uiSend(uiTXT::FairValue, {{"price", mgFairValue}}, true);
-};
-static void cleanStdev() {
+      };
+      static void filter(string k, json o) {
+        for (json::iterator it = mGWmktFilter[k].begin(); it != mGWmktFilter[k].end();)
+          if (abs((*it)["price"].get<double>() - o["price"].get<double>()) < gw->minTick) {
+            (*it)["size"] = (*it)["size"].get<double>() - o["quantity"].get<double>();
+            if ((*it)["size"].get<double>() < gw->minTick) mGWmktFilter[k].erase(it);
+            break;
+          } else ++it;
+      };
+      static void cleanStdev() {
         size_t periods = (size_t)qpRepo["quotingStdevProtectionPeriods"].get<int>();
         if (mgStatFV.size()>periods) mgStatFV.erase(mgStatFV.begin(), mgStatFV.end()-periods);
         if (mgStatBid.size()>periods) mgStatBid.erase(mgStatBid.begin(), mgStatBid.end()-periods);

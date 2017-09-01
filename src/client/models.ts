@@ -1,17 +1,3 @@
-import * as moment from "moment";
-
-export interface ITimestamped {
-    time : Date;
-}
-
-export class Timestamped<T> implements ITimestamped {
-    constructor(public data: T, public time: Date) {}
-
-    public toString() {
-        return "time=" + (this.time === null ? null : moment(this.time).format('D/M HH:mm:ss,SSS')) + ";data=" + this.data;
-    }
-}
-
 export var Prefixes = {
   SNAPSHOT: '=',
   MESSAGE: '-'
@@ -56,25 +42,11 @@ export var Topics = {
 export class MarketSide {
     constructor(public price: number,
                 public size: number) { }
-
-    public toString() {
-        return "px=" + this.price + ";size=" + this.size;
-    }
-}
-
-export class GatewayMarketTrade {
-    constructor(public price: number,
-                public size: number,
-                public make_side: Side) { }
 }
 
 export class Market {
     constructor(public bids: MarketSide[],
                 public asks: MarketSide[]) { }
-
-    public toString() {
-        return "asks: [" + this.asks.join(";") + "] bids: [" + this.bids.join(";") + "]";
-    }
 }
 
 export class MarketStats {
@@ -103,17 +75,6 @@ export enum Currency {
     EOS, SAN, OMG, PAY, BCC, BCH
 }
 
-export function toCurrency(c: string) : Currency|undefined {
-    return Currency[c.toUpperCase()];
-}
-
-export function fromCurrency(c: Currency) : string|undefined {
-    const t = Currency[c];
-    if (t) return t.toUpperCase();
-    return undefined;
-}
-
-export enum GatewayType { MarketData, OrderEntry, Position }
 export enum Connectivity { Connected, Disconnected }
 export enum Exchange { Null, HitBtc, OkCoin, Coinbase, Bitfinex, Korbit, Poloniex }
 export enum Side { Bid, Ask, Unknown }
@@ -128,36 +89,6 @@ export enum mSafeMode { buy, sell, unknown }
 export interface ProductState {
     advert: ProductAdvertisement;
     fixed: number
-}
-
-export enum OrderSource {
-    Unknown = 0,
-    Quote = 1,
-    OrderTicket = 2
-}
-
-export class SubmitNewOrder {
-    constructor(public side: Side,
-                public quantity: number,
-                public type: OrderType,
-                public price: number,
-                public timeInForce: TimeInForce,
-                public isPong: boolean,
-                public preferPostOnly: boolean,
-                public source: OrderSource,
-                public msg?: string) {
-                    this.msg = msg || null;
-                }
-}
-
-export class CancelReplaceOrder {
-    constructor(public origOrderId: string,
-                public quantity: number,
-                public price: number) {}
-}
-
-export class OrderCancel {
-    constructor(public origOrderId: string) {}
 }
 
 export interface OrderStatusReport {
@@ -238,10 +169,6 @@ export class CurrencyPosition {
     constructor(public amount: number,
                 public heldAmount: number,
                 public currency: Currency) {}
-
-    public toString() {
-        return "currency=" + Currency[this.currency] + ";amount=" + this.amount;
-    }
 }
 
 export class PositionReport {
@@ -357,23 +284,6 @@ export class ProductAdvertisement {
 
 export class ApplicationState {
     constructor(public memory: number, public hour: number, public freq: number, public dbsize: number) { }
-}
-
-export class EWMACurrent {
-  constructor(
-    public currentShort: number,
-    public currentLong: number,
-    public currentMedium: number
-  ) {}
-}
-
-export class RegularFairValue {
-    constructor(
-      public fairValue: number,
-      public ewmaLong: number,
-      public ewmaMedium: number,
-      public ewmaShort: number
-    ) {}
 }
 
 export class TradeSafety {

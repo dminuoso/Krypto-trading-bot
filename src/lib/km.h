@@ -14,7 +14,7 @@ namespace K {
     "SC", "SJCX", "STR", "STRAT", "SYS", "VIA", "VRC", "VTC", "XBC", "XCP", "XPM", "XVC", "USD", "USDT",
     "EOS", "SAN", "OMG", "PAY", "BCC", "BCH" };
   enum class mExchange: unsigned int { Null, HitBtc, OkCoin, Coinbase, Bitfinex, Korbit, Poloniex };
-  enum class mGatewayType: unsigned int { MarketData, OrderEntry, Position };
+  enum class mGatewayType: unsigned int { MarketData, OrderEntry };
   enum class mTimeInForce: unsigned int { IOC, FOK, GTC };
   enum class mConnectivity: unsigned int { Connected, Disconnected };
   enum class mLiquidity: unsigned int { Make, Take };
@@ -32,7 +32,13 @@ namespace K {
   enum class mSafeMode:  unsigned int {buy, sell, unknown };
   enum class mAPR: unsigned int { Off, Size, SizeWidth };
   enum class mSOP: unsigned int { Off, x2trades, x3trades, x2Size, x3Size, x2tradesSize, x3tradesSize };
-  enum class mSTDEV: unsigned int{ Off, OnFV, OnFVAPROff, OnTops, OnTopsAPROff, OnTop, OnTopAPROff };
+  enum class mSTDEV: unsigned int { Off, OnFV, OnFVAPROff, OnTops, OnTopsAPROff, OnTop, OnTopAPROff };
+  enum class mEvent: unsigned int {
+    GatewayMarketConnect, GatewayOrderConnect, ExchangeConnect, MarketDataGateway,
+    PositionGateway, MarketTradeGateway, OrderUpdateGateway, TargetPosition,
+    OrderUpdateBroker, PositionBroker, OrderTradeBroker, QuotingParameters,
+    MarketTrade, EWMAProtectionCalculator, FilteredMarket
+  };
   enum class uiBIT: unsigned char { MSG = '-', SNAP = '=' };
   enum class uiTXT: unsigned char {
     FairValue = 'a', Quote = 'b', ActiveSubscription = 'c', ActiveState = 'd', MarketData = 'e',

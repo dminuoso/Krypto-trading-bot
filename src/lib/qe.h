@@ -4,53 +4,56 @@
 namespace K {
   unsigned int qeT = 0;
   unsigned int qeTD = 0;
-  uv_timer_t qeD_;
+  uv_timer_t delayAPI_t;
   json qeQuote;
   json qeStatus;
   mQuoteStatus qeBidStatus = mQuoteStatus::MissingData;
   mQuoteStatus qeAskStatus = mQuoteStatus::MissingData;
-  uv_timer_t qeCalc_;
+  uv_timer_t qeCalc_t;
   typedef json (*qeMode)(double widthPing, double buySize, double sellSize);
   map<mQuotingMode, qeMode> qeQuotingMode;
   bool gwState_ = false;
   mConnectivity gwConn_ = mConnectivity::Disconnected;
   class QE {
     public:
-      static void main(Local<Object> exports) {
+      static void main() {
         load();
         thread([&]() {
-          if (uv_timer_init(uv_default_loop(), &qeCalc_)) { cout << FN::uiT() << "Errrror: QE qeCalc_ init timer failed." << endl; exit(1); }
-          if (uv_timer_start(&qeCalc_, [](uv_timer_t *handle) {
+          if (uv_timer_init(uv_default_loop(), &qeCalc_t)) { cout << FN::uiT() << "Errrror: QE qeCalc_t init timer failed." << endl; exit(1); }
+          if (uv_timer_start(&qeCalc_t, [](uv_timer_t *handle) {
             if (mgFairValue) {
-              MG::calc();
-              PG::calc();
-              calc();
+              MG::calcStats();
+              PG::calcSafety();
+              calcQuote();
             } else cout << FN::uiT() << "Unable to calculate quote, missing fair value." << endl;
-          }, 0, 1000)) { cout << FN::uiT() << "Errrror: QE qeCalc_ start timer failed." << endl; exit(1); }
+          }, 0, 1000)) { cout << FN::uiT() << "Errrror: QE qeCalc_t start timer failed." << endl; exit(1); }
         }).detach();
-        if (uv_timer_init(uv_default_loop(), &qeD_)) { cout << FN::uiT() << "Errrror: UV qeD_ init timer failed." << endl; exit(1); }
-        EV::evOn("ExchangeConnect", [](json k) {
+        if (uv_timer_init(uv_default_loop(), &delayAPI_t)) { cout << FN::uiT() << "Errrror: UV delayAPI_t init timer failed." << endl; exit(1); }
+        EV::on(mEvent::ExchangeConnect, [](json k) {
           gwState_ = k["state"].get<bool>();
           gwConn_ = (mConnectivity)k["status"].get<int>();
           send();
         });
-        EV::evOn("EWMAProtectionCalculator", [](json k) {
-          calc();
+        EV::on(mEvent::QuotingParameters, [](json k) {
+          MG::calcFairValue();
+          PG::calcTargetBasePos();
+          PG::calcSafety();
+          calcQuote();
+          UI::setDelay(k["delayUI"].get<double>());
         });
-        EV::evOn("FilteredMarket", [](json k) {
-          calc();
+        EV::on(mEvent::OrderTradeBroker, [](json k) {
+          PG::addTrade(k);
+          PG::calcSafety();
+          calcQuote();
         });
-        EV::evOn("QuotingParameters", [](json k) {
-          calc();
+        EV::on(mEvent::EWMAProtectionCalculator, [](json k) {
+          calcQuote();
         });
-        EV::evOn("OrderTradeBroker", [](json k) {
-          calc();
+        EV::on(mEvent::FilteredMarket, [](json k) {
+          calcQuote();
         });
-        EV::evOn("TargetPosition", [](json k) {
-          calc();
-        });
-        EV::evOn("Safety", [](json k) {
-          calc();
+        EV::on(mEvent::TargetPosition, [](json k) {
+          calcQuote();
         });
         UI::uiSnap(uiTXT::QuoteStatus, &onSnap);
       }
@@ -74,14 +77,14 @@ namespace K {
         map<mSide, json>* k = (map<mSide, json>*)handle->data;
         start(k->begin()->first, k->begin()->second);
       };
-      static void calc() {
+      static void calcQuote() {
         qeBidStatus = mQuoteStatus::MissingData;
         qeAskStatus = mQuoteStatus::MissingData;
         if (!mgFairValue or MG::empty()) {
           qeQuote = {};
           return;
         }
-        json quote = calcQuote();
+        json quote = nextQuote();
         if (quote.is_null()) {
           qeQuote = {};
           return;
@@ -184,7 +187,7 @@ namespace K {
         qeT = now;
         return newQuote;
       };
-      static json calcQuote() {
+      static json nextQuote() {
         if (MG::empty() or pgPos.is_null()) return {};
         double widthPing = qpRepo["widthPercentage"].get<bool>()
           ? qpRepo["widthPingPercentage"].get<double>() * mgFairValue / 100
@@ -526,14 +529,14 @@ namespace K {
       };
       static void start(mSide side, json q) {
         if (qpRepo["delayAPI"].get<double>()) {
-          if (uv_timer_stop(&qeD_)) { cout << FN::uiT() << "Errrror: QE qeD_ stop timer failed." << endl; exit(1); }
+          if (uv_timer_stop(&delayAPI_t)) { cout << FN::uiT() << "Errrror: QE delayAPI_t stop timer failed." << endl; exit(1); }
           unsigned long nextStart = qeTD + (6e+4/qpRepo["delayAPI"].get<double>());
           unsigned long diffStart = nextStart - FN::T();
           if (diffStart>0) {
             map<mSide, json> k;
             k[side] = q;
-            qeD_.data = &k;
-            if (uv_timer_start(&qeD_, qeD, diffStart, 0)) { cout << FN::uiT() << "Errrror: UV qeD_ start timer failed." << endl; exit(1); }
+            delayAPI_t.data = &k;
+            if (uv_timer_start(&delayAPI_t, qeD, diffStart, 0)) { cout << FN::uiT() << "Errrror: UV delayAPI_t start timer failed." << endl; exit(1); }
             return;
           }
           qeTD = FN::T();

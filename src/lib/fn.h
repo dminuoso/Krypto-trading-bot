@@ -6,9 +6,6 @@ namespace K {
     public:
       static string S2l(string k) { transform(k.begin(), k.end(), k.begin(), ::tolower); return k; };
       static string S2u(string k) { transform(k.begin(), k.end(), k.begin(), ::toupper); return k; };
-      static Local<String> v8S(string k) { return String::NewFromUtf8(Isolate::GetCurrent(), k.data()); };
-      static Local<String> v8S(Isolate* isolate, string k) { return String::NewFromUtf8(isolate, k.data()); };
-      static string S8v(Local<String> k) { return string(*String::Utf8Value(k)); };
       static double roundNearest(double value, double minTick) { return round(value / minTick) * minTick; };
       static double roundUp(double value, double minTick) { return ceil(value / minTick) * minTick; };
       static double roundDown(double value, double minTick) { return floor(value / minTick) * minTick; };
@@ -334,6 +331,26 @@ namespace K {
         ostringstream oss;
         oss << shifted / magnitude;
         return oss.str();
+      };
+      static int procSelfStatus(char* line){
+        int i = strlen(line);
+        const char* p = line;
+        while (*p <'0' || *p > '9') p++;
+        line[i-3] = '\0';
+        i = atoi(p);
+        return i;
+      };
+      static int memory() {
+        FILE* file = fopen("/proc/self/status", "r");
+        int result = -1;
+        char line[128];
+        while (fgets(line, 128, file) != NULL)
+          if (strncmp(line, "VmRSS:", 6) == 0) {
+            result = procSelfStatus(line);
+            break;
+          }
+        fclose(file);
+        return result * 1e+3;
       };
   };
 }
