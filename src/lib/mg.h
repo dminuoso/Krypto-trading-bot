@@ -30,7 +30,6 @@ namespace K {
   vector<double> ArrayEwmaS;   // vector for EwmaS
   vector<double> ArrayEwmaM;  // vector for EwmaM
   double mgEwmaProfit = 0;
-  double myEWMA = 0;
   vector<int> mgMATIME;
   double mgSMA3G;   // global SMA3 current value
   class MG {
@@ -605,11 +604,11 @@ static double LoadEWMA(int periods) {
         cout << FN::uiT()  << "pair: " << pair << "\n";
         string exchange =  CF::cfString("EXCHANGE");
         int CurrentTime = std::time(nullptr);
-        int doublePeriods = periods + 1;
+        int doublePeriods = periods;
         int BackTraceStart = CurrentTime - (periods * 60000);
         std::vector<double> EWMAArray;
         vector<double> EMAStorage;
-        myEWMA = 0;
+        double myEWMA = 0;
         double previous = 0;
         bool first = true;
         string fullURL = string(baseurl.append("?periods=").append(std::to_string(doublePeriods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
@@ -629,15 +628,11 @@ static double LoadEWMA(int periods) {
         std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
         for(auto it = EMAStorage.begin(); it != EMAStorage.end(); ++it)
         {
-                if(first)
-                {
-                         myEWMA = *it;
-                        first = false;
-                } else {
+
               //  myEWMA = MycalcEwma(*it, previous,periods);
                calcEwma(&myEWMA, periods);
                 //cout << "Close Value is: " << *it << "\n";
-                }
+
         }
         cout << FN::uiT()  << "period: " << periods << " EWMA is: " << myEWMA << "\n";
         return myEWMA;
