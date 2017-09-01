@@ -628,7 +628,7 @@ static double LoadEWMA(int periods) {
         std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
         for(auto it = EMAStorage.begin(); it != EMAStorage.end(); ++it)
         {
-
+              myEWMA = *it;
               //  myEWMA = MycalcEwma(*it, previous,periods);
                calcEwma(&myEWMA, periods);
                 //cout << "Close Value is: " << *it << "\n";
