@@ -329,7 +329,7 @@ static void calcTargetPos() {
                 for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
                 {
                         mgSMA3.push_back(*ia);
-                        (mgSMA3.size()>3)mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
+                        if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
 
                         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
                                 SMA3 += *it;
@@ -654,7 +654,7 @@ static double LoadEWMA(int periods) {
         return myEWMA;
 }
 
-static   double LoadSMA(int periods) {
+static  vector <double> LoadSMA(int periods) {
         //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
         cout << FN::uiT()  << "Starting Load SMA\n";
         //string baseurl = "http://34.227.139.87/MarketPublish/";
@@ -685,7 +685,7 @@ static   double LoadSMA(int periods) {
         }
         std::reverse(std::begin(EMAStorage), std::end(EMAStorage));
 
-        return myEWMA;
+        return EMAStorage;
 }
 
 
