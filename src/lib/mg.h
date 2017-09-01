@@ -639,7 +639,7 @@ static double LoadEWMA(int periods) {
                 }
         }
         cout << FN::uiT()  << "period: " << periods << " EWMA is: " << &myEWMA << "\n";
-        return &myEWMA;
+        return myEWMA;
 
 }
 
