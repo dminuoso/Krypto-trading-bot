@@ -379,7 +379,7 @@ static void calcTargetPos() {
                         cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
                         qpRepo["takeProfitNow"] = true;
-                        cout
+                        cout << FN::uiT()  << " Should take a small profit now\n";
 
                 }
 
