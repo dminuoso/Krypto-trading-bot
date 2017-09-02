@@ -326,7 +326,7 @@ static void calcTargetPos() {
         if(mgSMA3.size() == 0)
         {
                 cout << FN::uiT()  << " Warming up SMA3" << "\n";
-                vector <double> preLoadSMA = LoadSMA(qpRepo["safetytime"].get<signed int>()*100);
+                vector <double> preLoadSMA = LoadSMA(qpRepo["safetytime"].get<signed int>()*10);
 
                 for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
                 {
@@ -373,7 +373,7 @@ static void calcTargetPos() {
 
                         cout << FN::uiT()  << "EWMA Profit  > SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
-                        qpRepo["takeProfitNow"] = true;
+                        qpRepo["takeProfitNow"] = false;
                 }
                 if(mgEwmaProfit < SMA3) {
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / (qpRepo["ewmaSensiblityPercentage"].get<double>() - takeProfit) );
