@@ -657,7 +657,7 @@ static double LoadEWMA(int periods) {
         return myEWMA;
 }
 
-static  vector <double> LoadSMA(int periods,) {
+static  vector <double> LoadSMA(int periods) {
         //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
         cout << FN::uiT()  << "Starting Load SMA\n";
         //string baseurl = "http://34.227.139.87/MarketPublish/";
