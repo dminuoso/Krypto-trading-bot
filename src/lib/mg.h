@@ -643,6 +643,7 @@ static double LoadEWMA(int periods) {
         std::vector<double> EWMAArray;
         vector<double> EMAStorage;
         double myEWMA = 0;
+        double tempEWMA = 0;
         double previous = 0;
         bool first = true;
         string fullURL = string(baseurl.append("?periods=").append(std::to_string(doublePeriods)).append("&exchange=").append(exchange).append("&pair=").append(pair));
@@ -662,13 +663,21 @@ static double LoadEWMA(int periods) {
         {
                 myEWMA = *it;
                 //  myEWMA = MycalcEwma(*it, previous,periods);
-                calcEwma(&myEWMA, periods);
+                tempEWMA = zEwma(myEWMA,tempEWMA,periods);
                 //cout << "Close Value is: " << *it << "\n";
 
         }
         cout << FN::uiT()  << "period: " << periods << " EWMA is: " << myEWMA << "\n";
-        return myEWMA;
+        return tempEWMA;
 }
+
+static double zEwma(double k, double previous, int periods) {
+        if (previous) {
+                double alpha = (double)2 / (periods + 1);
+                k = alpha * k + (1 - alpha) * previous;
+        } else k = k;
+        return k;
+};
 
 static vector <double> LoadSMA(int periods) {
         //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
