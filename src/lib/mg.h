@@ -379,6 +379,7 @@ static void calcTargetPos() {
                         cout << FN::uiT()  << "EWMA Profit  < SMA3 " << mgEwmaProfit << " | " << SMA3  << " Target: " << newTargetPosition <<  "\n";
                         cout << FN::uiT()  << "EWMA Profit Take Profit: " << takeProfit << "\n";
                         qpRepo["takeProfitNow"] = true;
+                        cout
 
                 }
 
@@ -606,7 +607,7 @@ static void calcSafety() {
                 }
         }
         // Set newTargetPosition
-
+/*
         if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy)
         {
                 mgTargetPos = 1;
@@ -616,6 +617,7 @@ static void calcSafety() {
                 mgTargetPos = -1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
         }
+        */
 
 
 
