@@ -107,6 +107,7 @@ static void load() {
         cout << FN::uiT() << "DB loaded EWMA Long = " << mgEwmaL << "." << endl;
         cout << FN::uiT() << "DB loaded EWMA Medium = " << mgEwmaM << "." << endl;
         cout << FN::uiT() << "DB loaded EWMA Short = " << mgEwmaS << "." << endl;
+        cout << FN::uiT() << "Time Stamp: " << std::time(nullptr) << "\n";
         if(qpRepo["take_profit_active"].get<bool>()) { mgEwmaProfit = LoadEWMA(qpRepo["ewmaProfit"].get<int>()); }
         qpRepo["safemode"]  = (int)mSafeMode::unknown;
         qpRepo["takeProfitNow"] = false;
@@ -664,7 +665,7 @@ static double LoadEWMA(int periods) {
                 myEWMA = *it;
                 //  myEWMA = MycalcEwma(*it, previous,periods);
                 tempEWMA = zEwma(myEWMA,tempEWMA,periods);
-                cout << "Close Value is: " << *it << "\n";
+                //cout << "Close Value is: " << *it << "\n";
 
         }
         cout << FN::uiT()  << "period: " << periods << " EWMA is: " << tempEWMA << "\n";
