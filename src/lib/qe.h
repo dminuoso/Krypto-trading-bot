@@ -386,7 +386,7 @@ namespace K {
             cout << FN::uiT()  << "sending a small take profit order: " << rawQuote["askSz"] << "\n";
 
           }
-          if (mgEwmaL > mgSMA3G &&  mgEwmaL > mgEwmaS )
+          if (mgEwmaL > mgSMA3G &&  mgEwmaL > mgEwmaS && mgWSMA33.size() > qpRepo["safetytime"].get<signed int>() )
           {
                rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
                rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
