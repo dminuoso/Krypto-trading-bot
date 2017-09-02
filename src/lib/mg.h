@@ -449,8 +449,8 @@ static void calcASP() {
 }
 static void calcSafety() {
         //  unsigned long int SMA33STARTTIME = std::time(nullptr); // get the time since EWMAProtectionCalculator
-        mgMATIME.push_back(std::time(nullptr));
-        if (mgMATIME.size()>1000) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
+        //mgMATIME.push_back(std::time(nullptr));
+        //if (mgMATIME.size()>1000) mgMATIME.erase(mgMATIME.begin(), mgMATIME.end()-1);
         // lets make a SMA logging average
 
         cout << FN::uiT() << "Safety Active: " << qpRepo["safetyactive"].get<bool>() << "\n";
@@ -469,7 +469,7 @@ static void calcSafety() {
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
                 cout << FN::uiT() << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << FN::uiT() << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
-                cout << FN::uiT() << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
+                //cout << FN::uiT() << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
 
                 if (
                         (
@@ -546,8 +546,8 @@ static void calcSafety() {
                         cout << FN::uiT() << "is Timer Over?:" << "\n";
                         cout << FN::uiT() << "Current Value: " << mgWSMA33.back() << "\n";
                         cout << FN::uiT() << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
-                        cout << FN::uiT() << "time back at time index: " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
-                        cout << FN::uiT() << "Current SMA3 time: " << mgMATIME.back() << "\n";
+
+                        //cout << FN::uiT() << "Current SMA3 time: " << mgMATIME.back() << "\n";
                         cout << FN::uiT() << "time counter: " <<   qpRepo["safetimestart"] << "\n";
                         cout << FN::uiT() << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
                         cout << FN::uiT() << "Duration: " << (qpRepo["safetimeOver"].get<int>() * 60) << "\n";
@@ -657,7 +657,7 @@ static double LoadEWMA(int periods) {
         return myEWMA;
 }
 
-static  vector <double> LoadSMA(int periods) {
+static  vector <double> LoadSMA(int periods,) {
         //  string baseurl = "https://api.cryptowat.ch/markets/bitfinex/ltcusd/ohlc?periods=60";
         cout << FN::uiT()  << "Starting Load SMA\n";
         //string baseurl = "http://34.227.139.87/MarketPublish/";
