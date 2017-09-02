@@ -613,7 +613,7 @@ static void calcSafety() {
                 mgTargetPos = 1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety buy Action\n";
         }
-        if( mgEwmaL > mgSMA3G || mgEwmaL > mgEwmaS )
+        if( mgEwmaL > mgEwmaS )
         {
                 mgTargetPos = -1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Liquidate it ALL Action\n";
