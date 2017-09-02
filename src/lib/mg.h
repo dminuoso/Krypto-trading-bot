@@ -667,7 +667,7 @@ static double LoadEWMA(int periods) {
                 cout << "Close Value is: " << *it << "\n";
 
         }
-        cout << FN::uiT()  << "period: " << periods << " EWMA is: " << myEWMA << "\n";
+        cout << FN::uiT()  << "period: " << periods << " EWMA is: " << tempEWMA << "\n";
         return tempEWMA;
 }
 
