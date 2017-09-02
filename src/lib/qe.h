@@ -386,12 +386,7 @@ namespace K {
             cout << FN::uiT()  << "sending a small take profit order: " << rawQuote["askSz"] << "\n";
 
           }
-          if (mgEwmaL > mgSMA3G || mgEwmaS > mgSMA3G  )
-          {
-               rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["take_profic_percent"].get<double>() / 100)  )), 1e-8);
-               rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
-                 cout << FN::uiT()  << " Dumping  SMA3 is under LONG or Short\n";
-          } else if ( mgEwmaL > mgEwmaS ) {
+         if ( mgEwmaL > mgEwmaS ) {
               rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
               rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
               cout << FN::uiT()  << " Dumping Short is now under Long\n";
