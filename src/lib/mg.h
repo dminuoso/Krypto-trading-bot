@@ -617,6 +617,9 @@ static void calcSafety() {
         {
                 mgTargetPos = -1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Liquidate it ALL Action\n";
+                cout << FN::uiT() << "Long: " << mgEwmaL << "\n";
+                cout << FN::uiT() << "Short: " << mgEwmaS << "\n";
+                cout << FN::uiT() << "SMA3: " << mgSMA3G << "\n";
         }
 
 
