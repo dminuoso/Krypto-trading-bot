@@ -331,18 +331,18 @@ static void calcTargetPos() {
                 {
                         cout << "SMAAAA: " << *ia << "\n";
                         mgSMA3.push_back(*ia);
-                        SMA3 = 0;
-                        if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
 
+                        if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
+                        SMA3 = 0;
 
                         for (vector<double>::iterator it = mgSMA3.begin(); it != mgSMA3.end(); ++it)
                         {
                                 SMA3 += *it;
-
+                        }
                                 SMA3 /= mgSMA3.size();
                                 mgSMA3G = SMA3;
                                 mgWSMA33.push_back(mgSMA3G);
-                        }
+
                 }
 
         } else {
@@ -554,7 +554,7 @@ static void calcSafety() {
                         cout << FN::uiT() << "Current Value: " << mgWSMA33.back() << "\n";
                         cout << FN::uiT() << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
 
-                        cout << FN::uiT() << "Current SMA3 time: " << mgMATIME.back() << "\n";
+                        //cout << FN::uiT() << "Current SMA3 time: " << mgMATIME.back() << "\n";
                         cout << FN::uiT() << "time counter: " <<   qpRepo["safetimestart"] << "\n";
                         cout << FN::uiT() << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
                         cout << FN::uiT() << "Duration: " << (qpRepo["safetimeOver"].get<int>() * 60) << "\n";
