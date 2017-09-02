@@ -326,7 +326,7 @@ static void calcTargetPos() {
         if(mgSMA3.size() == 0)
         {
                 cout << FN::uiT()  << " Warming up SMA3" << "\n";
-                vector <double> preLoadSMA = LoadSMA(qpRepo["safetytime"].get<signed int>()+1);
+                vector <double> preLoadSMA = LoadSMA(qpRepo["safetytime"].get<signed int>()*3);
 
                 for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
                 {
