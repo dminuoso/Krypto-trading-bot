@@ -329,6 +329,7 @@ static void calcTargetPos() {
 
                 for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
                 {
+                        cout << "SMAAAA: " << *ia << "\n";
                         mgSMA3.push_back(*ia);
                         if (mgSMA3.size()>3) mgSMA3.erase(mgSMA3.begin(), mgSMA3.end()-3);
 
@@ -469,7 +470,7 @@ static void calcSafety() {
         if((signed)mgWSMA33.size() > qpRepo["safetytime"].get<signed int>()) {
                 cout << FN::uiT() << "Entering Safety Check, SMA3Log Array Size: " << mgWSMA33.size()  << " and safetme index is: " << qpRepo["safetytime"].get<int>() << "\n";
                 cout << FN::uiT() << "Latest SMA3 Average in deck " << mgWSMA33.back() << " Target SMA3 " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgWSMA33.at(mgWSMA33.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
-                //cout << FN::uiT() << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
+                cout << FN::uiT() << "Latest SMA3 TIME in deck " << mgMATIME.back() << " Target SMA3 TIME " << qpRepo["safetytime"].get<int>() << "  Indexes BEHIND is " << mgMATIME.at(mgMATIME.size() - (qpRepo["safetytime"].get<int>()+1)) << "\n";
 
                 if (
                         (
@@ -547,7 +548,7 @@ static void calcSafety() {
                         cout << FN::uiT() << "Current Value: " << mgWSMA33.back() << "\n";
                         cout << FN::uiT() << "Index back: " << mgWSMA33.at(mgWSMA33.size() - qpRepo["safetytime"].get<int>()) << "\n";
 
-                        //cout << FN::uiT() << "Current SMA3 time: " << mgMATIME.back() << "\n";
+                        cout << FN::uiT() << "Current SMA3 time: " << mgMATIME.back() << "\n";
                         cout << FN::uiT() << "time counter: " <<   qpRepo["safetimestart"] << "\n";
                         cout << FN::uiT() << "time Difference: " << difftime(std::time(nullptr),(qpRepo["safetimestart"].get<double>())) << "\n";
                         cout << FN::uiT() << "Duration: " << (qpRepo["safetimeOver"].get<int>() * 60) << "\n";
