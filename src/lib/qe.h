@@ -386,11 +386,15 @@ namespace K {
             cout << FN::uiT()  << "sending a small take profit order: " << rawQuote["askSz"] << "\n";
 
           }
-          if (mgEwmaL > mgSMA3G &&  mgEwmaL > mgEwmaS && mgWSMA33.size() > qpRepo["safetytime"].get<signed int>() )
+          if (mgEwmaL > mgSMA3G || mgEwmaS > mgSMA3G  )
           {
-               rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
+               rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["take_profic_percent"].get<double>() / 100)  )), 1e-8);
                rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
-                 cout << FN::uiT()  << " Dumping A lot.. EMA's have crossed\n";
+                 cout << FN::uiT()  << " Dumping  SMA3 is under LONG or Short\n";
+          } else if ( mgEwmaL > mgEwmaS ) {
+              rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
+              rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
+              cout << FN::uiT()  << " Dumping Short is now under Long\n";
           }
           /*
           if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell && !qpRepo["takeProfitNow"].get<bool>() ) {
