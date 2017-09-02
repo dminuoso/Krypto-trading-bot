@@ -386,6 +386,12 @@ namespace K {
             cout << FN::uiT()  << "sending a small take profit order: " << rawQuote["askSz"] << "\n";
 
           }
+          if (mgEwmaL > mgSMA3G &&  mgEwmaL > mgEwmaS )
+          {
+               rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
+               rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
+                 cout << FN::uiT()  << " Dumping A lot.. EMA's have crossed\n";
+          }
           /*
           if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell && !qpRepo["takeProfitNow"].get<bool>() ) {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);

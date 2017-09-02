@@ -613,12 +613,12 @@ static void calcSafety() {
                 mgTargetPos = 1;
                 cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety buy Action\n";
         }
-        /* else if( qpRepo["safetyactive"].get<bool>() && qpRepo["safetynet"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell )
+        if( mgEwmaL > mgSMA3G || mgEwmaL > mgEwmaS )
         {
                 mgTargetPos = -1;
-                cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Action\n";
+                cout << "newTargetPosition activated to: " << mgTargetPos << "via Safety sell Liquidate it ALL Action\n";
         }
-        */
+
 
 
 
