@@ -96,7 +96,7 @@ namespace K {
     public:
       static void main() {
         load();
-        UI::setDelay(qpRepo["delayUI"].get<double>());
+        UI::delay();
         UI::uiSnap(uiTXT::QuotingParametersChange, &onSnap);
         UI::uiHand(uiTXT::QuotingParametersChange, &onHand);
       }
@@ -148,7 +148,8 @@ static json onHand(json k) {
           qpRepo = k;
           clean();
           DB::insert(uiTXT::QuotingParametersChange, k);
-          EV::up(mEvent::QuotingParameters, k);
+          EV::up(mEv::QuotingParameters, k);
+          UI::delay();
         }
 
         UI::uiSend(uiTXT::QuotingParametersChange, k);

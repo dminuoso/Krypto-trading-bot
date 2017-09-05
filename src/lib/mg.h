@@ -36,12 +36,12 @@ class MG {
 public:
 static void main() {
         load();
-        EV::on(mEvent::MarketTradeGateway, [](json k) {
-                                tradeUp(k);
-                        });
-        EV::on(mEvent::MarketDataGateway, [](json o) {
-                                levelUp(o);
-                        });
+        EV::on(mEv::MarketTradeGateway, [](json k) {
+          tradeUp(k);
+        });
+        EV::on(mEv::MarketDataGateway, [](json o) {
+          levelUp(o);
+        });
         UI::uiSnap(uiTXT::MarketTrade, &onSnapTrade);
         UI::uiSnap(uiTXT::FairValue, &onSnapFair);
         UI::uiSnap(uiTXT::EWMAChart, &onSnapEwma);
@@ -70,7 +70,7 @@ static void calcFairValue() {
                 gw->minTick
                 );
         if (!mgFairValue or (mgFairValue_ and abs(mgFairValue - mgFairValue_) < gw->minTick)) return;
-        EV::up(mEvent::PositionGateway);
+        EV::up(mEv::PositionGateway);
         UI::uiSend(uiTXT::FairValue, {{"price", mgFairValue}}, true);
 };
 private:
@@ -169,7 +169,7 @@ static void tradeUp(json k) {
                 );
         mGWmt_.push_back(t);
         if (mGWmt_.size()>69) mGWmt_.erase(mGWmt_.begin());
-        EV::up(mEvent::MarketTrade);
+        EV::up(mEv::MarketTrade);
         UI::uiSend(uiTXT::MarketTrade, tradeUp(t));
 };
 static void levelUp(json k) {
@@ -237,7 +237,7 @@ static void ewmaUp() {
         calcTargetPos();
         calcASP();
         calcSafety();
-        EV::up(mEvent::PositionBroker);
+        EV::up(mEv::PositionBroker);
         UI::uiSend(uiTXT::EWMAChart, {
                                 {"stdevWidth", {
                                          {"fv", mgStdevFV},
@@ -264,17 +264,17 @@ static void ewmaUp() {
 };
 static void ewmaPUp() {
         calcEwma(&mgEwmaP, qpRepo["quotingEwmaProtectionPeriods"].get<int>());
-        EV::up(mEvent::EWMAProtectionCalculator);
-};
-static void filter(json k) {
+        EV::up(mEv::EWMAProtectionCalculator);
+      };
+      static void filter(json k) {
         mGWmktFilter = (k.is_null() or k["bids"].is_null() or k["asks"].is_null())
                        ? json{{"bids", {}},{"asks", {}}} : k;
         if (empty()) return;
         for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it)
                 filter(mSide::Bid == (mSide)it->second["side"].get<int>() ? "bids" : "asks", it->second);
         if (!empty()) {
-                calcFairValue();
-                EV::up(mEvent::FilteredMarket);
+          calcFairValue();
+          EV::up(mEv::FilteredMarket);
         }
 };
 static void filter(string k, json o) {
