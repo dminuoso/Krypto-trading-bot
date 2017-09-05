@@ -192,9 +192,11 @@ namespace K {
         double widthPing = qpRepo["widthPercentage"].get<bool>()
           ? qpRepo["widthPingPercentage"].get<double>() * mgFairValue / 100
           : qpRepo["widthPing"].get<double>();
+/*
             if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell ) {
                 widthPing = .01;
             }
+            */
         double widthPong = qpRepo["widthPercentage"].get<bool>()
           ? qpRepo["widthPongPercentage"].get<double>() * mgFairValue / 100
           : qpRepo["widthPong"].get<double>();
@@ -378,6 +380,7 @@ namespace K {
               ? totalBasePosition : _rawBidSz;
           rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize, rawQuote["askSz"].get<double>()), 1e-8);
           rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
+/*
           if(qpRepo["takeProfitNow"].get<bool>())
           {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["take_profic_percent"].get<double>() / 100)  )), 1e-8);
@@ -391,7 +394,7 @@ namespace K {
               rawQuote["askPx"] =   mGWmktFilter["/bids/0/price"_json_pointer].get<double>() + .01;
               cout << FN::uiT()  << " Dumping Short is now under Long\n";
           }
-          /*
+
           if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::sell && !qpRepo["takeProfitNow"].get<bool>() ) {
             rawQuote["askSz"] = FN::roundDown(fmax(gw->minSize,(totalBasePosition * (qpRepo["SafetySellTotalPercent"].get<double>() / 100)  )), 1e-8);
             rawQuote["isAskPong"] = (pgSafety["buyPing"].get<double>() and rawQuote["askPx"].get<double>() and rawQuote["askPx"].get<double>() >= pgSafety["buyPing"].get<double>() + widthPong);
