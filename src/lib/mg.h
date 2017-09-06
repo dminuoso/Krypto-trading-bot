@@ -24,11 +24,14 @@ double mgStdevAskMean = 0;
 double mgStdevTop = 0;
 double mgStdevTopMean = 0;
 double mgTargetPos = 0;
+double mgStdevSMA3 = 0;
+vector<double> mgSTDevStatSMA3;
 vector<double> mgSMA3_temp;   // warm-up SMA3 data!
 vector<double> mgWSMA33;          // Logging SMA3 values
 vector<double> ArrayEwmaL;     // vector for EwmaL
 vector<double> ArrayEwmaS;     // vector for EwmaS
 vector<double> ArrayEwmaM;    // vector for EwmaM
+vector<double> mgStdevSMA33; // stdev SMA3
 double mgEwmaProfit = 0;
 vector<int> mgMATIME;
 double mgSMA3G;     // global SMA3 current value
@@ -300,6 +303,7 @@ static void calcStdev() {
         mgStdevBid = calcStdev(mgStatBid, k, &mgStdevBidMean);
         mgStdevAsk = calcStdev(mgStatAsk, k, &mgStdevAskMean);
         mgStdevTop = calcStdev(mgStatTop, k, &mgStdevTopMean);
+
 };
 static double calcStdev(vector<double> a, double f, double *mean) {
         int n = a.size();
@@ -342,7 +346,9 @@ static void calcTargetPos() {
                         }
                                 SMA3 /= mgSMA3.size();
                                 mgSMA3G = SMA3;
+                                mgStdevSMA3 = calcStdev(mgStdevSMA3, k, &mgStdevSMA3);
                                 mgWSMA33.push_back(mgSMA3G);
+                                mgStdevSMA33.push_back(mgStdevSMA3);
 
                 }
 
@@ -356,8 +362,11 @@ static void calcTargetPos() {
                         SMA3 += *it;
                 SMA3 /= mgSMA3.size();
                 mgSMA3G = SMA3;
+                mgStdevSMA3 = calcStdev(mgStdevSMA3, k, &mgStdevSMA3);
                 mgWSMA33.push_back(mgSMA3G);
+                mgStdevSMA33.push_back(mgStdevSMA3);
         }
+        cout << FN::uiT() << "SMA3 StDev: " << mgStdevSMA3 << "\n";
         double newTargetPosition = 0;
         if(qpRepo["take_profit_active"].get<bool>() ) {
                 /*If ewma take profit > SMA3
