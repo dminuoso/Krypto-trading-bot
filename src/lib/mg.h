@@ -348,7 +348,7 @@ static void calcTargetPos() {
                         }
                                 SMA3 /= mgSMA3.size();
                                 mgSMA3G = SMA3;
-                                mgStdevSMA3 = calcStdev(mgSMA3G, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
+                                mgStdevSMA3 = calcStdev(mgStdevSMA33, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
                                 mgWSMA33.push_back(mgSMA3G);
                                 mgStdevSMA33.push_back(mgStdevSMA3);
 
@@ -364,7 +364,7 @@ static void calcTargetPos() {
                         SMA3 += *it;
                 SMA3 /= mgSMA3.size();
                 mgSMA3G = SMA3;
-                mgStdevSMA3 = calcStdev(mgSMA3G, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
+                mgStdevSMA3 = calcStdev(mgStdevSMA33, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
                 mgWSMA33.push_back(mgSMA3G);
                 mgStdevSMA33.push_back(mgStdevSMA3);
         }
