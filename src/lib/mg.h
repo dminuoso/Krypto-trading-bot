@@ -25,6 +25,7 @@ double mgStdevTop = 0;
 double mgStdevTopMean = 0;
 double mgTargetPos = 0;
 double mgStdevSMA3 = 0;
+double mgStdevSMAMean = 0 ;
 vector<double> mgSTDevStatSMA3;
 vector<double> mgSMA3_temp;   // warm-up SMA3 data!
 vector<double> mgWSMA33;          // Logging SMA3 values
@@ -347,7 +348,7 @@ static void calcTargetPos() {
                         }
                                 SMA3 /= mgSMA3.size();
                                 mgSMA3G = SMA3;
-                                mgStdevSMA3 = calcStdev(mgSMA3G, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMA3);
+                                mgStdevSMA3 = calcStdev(mgSMA3G, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
                                 mgWSMA33.push_back(mgSMA3G);
                                 mgStdevSMA33.push_back(mgStdevSMA3);
 
@@ -363,7 +364,7 @@ static void calcTargetPos() {
                         SMA3 += *it;
                 SMA3 /= mgSMA3.size();
                 mgSMA3G = SMA3;
-                mgStdevSMA3 = calcStdev(mgSMA3G, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMA3);
+                mgStdevSMA3 = calcStdev(mgSMA3G, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
                 mgWSMA33.push_back(mgSMA3G);
                 mgStdevSMA33.push_back(mgStdevSMA3);
         }
