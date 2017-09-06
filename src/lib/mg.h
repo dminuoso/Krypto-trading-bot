@@ -326,6 +326,7 @@ static void calcEwma(double *k, int periods) {
         } else *k = mgFairValue;
 };
 static void calcTargetPos() {
+        ;
         double SMA3 = 0;
         if(mgSMA3.size() == 0)
         {
@@ -346,7 +347,7 @@ static void calcTargetPos() {
                         }
                                 SMA3 /= mgSMA3.size();
                                 mgSMA3G = SMA3;
-                                mgStdevSMA3 = calcStdev(mgStdevSMA3, k, &mgStdevSMA3);
+                                mgStdevSMA3 = calcStdev(mgStdevSMA3, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMA3);
                                 mgWSMA33.push_back(mgSMA3G);
                                 mgStdevSMA33.push_back(mgStdevSMA3);
 
@@ -362,7 +363,7 @@ static void calcTargetPos() {
                         SMA3 += *it;
                 SMA3 /= mgSMA3.size();
                 mgSMA3G = SMA3;
-                mgStdevSMA3 = calcStdev(mgStdevSMA3, k, &mgStdevSMA3);
+                mgStdevSMA3 = calcStdev(mgStdevSMA3, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMA3);
                 mgWSMA33.push_back(mgSMA3G);
                 mgStdevSMA33.push_back(mgStdevSMA3);
         }
