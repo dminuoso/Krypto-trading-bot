@@ -1,4 +1,3 @@
-LOGGING ?= true
 KCONFIG ?= K
 CROSS   ?= `g++ -dumpmachine`
 CXX      = $(CROSS)-g++-6
@@ -11,20 +10,19 @@ V_PNG   := 1.6.31
 V_JSON  := v2.1.1
 V_SQL   := 3200100
 V_QF    := v.1.14.4
-G_ARG   := -std=c++11 -DUSE_LIBUV -O3 -rdynamic -shared -fPIC -Ibuild/node-$(NODEv)/include/node \
-  -Ibuild/libpng-$(V_PNG)                       -Ibuild/json-$(V_JSON)                           \
-  -Ibuild/uWebSockets-$(V_UWS)/src              build/uWebSockets-$(V_UWS)/src/Extensions.cpp    \
-  build/uWebSockets-$(V_UWS)/src/Group.cpp      build/uWebSockets-$(V_UWS)/src/Networking.cpp    \
-  build/uWebSockets-$(V_UWS)/src/Hub.cpp        build/uWebSockets-$(V_UWS)/src/Node.cpp          \
-  build/uWebSockets-$(V_UWS)/src/WebSocket.cpp  build/uWebSockets-$(V_UWS)/src/HTTPSocket.cpp    \
-  build/uWebSockets-$(V_UWS)/src/Socket.cpp     build/uWebSockets-$(V_UWS)/src/Epoll.cpp         \
-  -Lbuild/libpng-$(V_PNG)/lib -Ldist/lib -Wl,-rpath,'$$ORIGIN' -Wextra                           \
-src/lib/K.cc -lsqlite3 -lpthread -lssl -lcrypto -lz -lK -lpng16 -lquickfix -lcurl
-ifeq ($(LOGGING), true)
-	LOGFILE = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))/$(KCONFIG).log
-else
-	LOGFILE = /dev/null
-endif
+G_ARG   := -Wextra -std=c++11 -O3                        -Ibuild-$(CROSS)/quickfix-$(V_QF)/include                  \
+  -Ibuild-$(CROSS)/curl-$(V_CURL)/include/curl           -Lbuild-$(CROSS)/curl-$(V_CURL)/lib/.libs                  \
+  -Ibuild-$(CROSS)/openssl-$(V_SSL)/include              -Lbuild-$(CROSS)/openssl-$(V_SSL)                          \
+  -Ibuild-$(CROSS)/json-$(V_JSON)                        -Ibuild-$(CROSS)/sqlite-autoconf-$(V_SQL)                  \
+src/server/K.cc -pthread -ldl -lz -lssl -lcrypto -lcurl -Wl,-rpath,'$$ORIGIN'                                       \
+  -Ibuild-$(CROSS)/uWebSockets-$(V_UWS)/src              build-$(CROSS)/uWebSockets-$(V_UWS)/src/Extensions.cpp     \
+  build-$(CROSS)/uWebSockets-$(V_UWS)/src/Group.cpp      build-$(CROSS)/uWebSockets-$(V_UWS)/src/Networking.cpp     \
+  build-$(CROSS)/uWebSockets-$(V_UWS)/src/Hub.cpp        build-$(CROSS)/uWebSockets-$(V_UWS)/src/Node.cpp           \
+  build-$(CROSS)/uWebSockets-$(V_UWS)/src/WebSocket.cpp  build-$(CROSS)/uWebSockets-$(V_UWS)/src/HTTPSocket.cpp     \
+  build-$(CROSS)/uWebSockets-$(V_UWS)/src/Socket.cpp     build-$(CROSS)/uWebSockets-$(V_UWS)/src/Epoll.cpp          \
+  build-$(CROSS)/openssl-$(V_SSL)/libssl.a               build-$(CROSS)/openssl-$(V_SSL)/libcrypto.a                \
+  build-$(CROSS)/libpng-$(V_PNG)/.libs/libpng16.a        build-$(CROSS)/sqlite-autoconf-$(V_SQL)/.libs/libsqlite3.a \
+  dist/lib/K-$(CROSS).a                                  build-$(CROSS)/quickfix-$(V_QF)/lib/libquickfix.a
 
 all: K
 
@@ -214,7 +212,7 @@ stop:
 
 start:
 	@test -d app || $(MAKE) install
-	./node_modules/.bin/forever start --minUptime 1 --spinSleepTime 21000 --uid "$(KCONFIG)" -a -l $(LOGFILE) -c /bin/sh K.sh
+	./node_modules/.bin/forever start --minUptime 1 --spinSleepTime 21000 --uid "$(KCONFIG)" -a -l /dev/null -c /bin/sh K.sh
 
 stunnel: dist/K-stunnel.conf
 	test -z "`ps axu | grep stunnel | grep -v grep`" && stunnel dist/K-stunnel.conf &
