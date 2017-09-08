@@ -2,7 +2,8 @@
 #define K_QP_H_
 
 namespace K {
-  json defQP {
+  static json qpRepo;
+  static json defQP {
     {  "widthPing",                     2                                      },
     {  "widthPingPercentage",           decimal_cast<2>("0.25").getAsDouble()  },
     {  "widthPong",                     2                                      },
@@ -88,7 +89,7 @@ namespace K {
     {  "OldewmaProfit",                 250                                    },
     {  "takeProfitNow",                 false                                  }
   };
-  vector<string> boolQP = {
+  static const vector<string> boolQP = {
     "widthPercentage", "bestWidth", "sellSizeMax", "buySizeMax", "percentageValues",
     "quotingEwmaProtection", "quotingStdevBollingerBands", "cancelOrdersAuto", "audio"
   };
@@ -96,18 +97,20 @@ namespace K {
     public:
       static void main() {
         load();
-        UI::delay();
         UI::uiSnap(uiTXT::QuotingParametersChange, &onSnap);
         UI::uiHand(uiTXT::QuotingParametersChange, &onHand);
       }
       static bool matchPings() {
-        mQuotingMode k = (mQuotingMode)qpRepo["mode"].get<int>();
+        mQuotingMode k = (mQuotingMode)getInt("mode");
         return k == mQuotingMode::Boomerang
-               or k == mQuotingMode::HamelinRat
-               or k == mQuotingMode::AK47;
-};
-private:
-static void load() {
+            or k == mQuotingMode::HamelinRat
+            or k == mQuotingMode::AK47;
+      };
+      static bool autoCancel() {
+        return getBool("cancelOrdersAuto");
+      };
+    private:
+      static void load() {
         for (json::iterator it = defQP.begin(); it != defQP.end(); ++it) {
                 string k = CF::cfString(it.key(), false);
                 if (k == "") continue;
@@ -126,6 +129,7 @@ static void load() {
         qpRepo["asptriggered"] = false;
         qpRepo["safetimestart"] = 0;
         clean();
+        UI::delay(getDouble("delayUI"));
         cout << FN::uiT() << "DB loaded Quoting Parameters " << (qp.size() ? "OK" : "OR reading defaults instead") << "." << endl;
       };
       static json onSnap(json z) {
@@ -144,22 +148,43 @@ static json onHand(json k) {
           if ((mQuotingMode)k["mode"].get<int>() == mQuotingMode::Depth)
             k["widthPercentage"] = false;
 
-            
+
           qpRepo = k;
           clean();
           DB::insert(uiTXT::QuotingParametersChange, k);
           EV::up(mEv::QuotingParameters, k);
-          UI::delay();
+          UI::delay(getDouble("delayUI"));
         }
 
         UI::uiSend(uiTXT::QuotingParametersChange, k);
         return {};
-};
-static void clean() {
-        for (vector<string>::iterator it = boolQP.begin(); it != boolQP.end(); ++it)
-                if (qpRepo[*it].is_number()) qpRepo[*it] = qpRepo[*it].get<int>() != 0;
-};
-};
+      };
+      static void clean() {
+        for (vector<string>::const_iterator it = boolQP.begin(); it != boolQP.end(); ++it)
+          if (qpRepo[*it].is_number()) qpRepo[*it] = qpRepo[*it].get<int>() != 0;
+      };
+      static bool getBool(string k) {
+        if (!qpRepo[k].is_boolean()) {
+          cout << FN::uiT() << "Warrrrning: QP " << k << " is not boolean, get a false instead." << endl;
+          return false;
+        }
+        return qpRepo[k].get<bool>();
+      };
+      static int getInt(string k) {
+        if (!qpRepo[k].is_number()) {
+          cout << FN::uiT() << "Warrrrning: QP " << k << " is not numeric, get a 0 instead." << endl;
+          return 0;
+        }
+        return qpRepo[k].get<int>();
+      };
+      static double getDouble(string k) {
+        if (!qpRepo[k].is_number()) {
+          cout << FN::uiT() << "Warrrrning: QP " << k << " is not numeric, get a 0 instead." << endl;
+          return 0;
+        }
+        return qpRepo[k].get<double>();
+      };
+  };
 }
 
 #endif
