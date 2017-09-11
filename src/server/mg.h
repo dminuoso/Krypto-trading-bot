@@ -371,7 +371,7 @@ static void calcTargetPos() {
 
 
 static void calcASP() {
-        QP::getDouble("aspvalue") = ((mgEwmaS * 100/ mgEwmaL) - 100);
+        QP["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100);
         cout << FN::uiT()  <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
         cout << FN::uiT() <<  "ASP Evaluation: fairV: " << mgFairValue << "\n";
         cout << FN::uiT() <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
