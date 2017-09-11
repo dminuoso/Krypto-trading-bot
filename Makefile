@@ -23,7 +23,7 @@ KARGS   := -Wextra -std=c++11 -O3 -I$(KLOCAL)/include  \
   $(KLOCAL)/lib/libssl.a   $(KLOCAL)/lib/libcrypto.a -ldl
 
 	ifeq ($(LOGGING), true)
-		LOGFILE = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))/$(KCONFIG).log
+		LOGFILE = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))/$(CONFIG).log
 	else
 		LOGFILE = /dev/null
 	endif
@@ -107,7 +107,7 @@ else
 endif
 
 Linux: build-$(CROSS)
-	$(CXX) -o dist/lib/K-$(CROSS) -static-libstdc++ -static-libgcc -g $(KARGS) 
+	$(CXX) -o dist/lib/K-$(CROSS) -static-libstdc++ -static-libgcc -g $(KARGS)
 
 Darwin: build-$(CROSS)
 	$(CXX) -o dist/lib/K-$(CROSS) -stdlib=libc++ -mmacosx-version-min=10.7 -undefined dynamic_lookup $(KARGSG)
