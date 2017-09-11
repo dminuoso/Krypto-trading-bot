@@ -15,7 +15,7 @@ namespace K {
         thread([&]() {
           unsigned int T_5m = 0;
           while (true) {
-            if (QP::autoCancel() and ++T_5m == 20) {
+            if (QP::getBool("cancelOrdersAuto") and ++T_5m == 20) {
               T_5m = 0;
               gW->cancelAll();
             }
@@ -24,18 +24,19 @@ namespace K {
           }
         }).detach();
         EV::on(mEv::GatewayMarketConnect, [](json k) {
-          mConnectivity conn = (mConnectivity)k["/0"_json_pointer].get<int>();
+          if (k.is_null() or !k.size()) return;
+          mConnectivity conn = (mConnectivity)(int)k.at(0);
           _gwCon_(mGatewayType::MarketData, conn);
           if (conn == mConnectivity::Disconnected)
             EV::up(mEv::MarketDataGateway);
         });
         EV::on(mEv::GatewayOrderConnect, [](json k) {
-          _gwCon_(mGatewayType::OrderEntry, (mConnectivity)k["/0"_json_pointer].get<int>());
+          if (k.is_null() or !k.size()) return;
+          _gwCon_(mGatewayType::OrderEntry, (mConnectivity)(int)k.at(0));
         });
         thread([&]() {
           gw->book();
         }).detach();
-        gW = (gw->target == "NULL") ? Gw::E(mExchange::Null) : gw;
         UI::uiSnap(uiTXT::ProductAdvertisement, &onSnapProduct);
         UI::uiSnap(uiTXT::ExchangeConnectivity, &onSnapStatus);
         UI::uiSnap(uiTXT::ActiveState, &onSnapState);
@@ -53,16 +54,12 @@ namespace K {
         EV::up(mEv::GatewayMarketConnect, {(int)k});
       };
       static void gwLevelUp(mGWbls k) {
-        json b;
-        json a;
+        json b, a;
         for (vector<mGWbl>::iterator it = k.bids.begin(); it != k.bids.end(); ++it)
-          b.push_back({{"price", (*it).price}, {"size", (*it).size}});
+          b.push_back({{"price", it->price}, {"size", it->size}});
         for (vector<mGWbl>::iterator it = k.asks.begin(); it != k.asks.end(); ++it)
-          a.push_back({{"price", (*it).price}, {"size", (*it).size}});
-        EV::up(mEv::MarketDataGateway, {
-          {"bids", b},
-          {"asks", a}
-        });
+          a.push_back({{"price", it->price}, {"size", it->size}});
+        EV::up(mEv::MarketDataGateway, {{"bids", b}, {"asks", a}});
       };
       static void gwTradeUp(vector<mGWbt> k) {
         for (vector<mGWbt>::iterator it = k.begin(); it != k.end(); ++it)
@@ -84,39 +81,16 @@ namespace K {
         if (k.oE.length()) o["exchangeId"] = k.oE;
         o["orderStatus"] = (int)k.oS;
         if (k.oS == mORS::Cancelled) o["lastQuantity"] = 0;
-        o["time"] = FN::T();
-        EV::up(mEv::OrderUpdateGateway, o);
-      };
-      static void gwOrderUp(mGWol k) {
-        EV::up(mEv::OrderUpdateGateway, {
-          {"orderId", k.oI},
-          {"orderStatus", (int)k.oS},
-          {"lastPrice", k.oP},
-          {"lastQuantity", k.oQ},
-          {"liquidity", (int)k.oL},
-          {"time", FN::T()}
-        });
-      };
-      static void gwOrderUp(mGWoS k) {
-        json o;
-        if (k.oI.length()) o["orderId"] = k.oI;
-        if (k.oE.length()) o["exchangeId"] = k.oE;
-        o["orderStatus"] = (int)k.os;
-        o["lastPrice"] = k.oP;
-        o["lastQuantity"] = k.oQ;
-        o["side"] = (int)k.oS;
-        o["time"] = FN::T();
         EV::up(mEv::OrderUpdateGateway, o);
       };
       static void gwOrderUp(mGWoa k) {
         json o;
-        o["orderId"] = k.oI;
+        if (k.oI.length()) o["orderId"] = k.oI;
         if (k.oE.length()) o["exchangeId"] = k.oE;
         o["orderStatus"] = (int)k.oS;
         if (k.oP) o["lastPrice"] = k.oP;
-        o["lastQuantity"] = k.oLQ;
         o["leavesQuantity"] = k.oQ;
-        o["time"] = FN::T();
+        o["lastQuantity"] = k.oLQ;
         EV::up(mEv::OrderUpdateGateway, o);
       };
     private:
@@ -138,8 +112,8 @@ namespace K {
         return {{{"state", gwState}}};
       };
       static json onHandState(json k) {
-        if (k["state"].get<bool>() != gwAutoStart) {
-          gwAutoStart = k["state"].get<bool>();
+        if (k.value("state", false) != gwAutoStart) {
+          gwAutoStart = k.value("state", false);
           gwUpState();
         }
         return {};

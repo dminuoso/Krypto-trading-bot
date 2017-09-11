@@ -8,6 +8,7 @@
 #include <locale>
 #include <time.h>
 #include <math.h>
+#include <getopt.h>
 #include <signal.h>
 #include <execinfo.h>
 #include <algorithm>
@@ -15,10 +16,10 @@
 #include <vector>
 #include <map>
 
-#include "uWS.h"
 #include "png.h"
-#include "curl.h"
 #include "sqlite3.h"
+#include "uWS/uWS.h"
+#include "curl/curl.h"
 #include "openssl/hmac.h"
 #include "openssl/sha.h"
 #include "openssl/md5.h"
@@ -55,7 +56,8 @@ using namespace dec;
 #include "gw.h"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;int main(int argc, char* argv[]) {;;
+;;int main(int argc, char** argv) {;;;
+;;;;K::FN::main(argc, argv);;;;;;;;;;;
 ;;;;K::EV::main();;;;;;;;;;;;;;;;;;;;;
 ;;;;K::UI::main();;;;    ;;;;    ;;;;;
 ;;;;K::DB::main();;;;    ;;    ;;;;;;;

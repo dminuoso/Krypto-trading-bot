@@ -105,7 +105,6 @@ export interface OrderStatusReport {
     lastQuantity : number;
     lastPrice : number;
     leavesQuantity : number;
-    liquidity : Liquidity;
     exchange : Exchange;
     computationalLatency : number;
     isPong : boolean;
@@ -155,7 +154,6 @@ export class Trade {
                 public quantity: number,
                 public side: Side,
                 public value: number,
-                public liquidity: Liquidity,
                 public Ktime: number,
                 public Kqty: number,
                 public Kprice: number,

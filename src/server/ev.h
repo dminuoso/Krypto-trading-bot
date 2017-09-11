@@ -3,8 +3,8 @@
 
 namespace K {
   typedef void (*evCb)(json);
-  extern map<unsigned int, vector<evCb>> ev;
-  extern void (*evExit)(int code);
+  static map<unsigned int, vector<evCb>> ev;
+  static void (*evExit)(int code);
   class EV {
     public:
       static void main() {
@@ -30,13 +30,12 @@ namespace K {
       };
     private:
       static void gitReversedVersion() {
-        system("git fetch");
+        FN::output("git fetch");
         string k = changelog();
-        string hardware = FN::output("echo -n `uname -m`");
         unsigned int commits = count(k.begin(), k.end(), '\n');
-        cout << "K " << hardware << " version "  << (!commits ? "0day.\n"
+        cout << BGREEN << "K" << RGREEN << " version " << (!commits ? "0day.\n"
           : string("-").append(to_string(commits)).append("commit")
-            .append(commits > 1?"s..\n":"..\n").append(k)
+            .append(commits > 1?"s..\n":"..\n").append(BYELLOW).append(k)
         );
       };
       static void happyEnding(int code) {
@@ -47,14 +46,14 @@ namespace K {
         end(EXIT_FAILURE);
       };
       static void quit(int sig) {
-        cout << endl << FN::uiT() << "Excellent decision! ";
+        cout << endl;
         json k = FN::wJet("https://api.icndb.com/jokes/random?escape=javascript&limitTo=[nerdy]");
-        if (k["/value/joke"_json_pointer].is_string())
-          cout << k["/value/joke"_json_pointer].get<string>() << endl;
+        cout << FN::uiT() << "Excellent decision! "
+          << k.value("/value/joke"_json_pointer, "let's plant a tree instead..") << endl;
         evExit(EXIT_SUCCESS);
       };
       static void wtf(int sig) {
-        cout << FN::uiT() << "Errrror: Signal " << sig << " "  << strsignal(sig);
+        cout << FN::uiT() << RCYAN << "Errrror: Signal " << sig << " "  << strsignal(sig);
         if (latest()) {
           cout << " (Three-Headed Monkey found)." << endl;
           report();
@@ -73,7 +72,7 @@ namespace K {
         return FN::output("git --no-pager log --graph --oneline @..@{u}");
       }
       static void upgrade() {
-        cout << endl << "Hint!"
+        cout << endl << BYELLOW << "Hint!" << RYELLOW
           << endl << "please upgrade to the latest commit; the encountered error may be already fixed at:"
           << endl << changelog()
           << endl << "If you agree, consider to run \"make latest\" prior further executions."
@@ -82,7 +81,7 @@ namespace K {
       static void report() {
         void *k[69];
         backtrace_symbols_fd(k, backtrace(k, 69), STDERR_FILENO);
-        cout << endl << "Yikes!"
+        cout << endl << BRED << "Yikes!" << RRED
           << endl << "please copy and paste the error above into a new github issue (noworry for duplicates)."
           << endl << "If you agree, go to https://github.com/ctubio/Krypto-trading-bot/issues/new"
           << endl << endl;

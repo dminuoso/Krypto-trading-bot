@@ -17,7 +17,6 @@ namespace K {
   enum class mGatewayType: unsigned int { MarketData, OrderEntry };
   enum class mTimeInForce: unsigned int { IOC, FOK, GTC };
   enum class mConnectivity: unsigned int { Connected, Disconnected };
-  enum class mLiquidity: unsigned int { Make, Take };
   enum class mOrderType: unsigned int { Limit, Market };
   enum class mSide: unsigned int { Bid, Ask, Unknown };
   enum class mORS: unsigned int { New, Working, Complete, Cancelled };
@@ -106,23 +105,6 @@ namespace K {
     string oE;
     mORS oS;
     mGWos(string oI, string oE, mORS oS);
-  };
-  struct mGWol {
-    string oI;
-    mORS oS;
-    double oP;
-    double oQ;
-    mLiquidity oL;
-    mGWol(string oI, mORS oS, double oP, double oQ, mLiquidity oL);
-  };
-  struct mGWoS {
-    string oI;
-    string oE;
-    mORS os;
-    double oP;
-    double oQ;
-    mSide oS;
-    mGWoS(string oI, string oE, mORS os, double oP, double oQ, mSide oS);
   };
   struct mGWoa {
     string oI;

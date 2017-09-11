@@ -93,11 +93,11 @@ Troubleshooting:
 
  * Create a temporary [swap file](https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance) (after install you can swapoff) if the installation fails with error: `virtual memory exhausted: Cannot allocate memory`.
 
- * Run `rm -rf node_modules && make install` if the application stops working after `make latest` (sometimes outdated dependencies are not deleted).
-
  * If there is no wallet data on a given exchange, do a manual buy/sell order first using the website of the exchange.
 
  Optional:
+
+ * See `./K.sh --help`.
 
  * Replace the certificate at `dist/sslcert` folder with your own, see [web ui](https://github.com/ctubio/Krypto-trading-bot#web-ui) section. But, the certificate provided is a fully featured default openssl, that you may just need to authorise in your browser.
 
@@ -181,6 +181,8 @@ If a database file do not exists, the application will create it on boot; otherw
 
 To see the data of each database file you can use https://github.com/sqlitebrowser/sqlitebrowser or similars.
 
+To set a different database path or to set an [in-memory database](https://sqlite.org/inmemorydb.html), use `--database=:memory:` argument (see `--help`).
+
 ### Charts
 
 The metrics are not saved anywhere, is just UI data collected with a visibility retention of 6 hours, to display over time:
@@ -215,11 +217,11 @@ Passing a config filename is possible with environment var `KCONFIG` like for ex
 
 ### Unreleased Changelog:
 
+Updated quoting engine and gateways without nodejs.
+
 Added Makefile to replace npm scripts.
 
 Added PNG files as configuration files.
-
-Updated quoting engine and gateways without nodejs.
 
 Added built-in C++ WWW Server to replace expressjs and socketio.
 

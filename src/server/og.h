@@ -28,8 +28,10 @@ namespace K {
         if (oE != "") {
           map<string, string>::iterator it_ = allOrdersIds.find(oE);
           if (it_ != allOrdersIds.end()) allOrdersIds.erase(it_);
-        } else for (map<string, string>::iterator it_ = allOrdersIds.begin(); it_ != allOrdersIds.end();)
-          if (it_->second == oI) it_ = allOrdersIds.erase(it_); else ++it_;
+        } else {
+          for (map<string, string>::iterator it_ = allOrdersIds.begin(); it_ != allOrdersIds.end();)
+            if (it_->second == oI) it_ = allOrdersIds.erase(it_); else ++it_;
+        }
       };
       static void sendOrder(mSide oS, double oP, double oQ, mOrderType oLM, mTimeInForce oTIF, bool oIP, bool oPO) {
         json o = updateOrderState({
@@ -50,7 +52,16 @@ namespace K {
         {
           cout << FN::uiT() <<  "SAFETY: PRINT ORDER: " << o << "\n";
         }
-        gW->send(o["orderId"].get<string>(), (mSide)o["side"].get<int>(), o["price"].get<double>(), o["quantity"].get<double>(), (mOrderType)o["type"].get<int>(), (mTimeInForce)o["timeInForce"].get<int>(), o["preferPostOnly"].get<bool>(), o["time"].get<unsigned long>());
+        gW->send(
+          o.value("orderId", ""),
+          (mSide)o.value("side", 0),
+          o.value("price", 0.0),
+          o.value("quantity", 0.0),
+          (mOrderType)o.value("type", 0),
+          (mTimeInForce)o.value("timeInForce", 0),
+          o.value("preferPostOnly", false),
+          o.value("time", (unsigned long)0)
+        );
       };
       static void cancelOrder(string k) {
         if (allOrders.find(k) == allOrders.end()) {
@@ -62,12 +73,17 @@ namespace K {
           return;
         }
         json o = updateOrderState(k, mORS::Working);
-        gW->cancel(o["orderId"].get<string>(), o["exchangeId"].get<string>(), (mSide)o["side"].get<int>(), o["time"].get<unsigned long>());
+        gW->cancel(
+          o.value("orderId", ""),
+          o.value("exchangeId", ""),
+          (mSide)o.value("side", 0),
+          o.value("time", (unsigned long)0)
+        );
       };
     private:
       static void load() {
         tradesMemory = DB::load(uiTXT::Trades);
-        cout << FN::uiT() << "DB loaded " << tradesMemory.size() << " historical Trades." << endl;
+        cout << FN::uiT() << "DB" << RWHITE << " loaded " << tradesMemory.size() << " historical Trades." << endl;
       };
       static json onSnapTrades(json z) {
         for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end(); ++it)
@@ -77,13 +93,14 @@ namespace K {
       static json onSnapOrders(json z) {
         json k;
         for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it) {
-          if (mORS::Working != (mORS)it->second["orderStatus"].get<int>()) continue;
+          if (mORS::Working != (mORS)it->second.value("orderStatus", 0)) continue;
           k.push_back(it->second);
         }
         return k;
       };
       static json onHandCancelOrder(json k) {
-        cancelOrder(k["orderId"].get<string>());
+        string orderId = k.value("orderId", "");
+        if (orderId!="") cancelOrder(orderId);
         return {};
       };
       static json onHandCancelAllOrders(json k) {
@@ -99,16 +116,17 @@ namespace K {
         return {};
       };
       static json onHandCleanTrade(json k) {
-        cleanTrade(k["tradeId"].get<string>());
+        string tradeId = k.value("tradeId", "");
+        if (tradeId!="") cleanTrade(tradeId);
         return {};
       };
       static json onHandSubmitNewOrder(json k) {
         sendOrder(
-          k["side"].get<string>() == "Bid" ? mSide::Bid : mSide::Ask,
-          k["price"].get<double>(),
-          k["quantity"].get<double>(),
-          k["orderType"].get<string>() == "Limit" ? mOrderType::Limit : mOrderType::Market,
-          k["timeInForce"].get<string>() == "GTC" ? mTimeInForce::GTC : (k["timeInForce"].get<string>() == "FOK" ? mTimeInForce::FOK : mTimeInForce::IOC),
+          k.value("side", "") == "Bid" ? mSide::Bid : mSide::Ask,
+          k.value("price", 0.0),
+          k.value("quantity", 0.0),
+          k.value("orderType", "") == "Limit" ? mOrderType::Limit : mOrderType::Market,
+          k.value("timeInForce", "") == "GTC" ? mTimeInForce::GTC : (k.value("timeInForce", "") == "FOK" ? mTimeInForce::FOK : mTimeInForce::IOC),
           false,
           false
         );
@@ -116,31 +134,31 @@ namespace K {
       };
       static json updateOrderState(json k) {
         json o;
-        if ((mORS)k["orderStatus"].get<int>() == mORS::New) o = k;
-        else if (!k["orderId"].is_null() and allOrders.find(k["orderId"].get<string>()) != allOrders.end())
-          o = allOrders[k["orderId"].get<string>()];
-        else if (!k["exchangeId"].is_null() and allOrdersIds.find(k["exchangeId"].get<string>()) != allOrdersIds.end()) {
-          o = allOrders[allOrdersIds[k["exchangeId"].get<string>()]];
-          k["orderId"] = o["orderId"].get<string>();
+        if ((mORS)k.value("orderStatus", 0) == mORS::New) o = k;
+        else if (!k["orderId"].is_null() and allOrders.find(k.value("orderId", "")) != allOrders.end())
+          o = allOrders[k.value("orderId", "")];
+        else if (!k["exchangeId"].is_null() and allOrdersIds.find(k.value("exchangeId", "")) != allOrdersIds.end()) {
+          o = allOrders[allOrdersIds[k.value("exchangeId", "")]];
+          k["orderId"] = o.value("orderId", "");
         } else return o;
         for (json::iterator it = k.begin(); it != k.end(); ++it)
           if (!it.value().is_null()) o[it.key()] = it.value();
-        if (o["time"].is_null()) o["time"] = FN::T();
-        if (o["computationalLatency"].is_null() and (mORS)o["orderStatus"].get<int>() == mORS::Working)
-          o["computationalLatency"] = FN::T() - o["time"].get<unsigned long>();
-        if (!o["computationalLatency"].is_null()) o["time"] = FN::T();
+        if (o.value("time", (unsigned long)0)==0) o["time"] = FN::T();
+        if (o.value("computationalLatency", (unsigned long)0)==0 and (mORS)o.value("orderStatus", 0) == mORS::Working)
+          o["computationalLatency"] = FN::T() - o.value("time", (unsigned long)0);
+        if (o.value("computationalLatency", (unsigned long)0)>0) o["time"] = FN::T();
         toMemory(o);
         if (!gW->cancelByClientId and !o["exchangeId"].is_null()) {
-          map<string, void*>::iterator it = toCancel.find(o["orderId"].get<string>());
+          map<string, void*>::iterator it = toCancel.find(o.value("orderId", ""));
           if (it != toCancel.end()) {
             toCancel.erase(it);
-            cancelOrder(o["orderId"].get<string>());
-            if ((mORS)o["orderStatus"].get<int>() == mORS::Working) return o;
+            cancelOrder(o.value("orderId", ""));
+            if ((mORS)o.value("orderStatus", 0) == mORS::Working) return o;
           }
         }
         EV::up(mEv::OrderUpdateBroker, o);
         UI::uiSend(uiTXT::OrderStatusReports, o, true);
-        if (!k["lastQuantity"].is_null() and k["lastQuantity"].get<double>() > 0)
+        if (k.value("lastQuantity", 0.0) > 0)
           toHistory(o);
         return o;
       };
@@ -148,16 +166,16 @@ namespace K {
         if (gW->supportCancelAll)
           return gW->cancelAll();
         for (map<string, json>::iterator it = allOrders.begin(); it != allOrders.end(); ++it)
-          if (mORS::New == (mORS)it->second["orderStatus"].get<int>() or mORS::Working == (mORS)it->second["orderStatus"].get<int>())
+          if (mORS::New == (mORS)it->second.value("orderStatus", 0) or mORS::Working == (mORS)it->second.value("orderStatus", 0))
             cancelOrder(it->first);
       };
       static void cleanClosedOrders() {
         for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end();) {
-          if ((*it)["Kqty"].get<double>()+0.0001 < (*it)["quantity"].get<double>()) ++it;
+          if (it->value("Kqty", 0.0)+0.0001 < it->value("quantity", 0.0)) ++it;
           else {
             (*it)["Kqty"] = -1;
             UI::uiSend(uiTXT::Trades, *it);
-            DB::insert(uiTXT::Trades, {}, false, (*it)["tradeId"].get<string>());
+            DB::insert(uiTXT::Trades, {}, false, it->value("tradeId", ""));
             it = tradesMemory.erase(it);
           }
         }
@@ -166,17 +184,17 @@ namespace K {
         for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end();) {
           (*it)["Kqty"] = -1;
           UI::uiSend(uiTXT::Trades, *it);
-          DB::insert(uiTXT::Trades, {}, false, (*it)["tradeId"].get<string>());
+          DB::insert(uiTXT::Trades, {}, false, it->value("tradeId", ""));
           it = tradesMemory.erase(it);
         }
       };
       static void cleanTrade(string k) {
         for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end();) {
-          if ((*it)["tradeId"].get<string>() != k) ++it;
+          if (it->value("tradeId", "") != k) ++it;
           else {
             (*it)["Kqty"] = -1;
             UI::uiSend(uiTXT::Trades, *it);
-            DB::insert(uiTXT::Trades, {}, false, (*it)["tradeId"].get<string>());
+            DB::insert(uiTXT::Trades, {}, false, it->value("tradeId", ""));
             it = tradesMemory.erase(it);
           }
         }
@@ -187,21 +205,16 @@ namespace K {
       };
       static void toHistory(json o) {
         double fee = 0;
-        double val = abs(o["lastPrice"].get<double>() * o["lastQuantity"].get<double>());
-        if (!o["liquidity"].is_null()) {
-          fee = (mLiquidity)o["liquidity"].get<int>() == mLiquidity::Make ? gw->makeFee : gw->takeFee;
-          if (fee) val -= ((mSide)o["side"].get<int>() == mSide::Bid ? 1 : -1) * fee;
-        }
+        double val = abs(o.value("lastPrice", 0.0) * o.value("lastQuantity", 0.0));
         json trade = {
           {"tradeId", to_string(FN::T())},
-          {"time", o["time"].get<unsigned long>()},
-          {"exchange", o["exchange"].get<int>()},
+          {"time", o.value("time", (unsigned long)0)},
+          {"exchange", o.value("exchange", 0)},
           {"pair", o["pair"]},
-          {"price", o["lastPrice"].get<double>()},
-          {"quantity", o["lastQuantity"].get<double>()},
-          {"side", o["side"].get<int>()},
+          {"price", o.value("lastPrice", 0.0)},
+          {"quantity", o.value("lastQuantity", 0.0)},
+          {"side", o.value("side", 0)},
           {"value", val},
-          {"liquidity", o["liquidity"].is_null() ? 0 : o["liquidity"].get<int>()},
           {"Ktime", 0},
           {"Kqty", 0},
           {"Kprice", 0},
@@ -210,95 +223,98 @@ namespace K {
           {"feeCharged", fee},
           {"loadedFromDB", false},
         };
-        cout << FN::uiT() << "GW " << CF::cfString("EXCHANGE") << " TRADE " << ((mSide)o["side"].get<int>() == mSide::Bid ? "BUY " : "SELL ") << o["lastQuantity"].get<double>() << " " << mCurrency[gw->base] << " at price " << o["lastPrice"].get<double>() << " " << mCurrency[gw->quote] << endl;
+        cout << FN::uiT() << "GW " << ((mSide)o.value("side", 0) == mSide::Bid ? RCYAN : RPURPLE) << CF::cfString("EXCHANGE") << " TRADE " << ((mSide)o.value("side", 0) == mSide::Bid ? BCYAN : BPURPLE) << ((mSide)o.value("side", 0) == mSide::Bid ? "BUY " : "SELL ") << o.value("lastQuantity", 0.0) << " " << mCurrency[gw->base] << " at price " << o.value("lastPrice", 0.0) << " " << mCurrency[gw->quote] << " (value " << val << " " << mCurrency[gw->quote] << ")" << endl;
         EV::up(mEv::OrderTradeBroker, trade);
-        if ((mQuotingMode)qpRepo["mode"].get<int>() == mQuotingMode::Boomerang or (mQuotingMode)qpRepo["mode"].get<int>() == mQuotingMode::HamelinRat or (mQuotingMode)qpRepo["mode"].get<int>() == mQuotingMode::AK47) {
-          double widthPong = qpRepo["widthPercentage"].get<bool>()
-            ? qpRepo["widthPongPercentage"].get<double>() * trade["price"].get<double>() / 100
-            : qpRepo["widthPong"].get<double>();
+        if (QP::matchPings()) {
+          double widthPong = QP::getBool("widthPercentage")
+            ? QP::getDouble("widthPongPercentage") * trade.value("price", 0.0) / 100
+            : QP::getDouble("widthPong");
           map<double, string> matches;
           for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end(); ++it)
-            if ((*it)["quantity"].get<double>() - (*it)["Kqty"].get<double>() > 0
-              and (mSide)(*it)["side"].get<int>() == ((mSide)trade["side"].get<int>() == mSide::Bid ? mSide::Ask : mSide::Bid)
-              and ((mSide)trade["side"].get<int>() == mSide::Bid ? ((*it)["price"].get<double>() > (trade["price"].get<double>() + widthPong)) : ((*it)["price"].get<double>() < (trade["price"].get<double>() - widthPong)))
-            ) matches[(*it)["price"].get<double>()] = (*it)["tradeId"].get<string>();
-          matchPong(matches, ((mPongAt)qpRepo["pongAt"].get<int>() == mPongAt::LongPingFair or (mPongAt)qpRepo["pongAt"].get<int>() == mPongAt::LongPingAggressive) ? (mSide)trade["side"].get<int>() == mSide::Ask : (mSide)trade["side"].get<int>() == mSide::Bid, trade);
+            if (it->value("quantity", 0.0) - it->value("Kqty", 0.0) > 0
+              and (mSide)it->value("side", 0) == ((mSide)trade["side"].get<int>() == mSide::Bid ? mSide::Ask : mSide::Bid)
+              and ((mSide)trade.value("side", 0) == mSide::Bid ? (it->value("price", 0.0) > (trade.value("price", 0.0) + widthPong)) : (it->value("price", 0.0) < (trade.value("price", 0.0) - widthPong)))
+            ) matches[it->value("price", 0.0)] = it->value("tradeId", "");
+          matchPong(matches, ((mPongAt)QP::getInt("pongAt") == mPongAt::LongPingFair or (mPongAt)QP::getInt("pongAt") == mPongAt::LongPingAggressive) ? (mSide)trade.value("side", 0) == mSide::Ask : (mSide)trade.value("side", 0) == mSide::Bid, trade);
         } else {
           UI::uiSend(uiTXT::Trades, trade);
-          DB::insert(uiTXT::Trades, trade, false, trade["tradeId"].get<string>());
+          DB::insert(uiTXT::Trades, trade, false, trade.value("tradeId", ""));
           tradesMemory.push_back(trade);
         }
         json t = {
-          {"price", o["lastPrice"].get<double>()},
-          {"side", o["side"].get<int>()},
-          {"quantity", o["lastQuantity"].get<double>()},
+          {"price", o.value("lastPrice", 0.0)},
+          {"side", o.value("side", 0)},
+          {"quantity", o.value("lastQuantity", 0.0)},
           {"value", val},
-          {"pong", o["isPong"].get<bool>()}
+          {"pong", o.value("isPong", false)}
         };
         UI::uiSend(uiTXT::TradesChart, t);
-        cleanAuto(o["time"].get<unsigned long>(), qpRepo["cleanPongsAuto"].get<double>());
+        cleanAuto(o.value("time", (unsigned long)0), QP::getDouble("cleanPongsAuto"));
       };
       static void matchPong(map<double, string> matches, bool reverse, json pong) {
         if (reverse) for (map<double, string>::reverse_iterator it = matches.rbegin(); it != matches.rend(); ++it) {
           if (!matchPong(it->second, &pong)) break;
         } else for (map<double, string>::iterator it = matches.begin(); it != matches.end(); ++it)
           if (!matchPong(it->second, &pong)) break;
-        if (pong["quantity"].get<double>() > 0) {
+        if (pong.value("quantity", 0.0) > 0) {
           bool eq = false;
           for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end(); ++it) {
-            if ((*it)["price"].get<double>()!=pong["price"].get<double>() or (*it)["side"].get<int>()!=pong["side"].get<int>() or (*it)["quantity"].get<double>()<=(*it)["Kqty"].get<double>()) continue;
+            if (it->value("price", 0.0)!=pong.value("price", 0.0) or it->value("side", 0)!=pong.value("side", 0) or it->value("quantity", 0)<=it->value("Kqty", 0.0)) continue;
             eq = true;
-            (*it)["time"] = pong["time"].get<unsigned long>();
-            (*it)["quantity"] = (*it)["quantity"].get<double>() + pong["quantity"].get<double>();
-            (*it)["value"] = (*it)["value"].get<double>() + pong["value"].get<double>();
+            (*it)["time"] = pong.value("time", (unsigned long)0);
+            (*it)["quantity"] = it->value("quantity", 0.0) + pong.value("quantity", 0.0);
+            (*it)["value"] = it->value("value", 0.0) + pong.value("value", 0.0);
             (*it)["loadedFromDB"] = false;
             UI::uiSend(uiTXT::Trades, *it);
-            DB::insert(uiTXT::Trades, *it, false, (*it)["tradeId"].get<string>());
+            DB::insert(uiTXT::Trades, *it, false, it->value("tradeId", ""));
             break;
           }
           if (!eq) {
             UI::uiSend(uiTXT::Trades, pong);
-            DB::insert(uiTXT::Trades, pong, false, pong["tradeId"].get<string>());
+            DB::insert(uiTXT::Trades, pong, false, pong.value("tradeId", ""));
             tradesMemory.push_back(pong);
           }
         }
       };
       static bool matchPong(string match, json* pong) {
         for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end(); ++it) {
-          if ((*it)["tradeId"].get<string>() != match) continue;
-          double Kqty = fmin((*pong)["quantity"].get<double>(), (*it)["quantity"].get<double>() - (*it)["Kqty"].get<double>());
-          (*it)["Ktime"] = (*pong)["time"].get<unsigned long>();
-          (*it)["Kprice"] = ((Kqty*(*pong)["price"].get<double>()) + ((*it)["Kqty"].get<double>()*(*it)["Kprice"].get<double>())) / ((*it)["Kqty"].get<double>()+Kqty);
-          (*it)["Kqty"] = (*it)["Kqty"].get<double>() + Kqty;
-          (*it)["Kvalue"] = abs((*it)["Kqty"].get<double>()*(*it)["Kprice"].get<double>());
-          (*pong)["quantity"] = (*pong)["quantity"].get<double>() - Kqty;
-          (*pong)["value"] = abs((*pong)["price"].get<double>()*(*pong)["quantity"].get<double>());
-          if ((*it)["quantity"].get<double>()<=(*it)["Kqty"].get<double>())
-            (*it)["Kdiff"] = abs(((*it)["quantity"].get<double>()*(*it)["price"].get<double>())-((*it)["Kqty"].get<double>()*(*it)["Kprice"].get<double>()));
+          if (it->value("tradeId", "") != match) continue;
+          double Kqty = fmin(pong->value("quantity", 0.0), it->value("quantity", 0.0) - it->value("Kqty", 0.0));
+          (*it)["Ktime"] = pong->value("time", (unsigned long)0);
+          (*it)["Kprice"] = ((Kqty*pong->value("price", 0.0)) + (it->value("Kqty", 0.0)*it->value("Kprice", 0.0))) / (it->value("Kqty", 0.0)+Kqty);
+          (*it)["Kqty"] = it->value("Kqty", 0.0) + Kqty;
+          (*it)["Kvalue"] = abs(it->value("Kqty", 0.0)*it->value("Kprice", 0.0));
+          (*pong)["quantity"] = pong->value("quantity", 0.0) - Kqty;
+          (*pong)["value"] = abs(pong->value("price", 0.0)*pong->value("quantity", 0.0));
+          if (it->value("quantity", 0.0)<=it->value("Kqty", 0.0))
+            (*it)["Kdiff"] = abs((it->value("quantity", 0.0)*it->value("price", 0.0))-(it->value("Kqty", 0.0)*it->value("Kprice", 0.0)));
           (*it)["loadedFromDB"] = false;
           UI::uiSend(uiTXT::Trades, *it);
-          DB::insert(uiTXT::Trades, *it, false, (*it)["tradeId"].get<string>());
+          DB::insert(uiTXT::Trades, *it, false, it->value("tradeId", ""));
           break;
         }
-        return (*pong)["quantity"].get<double>() > 0;
+        return pong->value("quantity", 0.0) > 0;
       };
       static void cleanAuto(unsigned long k, double pT) {
         if (pT == 0) return;
         unsigned long pT_ = k - (abs(pT) * 864e5);
         for (json::iterator it = tradesMemory.begin(); it != tradesMemory.end();) {
-          if ((*it)["time"].get<unsigned long>() < pT_ and (pT < 0 or (*it)["Kqty"].get<double>() >= (*it)["quantity"].get<double>())) {
+          if (it->value("time", (unsigned long)0) < pT_ and (pT < 0 or it->value("Kqty", 0) >= it->value("quantity", 0.0))) {
             (*it)["Kqty"] = -1;
             UI::uiSend(uiTXT::Trades, *it);
-            DB::insert(uiTXT::Trades, {}, false, (*it)["tradeId"].get<string>());
+            DB::insert(uiTXT::Trades, {}, false, it->value("tradeId", ""));
             it = tradesMemory.erase(it);
           } else ++it;
         }
       };
       static void toMemory(json k) {
-        if ((mORS)k["orderStatus"].get<int>() != mORS::Cancelled and (mORS)k["orderStatus"].get<int>() != mORS::Complete) {
-          if (!k["exchangeId"].is_null()) allOrdersIds[k["exchangeId"].get<string>()] = k["orderId"].get<string>();
-          allOrders[k["orderId"].get<string>()] = k;
-        } else allOrdersDelete(k["orderId"].get<string>(), k["exchangeId"].is_null() ? "" : k["exchangeId"].get<string>());
+        if ((mORS)k.value("orderStatus", 0) != mORS::Cancelled and (mORS)k.value("orderStatus", 0) != mORS::Complete) {
+          if (!k["exchangeId"].is_null())
+            allOrdersIds[k.value("exchangeId", "")] = k.value("orderId", "");
+          allOrders[k.value("orderId", "")] = k;
+        } else {
+          allOrdersDelete(k.value("orderId", ""), k["exchangeId"].is_null()?"":k.value("exchangeId", ""));
+        }
       };
   };
 }
