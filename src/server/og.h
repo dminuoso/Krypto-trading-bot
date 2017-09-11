@@ -48,7 +48,7 @@ namespace K {
           {"orderStatus", (int)mORS::New},
           {"preferPostOnly", oPO}
         });
-        if(qpRepo["safetyactive"].get<bool>())
+        if(QP::getBool("safetyactive"])
         {
           cout << FN::uiT() <<  "SAFETY: PRINT ORDER: " << o << "\n";
         }

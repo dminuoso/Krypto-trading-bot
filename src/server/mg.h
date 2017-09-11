@@ -290,7 +290,7 @@ static void calcTargetPos() {
         if(mgSMA3.size() == 0)
         {
                 cout << FN::uiT()  << " Warming up SMA3" << "\n";
-                vector <double> preLoadSMA = LoadSMA(qpRepo["safetytime"].get<signed int>()*10);
+                vector <double> preLoadSMA = LoadSMA(QP::getInt("safetytime")*10);
 
                 for (vector<double>::iterator ia = preLoadSMA.begin(); ia != preLoadSMA.end(); ++ia)
                 {
@@ -306,7 +306,7 @@ static void calcTargetPos() {
                         }
                                 SMA3 /= mgSMA3.size();
                                 mgSMA3G = SMA3;
-                                mgStdevSMA3 = calcStdev(mgStdevSMA33, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
+                                mgStdevSMA3 = calcStdev(mgStdevSMA33, QP::getDouble("quotingStdevProtectionFactor"), &mgStdevSMAMean);
                                 mgWSMA33.push_back(mgSMA3G);
                                 mgStdevSMA33.push_back(mgStdevSMA3);
 
@@ -322,13 +322,13 @@ static void calcTargetPos() {
                         SMA3 += *it;
                 SMA3 /= mgSMA3.size();
                 mgSMA3G = SMA3;
-                mgStdevSMA3 = calcStdev(mgStdevSMA33, qpRepo["quotingStdevProtectionFactor"].get<double>(), &mgStdevSMAMean);
+                mgStdevSMA3 = calcStdev(mgStdevSMA33, QP::getDouble("quotingStdevProtectionFactor"), &mgStdevSMAMean);
                 mgWSMA33.push_back(mgSMA3G);
                 mgStdevSMA33.push_back(mgStdevSMA3);
         }
         cout << FN::uiT() << "SMA3 StDev: " << mgStdevSMA3 << "\n";
         double newTargetPosition = 0;
-        if(qpRepo["take_profit_active"].get<bool>() ) {
+        if(QP::getBool("take_profit_active") ) {
                 /*If ewma take profit > SMA3
                         newTargetPosition = ((mgEwmaS * 100/ mgEwmaL) - 100) * (1 / qpRepo["ewmaSensiblityPercentage"]
                         else
@@ -371,13 +371,13 @@ static void calcTargetPos() {
 
 
 static void calcASP() {
-        qpRepo["aspvalue"] = ((mgEwmaS * 100/ mgEwmaL) - 100);
+        QP::getDouble("aspvalue") = ((mgEwmaS * 100/ mgEwmaL) - 100);
         cout << FN::uiT()  <<  "ASP Evaluation: " << ((mgEwmaS * 100/ mgEwmaL) - 100) << "\n";
         cout << FN::uiT() <<  "ASP Evaluation: fairV: " << mgFairValue << "\n";
         cout << FN::uiT() <<  "ASP Evaluation: SMA3 Latest: " << mgSMA3G << "\n";
         cout << FN::uiT() << "Current Short: " << mgEwmaS << "\n";
         cout << FN::uiT() << "Current Long: " << mgEwmaL << "\n";
-        if(qpRepo["take_profit_active"].get<bool>()) {
+        if(QP::getBool("take_profit_active") ) {
                 if(mgEwmaProfit < mgSMA3G)
                 {
                         qpRepo["asptriggered"] = false;
