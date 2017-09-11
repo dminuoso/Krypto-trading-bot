@@ -143,10 +143,10 @@ namespace K {
           for (json::iterator it = qp_.begin(); it != qp_.end(); ++it)
             qp[it.key()] = it.value();
         }
-        qpRepo["safemode"] == (int)mSafeMode::unknown;
-        qpRepo["safetyactive"] = false;
-        qpRepo["asptriggered"] = false;
-        qpRepo["safetimestart"] = 0;
+        qp_["safemode"] == (int)mSafeMode::unknown;
+        qp_["safetyactive"] = false;
+        qp_["asptriggered"] = false;
+        qp_["safetimestart"] = 0;
         clean();
         UI::delay(getDouble("delayUI"));
         cout << FN::uiT() << "DB" << RWHITE << " loaded Quoting Parameters " << (qp_.size() ? "OK" : "OR reading defaults instead") << "." << endl;
