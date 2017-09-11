@@ -13,7 +13,7 @@ V_UWS   := 0.14.3
 V_SQL   := 3200100
 V_QF    := v.1.14.4
 KARGS   := -Wextra -std=c++11 -O3 -I$(KLOCAL)/include  \
-  src/server/K.cc -pthread -ldl -Wl,-rpath,'$$ORIGIN'  \
+  src/server/K.cc -pthread  -Wl,-rpath,'$$ORIGIN'  \
   -DK_STAMP='"$(shell date --rfc-3339=ns)"'            \
   -DK_BUILD='"$(CROSS)"'   $(KLOCAL)/include/uWS/*.cpp \
   dist/lib/K-$(CROSS).a    $(KLOCAL)/lib/libquickfix.a \
@@ -100,7 +100,7 @@ else
 endif
 
 Linux: build-$(CROSS)
-	$(CXX) -o dist/lib/K-$(CROSS) -static-libstdc++ -static-libgcc -g $(KARGS)
+	$(CXX) -o dist/lib/K-$(CROSS) -static-libstdc++ -static-libgcc -g $(KARGS) -ldl
 
 Darwin: build-$(CROSS)
 	$(CXX) -o dist/lib/K-$(CROSS) -stdlib=libc++ -mmacosx-version-min=10.7 -undefined dynamic_lookup $(KARGSG)
