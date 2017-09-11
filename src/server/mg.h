@@ -436,7 +436,7 @@ static void calcSafety() {
         cout << FN::uiT() << "Safety SMA3 Array size: " << mgWSMA33.size() << "\n";
         if (mgWSMA33.size()>1000) mgWSMA33.erase(mgWSMA33.begin(), mgWSMA33.end()-1);
 
-        if (!QP::getBool("safetynet"]) {
+        if ( !QP::getBool("safetynet") ) {
                 qp["safemode"]  = (int)mSafeMode::unknown;
                 qp["safetyactive"] = false;
                 return;
