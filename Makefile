@@ -1,4 +1,5 @@
-KCONFIG ?= K
+LOGGING ?= true
+CONFIG ?= K
 CROSS   ?= $(shell g++ -dumpmachine)
 CXX      = $(CROSS)-g++-6
 CC       = $(CROSS)-gcc-6
@@ -19,7 +20,13 @@ KARGS   := -Wextra -std=c++11 -O3 -I$(KLOCAL)/include  \
   dist/lib/K-$(CROSS).a    $(KLOCAL)/lib/libquickfix.a \
   $(KLOCAL)/lib/libpng16.a $(KLOCAL)/lib/libsqlite3.a  \
   $(KLOCAL)/lib/libz.a     $(KLOCAL)/lib/libcurl.a     \
-  $(KLOCAL)/lib/libssl.a   $(KLOCAL)/lib/libcrypto.a
+  $(KLOCAL)/lib/libssl.a   $(KLOCAL)/lib/libcrypto.a -ldl
+
+	ifeq ($(LOGGING), true)
+		LOGFILE = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))/$(KCONFIG).log
+	else
+		LOGFILE = /dev/null
+	endif
 
 all: K
 
@@ -100,7 +107,7 @@ else
 endif
 
 Linux: build-$(CROSS)
-	$(CXX) -o dist/lib/K-$(CROSS) -static-libstdc++ -static-libgcc -g $(KARGS) -ldl
+	$(CXX) -o dist/lib/K-$(CROSS) -static-libstdc++ -static-libgcc -g $(KARGS) 
 
 Darwin: build-$(CROSS)
 	$(CXX) -o dist/lib/K-$(CROSS) -stdlib=libc++ -mmacosx-version-min=10.7 -undefined dynamic_lookup $(KARGSG)
@@ -232,7 +239,7 @@ stop:
 
 start:
 	@test -d app || $(MAKE) install
-	./node_modules/.bin/forever start --minUptime 1 --spinSleepTime 21000 --uid "$(KCONFIG)" -a -l /dev/null -c /bin/sh K.sh
+	./node_modules/.bin/forever start --minUptime 1 --spinSleepTime 21000 --uid "$(KCONFIG)" -a -l $(LOGFILE) -c /bin/sh K.sh
 
 gdax:
 	openssl s_client -showcerts -connect fix.gdax.com:4198 < /dev/null \
