@@ -230,7 +230,7 @@ namespace K {
             pDiv = 0;
             cout << FN::uiT()  << "PDIV: pDiv set to 0 via ASP Trigger\n";
           }
-          if (QP::getBool("safetyactive") && (mSafeMode)QP::getInt("safemode"] == mSafeMode::buy ) {
+          if (QP::getBool("safetyactive") && (mSafeMode)QP::getInt("safemode") == mSafeMode::buy ) {
               pDiv = 0;
               cout << FN::uiT()  << "PDIV: pDiv set to 0 via Safety Trigger\n";
             }
