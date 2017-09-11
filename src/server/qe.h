@@ -226,11 +226,11 @@ namespace K {
           ? QP::getDouble("positionDivergencePercentage") * pgPos.value("value", 0.0) / 100
           : QP::getDouble("positionDivergence");
 
-          if (qpRepo["asptriggered"].get<bool>()) {
+          if (QP::getBool("asptriggered") {
             pDiv = 0;
             cout << FN::uiT()  << "PDIV: pDiv set to 0 via ASP Trigger\n";
           }
-          if (qpRepo["safetyactive"].get<bool>() && (mSafeMode)qpRepo["safemode"].get<int>() == mSafeMode::buy ) {
+          if (QP::getBool("safetyactive") && (mSafeMode)QP::getInt("safemode"] == mSafeMode::buy ) {
               pDiv = 0;
               cout << FN::uiT()  << "PDIV: pDiv set to 0 via Safety Trigger\n";
             }
