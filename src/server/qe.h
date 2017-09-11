@@ -226,7 +226,7 @@ namespace K {
           ? QP::getDouble("positionDivergencePercentage") * pgPos.value("value", 0.0) / 100
           : QP::getDouble("positionDivergence");
 
-          if (QP::getBool("asptriggered") {
+          if (QP::getBool("asptriggered") ) {
             pDiv = 0;
             cout << FN::uiT()  << "PDIV: pDiv set to 0 via ASP Trigger\n";
           }
